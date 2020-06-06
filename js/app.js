@@ -54,13 +54,13 @@
       }
 
       function wordUpdate(word, event){
-        console.log(event.target.className);
-        var value = event.target.value.trim();
-        if(!value){
+        var inputWord = document.getElementById('input_title_' + word._id).value.trim();
+        var inputDef = document.getElementById('input_def_' + word._id).value.trim();
+        if(!inputWord){
           db.remove(word);
         } else{
-        //how to update both fields?
-          word.title = value;
+          word.title = inputWord;
+          word.definition = inputDef;
           db.put(word);
         }
       }
@@ -87,7 +87,7 @@
       }
 
       function createWordListItem(word){
-        
+          
             var remove = document.createElement('button');
             remove.className = 'destroy';
             remove.addEventListener('click', removeWord.bind(this, word));
@@ -99,19 +99,24 @@
             definitionLabel.appendChild(document.createTextNode(word.definition))
             
             //* input_editWord and input_editDefinition should only appear on toggle */
+
             var input_editWord = document.createElement('input');
             input_editWord.id= 'input_title_' + word._id;
             input_editWord.className = 'edit';
             input_editWord.value = word.title;
-            input_editWord.addEventListener('keypress', enterKeyPressed.bind(this, word));
-            // input_editWord.addEventListener('blur', wordUpdate.bind(this, word));
-        
+            
 
             var input_editDefinition = document.createElement('input');
             input_editDefinition.id= 'input_def_' + word._id;
             input_editDefinition.className = 'edit';
             input_editDefinition.value = word.definition;
           
+            let editDiv = document.createElement('div');
+            editDiv.id = 'editbox_' + word._id;
+            editDiv.appendChild(input_editWord);
+            editDiv.appendChild(input_editDefinition);
+            editDiv.addEventListener('blur', wordUpdate.bind(this, word));
+            editDiv.addEventListener('keypress', enterKeyPressed.bind(this, word));
             
             var li = document.createElement('li');
             var br = document.createElement('br');
@@ -130,8 +135,7 @@
 
             li.appendChild(remove);
             li.appendChild(divDisplay);
-            li.appendChild(input_editWord);
-            li.appendChild(input_editDefinition);
+            li.appendChild(editDiv);
             
             return li;
       }
