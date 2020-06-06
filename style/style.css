@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+html{
+    margin: 0 ;
+    padding: 0;
 
+}
 #app{
     margin: 0 auto;
-    width: 500px;
+    max-width: 800px;
     font-family: 'Roboto', sans-serif;
 
 }
@@ -33,14 +37,14 @@ input{
     padding: 0;
 }
 #word_list li{
-    
     position:  relative;
-    max-width: 500px;
     list-style-type: none;
+    transition: ease-in-out .1s;
 }
 
 #word_list .viewBox{
     display: block;
+    
     border: .5px solid whitesmoke;
     padding: 15px;
     margin: 10px;
@@ -49,6 +53,13 @@ input{
     -moz-box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
     box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
     background-color: rgb(236, 236, 236);
+}
+
+#word_list li:hover{
+    transform: translateY(-2px);
+}
+#word_list li:hover .viewBox{
+    border-color: rgb(127, 197, 255);
 }
 #word_list li.editing {
     display: block;

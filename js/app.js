@@ -81,13 +81,27 @@
       }
 
       function redrawTodosUI(words) {
-        var ul = document.getElementById('word_list');
-        ul.innerHTML = '';
+        let wordsUL = document.getElementById('word_list');
+        // let dictUL = document.getElementById('dictionaries_list');
+        wordsUL.innerHTML = '';
+        // dictUL.innerHTML = '';
+
         words.forEach(function(word) {
-          ul.appendChild(createWordListItem(word.doc));
+          wordsUL.appendChild(createWordListItem(word.doc));
         });
       }
+      //if we want to have a sepereate dictionary list to be generated from the words
+      function createDictionaryList(word){
+        let li = document.createElement('li');
+        let dict = document.createElement('dictionaryItem');
+        dict.className = 'dictionaries';
+        li.id = 'li_' + word._id;
+        dict.id = 'dict_' + word._id;
+        dict.appendChild(document.createTextNode(word.dictionary));
+        li.appendChild(dict);
 
+        return li;
+      }
       function createWordListItem(word){
           
             var remove = document.createElement('button');
