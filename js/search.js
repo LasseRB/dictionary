@@ -12,45 +12,12 @@ let elem = {
     searchButton: undefined,
 }
 
-function tryFindTerm(term) {
-    // todo: attempt to find term
-    term = term.trim();
-    console.log(`searching for term: ${term}`);
-
-    return new Promise((resolve, reject) => {
-        db.createIndex({
-            index: {
-                fields: ['title']
-            }
-        }).then(res => {
-            // created or already exists
-        }).catch(err => {
-            reject(err);
-        });
-
-        db.find({
-            selector: {title: term},
-            fields: ['title'],
-        }).then(res => {
-            resolve(res);
-        }).catch(err => {
-            console.error(err);
-            reject(err);
-        });
-    })
-}
-
+/**
+ * Initializes the database and search event listeners.
+ */
 function init() {
-    console.log('Search is loaded.');
-
     // create or retrieve database
     db = new PouchDB('dictionary');
-
-    // db.allDocs({include_docs: true, descending: true}, (err, res) => {
-    //     res.rows.forEach(row => {
-    //         console.log(row.doc.title);
-    //     })
-    // });
 
     // setup document elements
     elem.searchTerm = document.getElementById('search-term');
@@ -70,6 +37,33 @@ function init() {
             console.log(res);
         });
     })
+}
+
+/**
+ * Tries to find all matches to by term (title)
+ * @param {string} term
+ * @returns {Promise<Object>}
+ */
+function tryFindTerm(term) {
+    // remove trailing white space
+    term = term.trim();
+
+    // an index must be created first, if it already then exists nothing is done
+    return new Promise((resolve, reject) => {
+        db.createIndex({
+            index: {fields: ['title']}
+        }).then(() => {
+            db.find({
+                selector: {title: term},
+                limit: 10
+            }).then(res => {
+                resolve(res);
+            });
+        }).catch(err => {
+            console.error(err);
+            reject(err);
+        });
+    });
 }
 
 // init script when everything is loaded
