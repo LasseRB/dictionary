@@ -14,13 +14,30 @@ let elem = {
 
 function tryFindTerm(term) {
     // todo: attempt to find term
-    console.log('searching for term');
+    term = term.trim();
+    console.log(`searching for term: ${term}`);
 
-    db.createIndex({
-        index: {fields: ['']}
-    });
+    return new Promise((resolve, reject) => {
+        db.createIndex({
+            index: {
+                fields: ['title']
+            }
+        }).then(res => {
+            // created or already exists
+        }).catch(err => {
+            reject(err);
+        });
 
-    return undefined;
+        db.find({
+            selector: {title: term},
+            fields: ['title'],
+        }).then(res => {
+            resolve(res);
+        }).catch(err => {
+            console.error(err);
+            reject(err);
+        });
+    })
 }
 
 function init() {
@@ -29,11 +46,11 @@ function init() {
     // create or retrieve database
     db = new PouchDB('dictionary');
 
-    db.allDocs({include_docs: true, descending: true}, (err, res) => {
-        res.rows.forEach(row => {
-            console.log(row.doc.title);
-        })
-    });
+    // db.allDocs({include_docs: true, descending: true}, (err, res) => {
+    //     res.rows.forEach(row => {
+    //         console.log(row.doc.title);
+    //     })
+    // });
 
     // setup document elements
     elem.searchTerm = document.getElementById('search-term');
@@ -49,7 +66,9 @@ function init() {
 
     elem.searchButton.addEventListener('click', event => {
         // todo: search for the term
-        tryFindTerm();
+        tryFindTerm(elem.searchTerm.value).then(res => {
+            console.log(res);
+        });
     })
 }
 
