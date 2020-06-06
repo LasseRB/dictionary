@@ -4,8 +4,8 @@
     // var ENTER_KEY = 13;
     var newWordDom = document.getElementById('new_word');
     var newDefDom = document.getElementById('new_definition');
-    var newDicDom = document.getElementById('dictionaries')
-    
+    var newDicDom = document.getElementById('dictionaries');
+    var newTagDom = document.getElementById('tags');
 
     var db = new PouchDB('dictionary');
     // to-set up later:
@@ -17,13 +17,21 @@
         live: true
       }).on('change', showWords);
       
-    
-      function addWord(text, definition, dictionary){
+      function seperateTags(tags){
+        var tags_array = [];
+        if(tags.length > 0){
+          tags_array = tags.split(",");
+        }
+        return tags_array; 
+      }
+      function addWord(text, definition, dictionary, tags){
+     
           var word = {
               _id:new Date().toISOString(),
               title: text,
               definition: definition,
-              dictionary: dictionary
+              dictionary: dictionary,
+              tags: seperateTags(tags)
           }
           db.put(word).then(function (result){
               console.log(word);
@@ -39,9 +47,10 @@
       function enterWord(event){
           if(event.code === "Enter"){
               if(newWordDom.value !== ""){
-              addWord(newWordDom.value, newDefDom.value, newDicDom.value);
+              addWord(newWordDom.value, newDefDom.value, newDicDom.value, newTagDom.value);
               newWordDom.value = '';
               newDefDom.value = '';
+              newTagDom.value = '';
             }else{
                 alert('please fill out word box');
             }
@@ -58,11 +67,13 @@
       function wordUpdate(word, event){
         var inputWord = document.getElementById('input_title_' + word._id).value.trim();
         var inputDef = document.getElementById('input_def_' + word._id).value.trim();
+         var inputTag = document.getElementById('input_tag_' + word._id).value.trim();
         if(!inputWord){
           db.remove(word);
         } else{
           word.title = inputWord;
           word.definition = inputDef;
+          word.tags = seperateTags(inputTag);
           db.put(word);
         }
       }
@@ -115,23 +126,29 @@
             definitionLabel.appendChild(document.createTextNode(word.definition))
             var dict = document.createElement('dictionary');
             dict.appendChild(document.createTextNode(word.dictionary));
+            
             //* input_editWord and input_editDefinition should only appear on toggle */
-
             var input_editWord = document.createElement('input');
             input_editWord.id= 'input_title_' + word._id;
             input_editWord.className = 'edit';
             input_editWord.value = word.title;
-            
-
+  
             var input_editDefinition = document.createElement('textarea');
             input_editDefinition.id= 'input_def_' + word._id;
             input_editDefinition.className = 'edit';
             input_editDefinition.value = word.definition;
+
+            var input_editTags = document.createElement('input');
+            input_editTags.id= 'input_tag_' + word._id;
+            input_editTags.className = 'edit';
+            input_editTags.value = word.tags; 
+            
           
             let editDiv = document.createElement('div');
             editDiv.id = 'editbox_' + word._id;
             editDiv.appendChild(input_editWord);
             editDiv.appendChild(input_editDefinition);
+            editDiv.appendChild(input_editTags);
             editDiv.addEventListener('blur', wordUpdate.bind(this, word));
             editDiv.addEventListener('keypress', enterKeyPressed.bind(this, word));
             
