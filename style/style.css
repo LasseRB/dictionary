@@ -36,6 +36,30 @@ label{
     box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
     background-color: rgb(236, 236, 236);
 }
+#word_list li.editing {
+    display: block;
+    border: .5px solid whitesmoke;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    -webkit-box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
+    -moz-box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
+    box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
+    background-color: rgb(236, 236, 236);
+}
+#word_list li.editing .edit{
+    display: block;
+}
+#word_list li .edit{
+    display: none;
+}
+
+#word_list li.editing .viewBox{
+    display: none;
+}
+#word_list li .edit{
+    display: none;
+}
 
 #word_list li button{
     position: absolute;
