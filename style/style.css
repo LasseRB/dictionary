@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
+#app{
+    margin: 0 auto;
+    width: 500px;
+    font-family: 'Roboto', sans-serif;
+
+}
+#word_list li .destroy:after{
+    content: '✖';
+
+}
+label{
+    font-weight: bold;
+    color: rgb(0, 255, 255); 
+    mix-blend-mode: difference;
+}
+#word_list{
+    margin: 0;
+    padding: 0;
+}
+#word_list li{
+    position:  relative;
+    width: 500px;
+    list-style-type: none;
+}
+
+#word_list .viewBox{
+    display: block;
+    border: .5px solid whitesmoke;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 5px;
+    -webkit-box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
+    -moz-box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
+    box-shadow: 1px 0px 3px 1px rgba(0,0,0,0.01);
+    background-color: rgb(236, 236, 236);
+}
+
+#word_list li button{
+    position: absolute;
+    margin: 5px;
+    right: 10px;
+}
+
+
+  
+#word_list li:nth-child(even) .viewBox {
+    background-color: rgb(248, 248, 246);
+}
