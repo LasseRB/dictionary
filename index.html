@@ -23,8 +23,16 @@
             <ul id="dictionaries_list"></ul>
         </section>
         <footer id="footer"></footer>
-        <script src="js/pouchdb-7.1.1.min.js"></script>
-    <script src="./js/app.js"></script>
+        <section id="search">
+            <header id="search-header">
+                <input type="search" id="search-term" placeholder="Search for term..." aria-label="search for term" >
+                <button id="search-button">Search</button>
+            </header>
+        </section>
+        <script src="js/lib/pouchdb-7.1.1.min.js"></script>
+        <script src="js/lib/pouchdb.find.js"></script>
+        <script src="./js/app.js"></script>
+        <script src="js/search.js"></script>
     </section>
 </body>
 </html>
