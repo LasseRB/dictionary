@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    var ENTER_KEY = 13;
+    // var ENTER_KEY = 13;
     var newWordDom = document.getElementById('new_word');
     var newDefDom = document.getElementById('new_definition');
     
@@ -35,8 +35,8 @@
 
       //respond to enter-pressed
       function enterWord(event){
-          if(event.keyCode === ENTER_KEY){
-              if(newWordDom.value != ""){
+          if(event.code === "Enter"){
+              if(newWordDom.value !== ""){
               addWord(newWordDom.value, newDefDom.value);
               newWordDom.value = '';
               newDefDom.value = '';
@@ -65,7 +65,7 @@
         }
       }
       function enterKeyPressed(word, event) {
-        if (event.keyCode === ENTER_KEY) {
+        if (event.code === "Enter") {
           var inputEditWord = document.getElementById('input_title_' + word._id);
           inputEditWord.blur();
           wordUpdate(word,event);
@@ -146,7 +146,12 @@
 
       addEventListeners();
       showWords();
-      if (remoteCouch) {
+
+    function sync() {
+        // todo: implement remote sync
+    }
+
+    if (remoteCouch) {
         sync();
       }
 })();
