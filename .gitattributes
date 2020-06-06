@@ -3,26 +3,27 @@
 
 # Source code
 # c
-*.[Cc] -merge diff=cpp -text
+*.[Cc] merge=text diff=cpp
 # cpp
-*.[Cc][Pp][Pp] -merge diff=cpp -text
+*.[Cc][Pp][Pp] merge=text diff=cpp
 # cs
-*.[Cc][Ss] -merge diff=csharp -text
+*.[Cc][Ss] merge=text diff=csharp
 # h
-*.[Hh] -merge -text
+*.[Hh] merge=text
 # java
-*.[Jj][Aa][Vv][Aa] -merge diff=java -text
+*.[Jj][Aa][Vv][Aa] merge=text diff=java
 # js
-*.[Jj][Ss] -merge diff -text
+*.[Jj][Ss] merge=text diff
 # m
-*.[Mm] -merge diff=objc -text
+*.[Mm] merge=text diff=objc
 # py
-*.[Pp][Yy] -merge diff=python -text
+*.[Pp][Yy] merge=text diff=python
+
 # Text files
 # txt
-*.[Tt][Xx][Tt] diff -text
+*.[Tt][Xx][Tt] merge=text diff
 # md
-*.[Mm][Dd] diff -text
+*.[Mm][Dd] merge=text diff
 
 # Image formats
 # afphoto
