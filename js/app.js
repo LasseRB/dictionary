@@ -4,6 +4,7 @@
     // var ENTER_KEY = 13;
     var newWordDom = document.getElementById('new_word');
     var newDefDom = document.getElementById('new_definition');
+    var newDicDom = document.getElementById('dictionaries')
     
 
     var db = new PouchDB('dictionary');
@@ -17,11 +18,12 @@
       }).on('change', showWords);
       
     
-      function addWord(text, definition){
+      function addWord(text, definition, dictionary){
           var word = {
               _id:new Date().toISOString(),
               title: text,
-              definition: definition
+              definition: definition,
+              dictionary: dictionary
           }
           db.put(word).then(function (result){
               console.log(word);
@@ -37,7 +39,7 @@
       function enterWord(event){
           if(event.code === "Enter"){
               if(newWordDom.value !== ""){
-              addWord(newWordDom.value, newDefDom.value);
+              addWord(newWordDom.value, newDefDom.value, newDicDom.value);
               newWordDom.value = '';
               newDefDom.value = '';
             }else{
@@ -97,7 +99,8 @@
             wordLabel.appendChild(document.createTextNode(word.title))
             
             definitionLabel.appendChild(document.createTextNode(word.definition))
-            
+            var dict = document.createElement('dictionary');
+            dict.appendChild(document.createTextNode(word.dictionary));
             //* input_editWord and input_editDefinition should only appear on toggle */
 
             var input_editWord = document.createElement('input');
@@ -130,6 +133,7 @@
             // divDisplay.style.backgroundColor = "#" + randomColor;
             
             divDisplay.appendChild(wordLabel);
+            divDisplay.appendChild(dict);
             divDisplay.appendChild(br);
             divDisplay.appendChild(definitionLabel);
 

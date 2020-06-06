@@ -15,6 +15,12 @@ label{
     color: rgb(0, 255, 255); 
     mix-blend-mode: difference;
 }
+dictionary{
+    position: absolute;
+    color: #CCC;
+    right: 20px;
+    top: 25px;
+}
 input{
     font-family: 'Roboto', sans-serif;
     font-size: 11pt;
