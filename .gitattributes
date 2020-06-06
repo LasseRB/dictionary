@@ -24,6 +24,8 @@
 *.[Tt][Xx][Tt] merge=text diff
 # md
 *.[Mm][Dd] merge=text diff
+# json
+*.[Jj][Ss][Oo][Nn] merge=text diff
 
 # Image formats
 # afphoto
@@ -150,11 +152,14 @@
 *.[Ee][Xx][Ee] filter=lfs diff=lfs merge=lfs -text
 # msi
 *.[Mm][Ss][Ii] filter=lfs diff=lfs merge=lfs -text
+
 # Packaging
 # 7z
 *.7[Zz] filter=lfs diff=lfs merge=lfs -text
 # bz2
 *.[Bb][Zz]2 filter=lfs diff=lfs merge=lfs -text
+# db
+*.[Dd][Bb] filter=lfs diff=lfs merge=lfs -text
 # dmg
 *.[Dd][Mm][Gg] filter=lfs diff=lfs merge=lfs -text
 # gz
@@ -173,6 +178,7 @@
 *.[Xx][Zz] filter=lfs diff=lfs merge=lfs -text
 # zip
 *.[Zz][Ii][Pp] filter=lfs diff=lfs merge=lfs -text
+
 # Fonts
 # otf
 *.[Oo][Tt][Ff] filter=lfs diff=lfs merge=lfs -text
