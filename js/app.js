@@ -4,7 +4,7 @@
     // var ENTER_KEY = 13;
     var newWordDom = document.getElementById('new_word');
     var newDefDom = document.getElementById('new_definition');
-    var newDicDom = document.getElementById('dictionaries')
+    // var newDicDom = document.getElementById('dictionaries')
     
 
     var db = new PouchDB('dictionary');
@@ -123,7 +123,7 @@
             input_editWord.value = word.title;
             
 
-            var input_editDefinition = document.createElement('input');
+            var input_editDefinition = document.createElement('textarea');
             input_editDefinition.id= 'input_def_' + word._id;
             input_editDefinition.className = 'edit';
             input_editDefinition.value = word.definition;
