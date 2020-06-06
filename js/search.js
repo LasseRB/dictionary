@@ -1,9 +1,3 @@
-/**
- * Try to find an exact term in the database
- * @param {string} term
- * @returns {undefined}
- */
-
 'use strict';
 
 let db;
