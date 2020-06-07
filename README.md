@@ -11,4 +11,5 @@ Make your own damn server, because the original developer is too damn lazy to do
 - Riff
 - Termy
 - Dickie / Dickey (no penis jokes)
-- Techy-Dicky
+- Techy-Dicky (also no penis jokes)
+- Duke
