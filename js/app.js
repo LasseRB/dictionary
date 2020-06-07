@@ -29,6 +29,9 @@
           var word = {
               _id:new Date().toISOString(),
               title: text,
+              abbreviation: '', // todo: get from input
+              searchTitle: '', // todo: use searchify() on title
+              searchAbbreviation: '', // todo: use searchify() on abbreviation
               definition: definition,
               dictionary: dictionary,
               tags: seperateTags(tags)
