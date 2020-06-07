@@ -91,6 +91,8 @@
         });
       }
 
+  
+
       function redrawTodosUI(words) {
         let wordsUL = document.getElementById('word_list');
         // let dictUL = document.getElementById('dictionaries_list');
@@ -139,13 +141,31 @@
             var div = document.createElement('div');
             div.id = 'tag_'+[i]+'_' + word._id;
             li.id = 'li_'+[i]+'_' + word._id;
+            div.className ='tag_div';
             li.appendChild(document.createTextNode(word.tags[i]));
             div.appendChild(li);
             tags.appendChild(div);
             div.style.backgroundColor = "#" + randomColor;
             div.style.right = 20+ (i*10) + 'px';
-          } 
-            
+          }
+          tags.addEventListener('click', ()=> {
+            if(tags.className === "tags"){
+              tags.className ="tags_clicked"; 
+              
+              for(let i = 0; i < word.tags.length; i++){
+                var div_i = document.getElementById( div.id = 'tag_'+[i]+'_' + word._id);
+                div_i.className = 'tag_div_clicked';
+              }
+            }
+            else if(tags.className === "tags_clicked"){
+              tags.className = "tags"; 
+              for(let i = 0; i < word.tags.length; i++){
+                var div_i = document.getElementById( div.id = 'tag_'+[i]+'_' + word._id);
+                div_i.className ='tag_div';
+              }
+             
+            }}); 
+          
 
           //* input_editWord and input_editDefinition should only appear on toggle */
           //edit title 
