@@ -155,6 +155,7 @@
               for(let i = 0; i < word.tags.length; i++){
                 var div_i = document.getElementById( div.id = 'tag_'+[i]+'_' + word._id);
                 div_i.className = 'tag_div_clicked';
+                div_i.style.right = 20+ (i*40) + 'px';
               }
             }
             else if(tags.className === "tags_clicked"){
@@ -162,6 +163,7 @@
               for(let i = 0; i < word.tags.length; i++){
                 var div_i = document.getElementById( div.id = 'tag_'+[i]+'_' + word._id);
                 div_i.className ='tag_div';
+                div_i.style.right = 20+ (i*10) + 'px';
               }
              
             }}); 
@@ -182,7 +184,7 @@
           //edit tags
             var input_editTags = document.createElement('input');
             input_editTags.id= 'input_tag_' + word._id;
-            input_editTags.className = 'edit';
+            input_editTags.className = 'tags_edit';
             input_editTags.value = word.tags; 
             
           // edit collection
