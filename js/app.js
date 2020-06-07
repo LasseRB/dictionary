@@ -27,10 +27,10 @@
       function addWord(text, definition, dictionary, tags){
      
           var word = {
-              _id:new Date().toISOString(),
+              _id: new Date().toISOString(),
               title: text,
               abbreviation: '', // todo: get from input
-              searchTitle: '', // todo: use searchify() on title
+              searchTitle: text.searchify(),
               searchAbbreviation: '', // todo: use searchify() on abbreviation
               definition: definition,
               dictionary: dictionary,
@@ -74,10 +74,13 @@
         if(!inputWord){
           db.remove(word);
         } else{
-          word.title = inputWord;
-          word.definition = inputDef;
-          word.tags = seperateTags(inputTag);
-          db.put(word);
+            word.title = inputWord;
+            word.definition = inputDef;
+            word.tags = seperateTags(inputTag);
+            word.abbreviation = ''; // todo: get from input
+            word.searchTitle = inputWord.searchify();
+            word.searchAbbreviation = ''; // todo: use searchify() on abbreviation
+            db.put(word);
         }
       }
       function enterKeyPressed(word, event) {
