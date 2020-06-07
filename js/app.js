@@ -1,4 +1,6 @@
+
 (function(){
+  const PouchDB = require('pouchdb');
     'use strict';
 
     // var ENTER_KEY = 13;

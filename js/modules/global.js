@@ -1,3 +1,4 @@
+const PouchDB = require('pouchdb');
 /**
  * Global variables that can be accessed from anywhere.
  */

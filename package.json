@@ -1,0 +1,28 @@
+{
+  "name": "dictionary",
+  "version": "1.0.0",
+  "description": "Make your own damn server, because the original developer is too damn lazy to do it for you, boy!",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon js/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LasseRB/dictionary.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LasseRB/dictionary/issues"
+  },
+  "homepage": "https://github.com/LasseRB/dictionary#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "node": "^14.4.0",
+    "pouchdb": "^7.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
