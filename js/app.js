@@ -10,7 +10,7 @@
     var db = new PouchDB('dictionary');
     // to-set up later:
     var remoteCouch = false;
-
+    
     // updates the window on changes to database
     db.changes({
         since: 'now',
@@ -114,36 +114,58 @@
         return li;
       }
       function createWordListItem(word){
-          
+          //remove button
             var remove = document.createElement('button');
             remove.className = 'destroy';
             remove.addEventListener('click', removeWord.bind(this, word));
-
+         
+          // titel
             var wordLabel = document.createElement('label');
             var definitionLabel = document.createElement('definition');
             wordLabel.appendChild(document.createTextNode(word.title))
-            
             definitionLabel.appendChild(document.createTextNode(word.definition))
+          
+          // dictionary  
             var dict = document.createElement('dictionary');
             dict.appendChild(document.createTextNode(word.dictionary));
+         
+          //tags 
+          var tags = document.createElement('ul');
+          tags.id = 'tags_' + word._id;
+          tags.className = 'tags';
+          for(let i = 0; i < word.tags.length; i++){
+            var randomColor = Math.floor(Math.random()*16777215).toString(16);
+            var li = document.createElement('li');
+            var div = document.createElement('div');
+            div.id = 'tag_'+[i]+'_' + word._id;
+            li.id = 'li_'+[i]+'_' + word._id;
+            li.appendChild(document.createTextNode(word.tags[i]));
+            div.appendChild(li);
+            tags.appendChild(div);
+            div.style.backgroundColor = "#" + randomColor;
+            div.style.right = 20+ (i*10) + 'px';
+          } 
             
-            //* input_editWord and input_editDefinition should only appear on toggle */
+
+          //* input_editWord and input_editDefinition should only appear on toggle */
+          //edit title 
             var input_editWord = document.createElement('input');
             input_editWord.id= 'input_title_' + word._id;
             input_editWord.className = 'edit';
             input_editWord.value = word.title;
-  
+          //edit definition
             var input_editDefinition = document.createElement('textarea');
             input_editDefinition.id= 'input_def_' + word._id;
             input_editDefinition.className = 'edit';
             input_editDefinition.value = word.definition;
-
+          
+          //edit tags
             var input_editTags = document.createElement('input');
             input_editTags.id= 'input_tag_' + word._id;
             input_editTags.className = 'edit';
             input_editTags.value = word.tags; 
             
-          
+          // edit collection
             let editDiv = document.createElement('div');
             editDiv.id = 'editbox_' + word._id;
             editDiv.appendChild(input_editWord);
@@ -151,7 +173,9 @@
             editDiv.appendChild(input_editTags);
             editDiv.addEventListener('blur', wordUpdate.bind(this, word));
             editDiv.addEventListener('keypress', enterKeyPressed.bind(this, word));
-            
+          
+          
+            // list element  
             var li = document.createElement('li');
             var br = document.createElement('br');
             li.id = 'li_' + word._id;
@@ -161,12 +185,12 @@
             divDisplay.className = 'viewBox';    
             divDisplay.addEventListener('dblclick', wordEditFocus.bind(this, word));
             
-            // divDisplay.style.backgroundColor = "#" + randomColor;
             
             divDisplay.appendChild(wordLabel);
             divDisplay.appendChild(dict);
             divDisplay.appendChild(br);
             divDisplay.appendChild(definitionLabel);
+            divDisplay.appendChild(tags);
 
             li.appendChild(remove);
             li.appendChild(divDisplay);

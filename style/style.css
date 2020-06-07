@@ -22,8 +22,7 @@ html{
 }
 label{
     font-weight: 500;
-    /* color: rgb(0, 255, 255);  */
-    /* mix-blend-mode: difference; */
+    
 }
 definition{
     font-weight: 300;
@@ -75,9 +74,9 @@ textarea{
     background-color: rgb(236, 236, 236);
 }
 
-#word_list li:hover{
+/* #word_list li:hover{
     transform: translateY(-2px);
-}
+} */
 #word_list li:hover .viewBox{
     border-color: rgb(127, 197, 255);
 }
@@ -112,8 +111,33 @@ textarea{
     margin: 5px;
     right: 10px;
 }
+.tags{
+    height: 20px;
+   width: 100%;
+}
+#word_list ul div{
+    transition: ease-in-out .2s;
+    position: relative;
+    display: inline-block;
+    background-color: rgb(31, 255, 10); 
+    border-radius: 30px;
+    padding: 0 10px 0 10px;
+    width: min-content;
+    right: 20px;
 
-
+}
+#word_list ul div li{
+    mix-blend-mode: difference;
+    font-weight: 200;
+    padding: 3px; 
+    color: rgb(255, 255, 255);  
+    
+}
+#word_list ul div:hover{
+    margin: 0 1% 0 1%;
+    padding: 0 20px 0 20px;
+    z-index: 5;
+}
   
 #word_list li:nth-child(even) .viewBox {
     background-color: rgb(248, 248, 246);
