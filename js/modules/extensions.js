@@ -12,6 +12,13 @@ Object.assign(String.prototype, {
             return this;
         }
 
-        return this.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        return this
+            .trim()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace('-', " ")
+            .replace('_', " ")
+            .matchAll(/[a-z0-9 ]+/g);
     }
 });

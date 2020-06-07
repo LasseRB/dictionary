@@ -23,22 +23,24 @@ function init() {
 
     // setup document elements
     elem.searchTerm = document.getElementById('search-term');
-    elem.searchButton = document.getElementById('search-button');
+    // elem.searchButton = document.getElementById('search-button');
 
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', event => {
         if (event.code === 'Enter') {
             event.preventDefault();
-            elem.searchButton.click();
+            // elem.searchButton.click();
+        } else {
+
         }
     });
 
-    // respond to search button click event
-    elem.searchButton.addEventListener('click', event => {
-        getDocFromTitle(elem.searchTerm.value).then(res => {
-            console.log(res);
-        });
-    })
+    // // respond to search button click event
+    // elem.searchButton.addEventListener('click', event => {
+    //     getDocFromTitle(elem.searchTerm.value).then(res => {
+    //         console.log(res);
+    //     });
+    // })
 }
 
 /**
