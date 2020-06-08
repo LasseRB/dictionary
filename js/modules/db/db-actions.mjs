@@ -1,4 +1,8 @@
 import * as g from '../global.mjs';
+/**
+ * This module us used to do perform basic insert, remove, update functions 
+ * on the database. 
+ */
 
 'use strict';
 
@@ -11,20 +15,33 @@ let elem = {
 export function init (){
     //leave this here for later
 }
+
 export var db = g.db;
    //respond to enter-pressed
-   export function enterWord(event){
-    if(event.code === "Enter"){
-        if(elem.wordDom.value !== ""){
-        addWord(elem.wordDom.value, elem.defDom.value, elem.dicDom.value, elem.tagDom.value);
-        elem.wordDom.value = '';
-        elem.defDom.value = '';
-        elem.tagDom.value = '';
-      }else{
-          alert('please fill out word box');
-      }
+
+   
+/**
+ * On enter key, this function takes DOM values and pass them to addWord. 
+ * If the input for word is empty, an error alert is shown. 
+ * @param  {} event
+ */
+export function enterWord(event){
+if(event.code === "Enter"){
+    if(elem.wordDom.value !== ""){
+    addWord(elem.wordDom.value, elem.defDom.value, elem.dicDom.value, elem.tagDom.value);
+    elem.wordDom.value = '';
+    elem.defDom.value = '';
+    elem.tagDom.value = '';
+    } else{
+            alert('please fill out word box');
+         }
     }
 }
+/**
+ * Finds words seperated by comma and return them as strings in array. 
+ * @param  {string} tags
+ * @returns {Array<string>} tags_array
+ */
 export function seperateTags(tags){
     var tags_array = [];
     if(tags.length > 0){
@@ -32,7 +49,13 @@ export function seperateTags(tags){
     }
     return tags_array; 
   }
-  
+/**
+ * Adds (puts) a word-object to the database
+ * @param  {string} text
+ * @param  {string} definition
+ * @param  {string} dictionary
+ * @param  {Array<string>} tags
+ */
 export function addWord(text, definition, dictionary, tags){
 
     var word = {
@@ -51,25 +74,26 @@ export function addWord(text, definition, dictionary, tags){
         console.log(error);
     });
 }
+/**
+ * Removes a word from the database
+ * @param {Object<word>} word
+ */
 export function removeWord(word){
     db.remove(word);
 }
 
    
-
-export function wordEditFocus(word){
-    var div = document.getElementById('li_' + word._id);
-    var inputEditWord = document.getElementById('input_title_' + word._id);
-    div.className = 'editing';
-    inputEditWord.focus();
-}
-
+/**
+ * Update word object in database
+ * @param  {Object<word>} word
+ * @param  {} event
+ */
 export function wordUpdate(word, event){
-    var inputWord = document.getElementById('input_title_' + word._id).value.trim();
-    var inputDef = document.getElementById('input_def_' + word._id).value.trim();
-    var inputTag = document.getElementById('input_tag_' + word._id).value.trim();
+    let inputWord = document.getElementById('input_title_' + word._id).value.trim();
+    let inputDef = document.getElementById('input_def_' + word._id).value.trim();
+    let inputTag = document.getElementById('input_tag_' + word._id).value.trim();
     if(!inputWord){
-    db.remove(word);
+        db.remove(word);
     } else{
         word.title = inputWord;
         word.definition = inputDef;
@@ -80,12 +104,6 @@ export function wordUpdate(word, event){
         db.put(word);
     }
 }
-export function enterKeyPressed(word, event) {
-    if (event.code === "Enter") {
-    var inputEditWord = document.getElementById('input_title_' + word._id);
-    inputEditWord.blur();
-    wordUpdate(word,event);
-    }
-}
+
 
 window.onload = init;

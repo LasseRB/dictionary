@@ -37,14 +37,22 @@ app.init = function () {
         searchTerm.addEventListener('keyup', event => {
             app.onSearchChange(event, app.inputs.searchTerm);
             });
-    // updates the window on changes to database
+    
+            // updates the window on changes to database
     g.db.changes({
         since: 'now',
         live: true
     }).on('change', ui.showWords);
+    
     ui.showWords();
     sync();
 };
+/**
+ * Mortens WIP searching functionality. 
+ * Logs what user types in search bar actively.
+ * @param  {} event
+ * @param  {} elem
+ */
 app.onSearchChange = function (event, elem) {
     if (event.code === 'Enter') {
         // todo: select top result

@@ -15,7 +15,29 @@ export function redrawWordsUI(words) {
         wordsUL.appendChild(createWordListItem(word.doc));
     });
 }
+/**
+ * Adds an class to the word list item, to enable editing css
+ * @param  {Object<word>} word
+ */
+export function wordEditFocus(word){
+    var div = document.getElementById('li_' + word._id);
+    var inputEditWord = document.getElementById('input_title_' + word._id);
+    div.className = 'editing';
+    inputEditWord.focus();
+}
 
+/**
+ * Update word on enter key
+ * @param  {Object<word>} word
+ * @param  {} event
+ */
+export function enterKeyPressed(word, event) {
+    if (event.code === "Enter") {
+    var inputEditWord = document.getElementById('input_title_' + word._id);
+    inputEditWord.blur();
+    dbactions.wordUpdate(word,event);
+    }
+}
 export function createWordListItem(word){
     //remove button
       var remove = document.createElement('button');
@@ -95,7 +117,7 @@ export function createWordListItem(word){
       editDiv.appendChild(input_editDefinition);
       editDiv.appendChild(input_editTags);
       editDiv.addEventListener('blur', dbactions.wordUpdate.bind(this, word));
-      editDiv.addEventListener('keypress', dbactions.enterKeyPressed.bind(this, word));
+      editDiv.addEventListener('keypress', enterKeyPressed.bind(this, word));
     
     
       // list element  
@@ -106,7 +128,7 @@ export function createWordListItem(word){
       
       var divDisplay = document.createElement('div');
       divDisplay.className = 'viewBox';    
-      divDisplay.addEventListener('dblclick', dbactions.wordEditFocus.bind(this, word));
+      divDisplay.addEventListener('dblclick', wordEditFocus.bind(this, word));
       
       
       divDisplay.appendChild(wordLabel);
