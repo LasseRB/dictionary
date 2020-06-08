@@ -1,10 +1,6 @@
 # Getting Started
-
-Make your own damn server, because the original developer is too damn lazy to do it for you, boy!
-
-~~Because it is very easy to do lol~~
-
-> _The above statement has been marked as potentially false. Read with scepticism_
+To start a local server run `npm run devstart` in the command-line. We use the **nodemon module to achieve this. 
+This will start a local node server which will restart everytime a js file is updated. (The server does not restart if html and css is changed.). 
 
 ## App name suggestions
 
@@ -13,3 +9,6 @@ Make your own damn server, because the original developer is too damn lazy to do
 - Dickie / Dickey (no penis jokes)
 - Techy-Dicky (also no penis jokes)
 - Duke
+- Sermo (Latin for Word)
+- Apperat <-- faktisk en god idè!
+
