@@ -3,3 +3,4 @@
  */
 
 export const db = new PouchDB('dictionary');
+export const remoteDB = false;
