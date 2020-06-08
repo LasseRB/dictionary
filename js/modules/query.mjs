@@ -1,8 +1,10 @@
+import * as g from './global';
+
 /**
  * Returns a document based on its _id
  * @returns {Object}
  */
-function getDocFromId(id) {
+export function getDocFromId(id) {
     return g.db.get(id);
 }
 
@@ -11,7 +13,7 @@ function getDocFromId(id) {
  * @param {string} title
  * @returns {Promise<Object>}
  */
-function getDocFromTitle(title) {
+export function getDocFromTitle(title) {
     // remove trailing white space
     title = title.trim();
 
@@ -37,7 +39,7 @@ function getDocFromTitle(title) {
  * Returns an object with documents objects with the fields: _id, title, abbreviation, searchTitle and searchAbbreviation
  * @returns {Promise<Object>}
  */
-function getSearchDocs() {
+export function getSearchDocs() {
     // an index must be created first, if it already then exists nothing is done
     return new Promise((resolve, reject) => {
         g.db.createIndex({

@@ -1,14 +1,14 @@
-'use strict';
+import * as g from "./global";
 
 let elem = {
     searchTerm: undefined,
     searchButton: undefined,
-}
+};
 
 /**
  * Initialize the database and search event listeners.
  */
-function init() {
+export function init () {
     // respond to database changes
     g.db.changes({
         since: 'now',
@@ -16,7 +16,7 @@ function init() {
         include_docs: true
     }).on('change', change => {
         // one event per changed document
-        databaseUpdated(change);
+        this.databaseUpdated(change);
     }).on('error', err => {
         console.error(err);
     });
@@ -47,7 +47,7 @@ function init() {
  * Respond to the database change event
  * @param {Object} change: The document object that has changed
  */
-function databaseUpdated(change) {
+export function databaseUpdated (change) {
     // todo
     if (change.deleted) {
         // note: the deleted document object is not passed completely, however _id and _rev is passed
@@ -57,5 +57,4 @@ function databaseUpdated(change) {
     }
 }
 
-// init script when everything is loaded
 window.onload = init;

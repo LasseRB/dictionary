@@ -1,4 +1,8 @@
-'use strict'
+import * as g from 'js/modules/global';
+import * as s from 'js/modules/search';
+import * as q from 'js/modules/query';
+
+'use strict';
 
 const app = {};
 
