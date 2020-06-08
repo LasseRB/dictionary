@@ -1,5 +1,4 @@
-(function(){
-    'use strict';
+
 
     // var ENTER_KEY = 13;
     var newWordDom = document.getElementById('new_word');
@@ -7,7 +6,9 @@
     var newDicDom = document.getElementById('dictionaries');
     var newTagDom = document.getElementById('tags');
 
-    var db = new PouchDB('dictionary');
+    //kan man ikke referere til g.db på en eller anden måde?
+
+    const db = new PouchDB('dictionary');
     // to-set up later:
     var remoteCouch = false;
     
@@ -80,7 +81,7 @@
             word.abbreviation = ''; // todo: get from input
             word.searchTitle = inputWord.searchify();
             word.searchAbbreviation = ''; // todo: use searchify() on abbreviation
-            db.put(word);
+            g.db.put(word);
         }
       }
       function enterKeyPressed(word, event) {
@@ -241,4 +242,3 @@
     if (remoteCouch) {
         sync();
       }
-})();
