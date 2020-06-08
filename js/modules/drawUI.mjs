@@ -1,12 +1,24 @@
 import * as g from "./global.mjs";
 import * as dbactions from './db/db-actions.mjs';
+
+/**
+ * This module is for drawing the UI elements based on what word-objects exist in the database
+ */
+
+/**
+ * Gets all words from the database. 
+ * (This is possibly the function to alter when implementing search)
+ */
 export function showWords() {
 
     g.db.allDocs({include_docs: true, descending: true}, function(err, doc) {
       redrawWordsUI(doc.rows);
     });
   }
-
+/**
+ * Generates HTML list from words array
+ * @param  {Object<word>} words
+ */
 export function redrawWordsUI(words) {
     let wordsUL = document.getElementById('word_list');
     wordsUL.innerHTML = '';
@@ -38,6 +50,13 @@ export function enterKeyPressed(word, event) {
     dbactions.wordUpdate(word,event);
     }
 }
+/**
+ * This giant function is resposible for generating all HTML tags for each list item.
+ * Returns all the <li> elements of each word in the database (along visible with attributes)
+ * 
+ * @param  {Object<word>} word
+ * @return {<li>} html list element
+ */
 export function createWordListItem(word){
     //remove button
       var remove = document.createElement('button');
