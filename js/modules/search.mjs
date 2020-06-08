@@ -50,6 +50,7 @@ export function init () {
 export function databaseUpdated (change) {
     // todo
     if (change.deleted) {
+        
         // note: the deleted document object is not passed completely, however _id and _rev is passed
         console.log(`change (deleted): ${change.doc._id}`);
     } else {
