@@ -1,4 +1,8 @@
-'use strict'
+import * as g from './modules/global.mjs';
+import * as s from './modules/search.mjs';
+import * as q from './modules/query.mjs';
+
+'use strict';
 
 const app = {};
 

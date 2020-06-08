@@ -9,7 +9,7 @@
 <body>
     <section id="app">
         <header id="header">
-            <h1>Riff</h1>
+            <h1>Ritz</h1>
             <input id="new_word" placeholder="Type a word here" autofocus>
             <br />
             <textarea id="new_definition" name="txtarea" placeholder="Type definition here" autofocus></textarea>
@@ -33,10 +33,10 @@
         </section>
         <script src="js/lib/pouchdb-7.1.1.min.js"></script>
         <script src="js/lib/pouchdb.find.js"></script>
-        <script src="js/modules/global.js"></script>
+        <script type="module" src="js/modules/global.mjs"></script>
+        <script type="module" src="js/modules/query.mjs"></script>
+        <script type="module" src="js/modules/search.mjs"></script>
         <script src="js/modules/extensions.js"></script>
-        <script src="js/modules/query.js"></script>
-        <script src="js/modules/search.js"></script>
         <script src="./js/app.js"></script>
     </section>
 </body>
