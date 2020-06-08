@@ -1,4 +1,4 @@
-import * as g from './global';
+import * as g from './global.mjs';
 
 /**
  * Returns a document based on its _id

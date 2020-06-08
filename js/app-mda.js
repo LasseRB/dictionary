@@ -1,6 +1,6 @@
-import * as g from 'js/modules/global';
-import * as s from 'js/modules/search';
-import * as q from 'js/modules/query';
+import * as g from './modules/global.mjs';
+import * as s from './modules/search.mjs';
+import * as q from './modules/query.mjs';
 
 'use strict';
 

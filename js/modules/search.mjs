@@ -1,4 +1,4 @@
-import * as g from "./global";
+import * as g from "./global.mjs";
 
 let elem = {
     searchTerm: undefined,
