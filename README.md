@@ -11,4 +11,8 @@ This will start a local node server which will restart everytime a js file is up
 - Duke
 - Sermo (Latin for Word)
 - Apperat <-- faktisk en god idè!
+- Define
+- Dfine
+- Deefine
+- fine
 
