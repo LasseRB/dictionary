@@ -5,15 +5,88 @@ textarea:focus,
 button:focus {
     outline: none;
 }
-html{
-    margin: 0 ;
+html,body{
+    margin: 0;
     padding: 0;
-    -webkit-app-region: drag;
-
+    min-width: 300px;
 }
+
+#app-container{
+    display: flex;
+    max-width: 100vw;
+    margin-top:30px;
+}
+
+#side-menu{
+    overflow: hidden;
+    transition: ease-in-out .5s;
+    position: relative;
+    float: left;
+    resize: width;
+    /* background-color: #FCF; */
+    border-right: 1px solid #CCC;
+    height: 100vh;
+    width: 300px;
+}
+#side-menu.closed{
+    width: 30px;
+}
+#menu-toggle{
+    transition: ease-in-out .2s;
+    position: absolute;
+    right: 0px;
+    width: 50px;
+    height: 50px;
+    background-color: #FFF;
+}
+#menu-toggle:hover #icon{
+    color: #000;
+}
+#menu-toggle #icon {
+    position: relative;
+    color: #CCC;
+    position: absolute;
+    right: 25px;
+   top: 20px;
+  }
+#menu-toggle #icon:before, #menu-toggle #icon:after {
+    transition: ease-in-out .2s;
+    content: '';
+    position: absolute;
+    top: -5px;
+    width: 10px;
+    height: 10px;
+    border-top: solid 1px currentColor;
+    border-right: solid 1px currentColor;
+    -webkit-transform: rotate(-135deg);
+            transform: rotate(-135deg);
+}
+#menu-toggle #icon:before{
+    left: 1px;
+}
+#menu-toggle #icon:after{
+    left: 5px;
+}
+#side-menu.closed #menu-toggle #icon:before,#side-menu.closed #menu-toggle #icon:after {
+  -webkit-transform: rotate(50deg);
+  transform: rotate(50deg);
+}
+
+#side-menu ul li{
+  transition: ease-in-out .3s;
+   list-style-type: none;
+   min-width: max-content;
+   color: #000;
+}
+#side-menu.closed ul li{
+    color: #FFF;
+}
+
 #app{
-    margin: 0 auto;
-    max-width: 800px;
+    float: left;
+    display: inline-block;
+    width: 100%;
+    margin: 0 20px 0 20px;
     font-family: 'Rasa', serif;
 
 }
@@ -165,3 +238,4 @@ textarea{
 #word_list li:nth-child(even) .viewBox {
     background-color: rgb(248, 248, 246);
 }
+

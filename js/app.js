@@ -21,13 +21,17 @@ app.init = function () {
     app.inputs.searchTerm = document.getElementById('search-term');
     app.inputs.wordDom = document.getElementById('new_word');
     app.inputs.defDom = document.getElementById('new_definition');
- 
+    
+    app.inputs.menuButtonDom = document.getElementById('menu-toggle');
+    
     var searchDictionary = app.inputs.searchDictionary;
     var searchTerm = app.inputs.searchTerm;
     var wordDom = app.inputs.wordDom;
     var defDom = app.inputs.defDom;
+    var menuButtonDom = app.inputs.menuButtonDom;
 
     
+
     /**
      * EVENT LISTENERS
      */
@@ -37,7 +41,7 @@ app.init = function () {
         searchTerm.addEventListener('keyup', event => {
             app.onSearchChange(event, app.inputs.searchTerm);
             });
-    
+    menuButtonDom.addEventListener('click', toggleMenu, false)
             // updates the window on changes to database
     g.db.changes({
         since: 'now',
@@ -71,5 +75,7 @@ function sync() {
 if (g.remoteDb) {
     sync();
   }
-
+  function toggleMenu() {
+   document.getElementById('side-menu').classList.toggle("closed");
+  } 
 window.onload = app.init;

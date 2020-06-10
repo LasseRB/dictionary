@@ -9,11 +9,12 @@ import * as dbactions from './db/db-actions.mjs';
  * Gets all words from the database. 
  * (This is possibly the function to alter when implementing search)
  */
-export function showWords() {
-
+export function showWords(search) {
+  if(search === undefined){
     g.db.allDocs({include_docs: true, descending: true}, function(err, doc) {
       redrawWordsUI(doc.rows);
     });
+  }
   }
 /**
  * Generates HTML list from words array
@@ -162,3 +163,4 @@ export function createWordListItem(word){
       
       return li;
 }
+
