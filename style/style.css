@@ -8,6 +8,7 @@ button:focus {
 html{
     margin: 0 ;
     padding: 0;
+    -webkit-app-region: drag;
 
 }
 #app{
