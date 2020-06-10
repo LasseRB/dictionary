@@ -6,32 +6,43 @@
     <title>Dictionary</title>
     <link rel="stylesheet" href="./style/style.css">
 </head>
-<body>
-    <section id="app">
-        <header id="header">
-            <h1>Ritz</h1>
-            <input id="new_word" placeholder="Type a word here" autofocus>
-            <br />
-            <textarea id="new_definition" name="txtarea" placeholder="Type definition here" autofocus></textarea>
-        </header>
-        <section id="main">
-            <select id="dictionaries">
-                <option value="general">General</option>
-                <option value="silly">Silly</option>
-                <option value="javascript">Javascript</option>
-            </select>
-            <input id="tags" placeholder="Seperate tags with comma"></input>
-            <ul id="word_list"></ul>
-            
+<body> 
+    <div id="app-container">
+        <section id="side-menu">
+            <div id="menu-toggle"><div id="icon"></div></div>
+            <ul id="dictionaries-container">
+                <li>Dictionary #1</li>
+                <li>Dictionary #2</li>
+                <li>Dictionary #3</li>
+            </ul>
         </section>
-        <footer id="footer"></footer>
-        <section id="search">
-            <header id="search-header">
-                <input type="search" id="search-term" placeholder="Search for term..." aria-label="search for term" >
-                <button id="search-button">Search</button>
+        <section id="app">
+            <header id="header">
+                <h1>Apperat</h1>
+                <input id="new_word" placeholder="Type a word here" autofocus>
+                <br />
+                <textarea id="new_definition" name="txtarea" placeholder="Type definition here" autofocus></textarea>
             </header>
+            <section id="main">
+                <select id="dictionaries">
+                    <option value="general">General</option>
+                    <option value="silly">Silly</option>
+                    <option value="javascript">Javascript</option>
+                </select>
+                <input id="tags" placeholder="Seperate tags with comma"></input>
+                <ul id="word_list"></ul>
+                
+            </section>
+        
+            <footer id="footer"></footer>
+            <section id="search">
+                <header id="search-header">
+                    <input type="search" id="search-term" placeholder="Search for term..." aria-label="search for term" >
+                    <button id="search-button">Search</button>
+                </header>
+            </section>
         </section>
-    </section>
+    </div>
 </body>
 </html>
 

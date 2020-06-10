@@ -27,6 +27,7 @@ export function getDocFromTitle(title) {
                 limit: 10
             }).then(res => {
                 resolve(res);
+                console.log(res);
             });
         }).catch(err => {
             console.error(err);
