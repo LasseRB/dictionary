@@ -1,7 +1,9 @@
 import * as g from '../global.mjs';
+import * as q from './db-query.mjs';
+
 /**
- * This module us used to do perform basic insert, remove, update functions 
- * on the database. 
+ * This module us used to do perform basic insert, remove, update functions
+ * on the database.
  */
 
 'use strict';
@@ -12,6 +14,9 @@ let elem = {
     dicDom:  document.getElementById('dictionaries'),
     tagDom: document.getElementById('tags')
 };
+
+let sanitize = DOMPurify.sanitize;
+
 export function init (){
     //leave this here for later
 }
@@ -19,10 +24,38 @@ export function init (){
 export var db = g.db;
    //respond to enter-pressed
 
-   
 /**
- * On enter key, this function takes DOM values and pass them to addWord. 
- * If the input for word is empty, an error alert is shown. 
+ * Document object used for updating documents in database. It creates a new id
+ * @param {string} title
+ * @param {string} abbreviation
+ * @param {[string]} tags
+ * @param {string} content
+ * @param {string|undefined} _id
+ */
+export var Document = function(title, abbreviation, tags, content, _id = undefined) {
+    if (title === undefined) title = "Untitled";
+    if (abbreviation === undefined) abbreviation = "";
+    if (tags === undefined) tags = [];
+    if (content === undefined || content == null) content = "";
+    if (_id === undefined) _id = createId();
+
+    tags.forEach((tag, i) => {
+        tags[i] = sanitize(tag);
+    });
+
+    this._id = _id;
+    this.title = sanitize(title);
+    this.abbreviation = sanitize(abbreviation);
+    this.tags = tags;
+    this.content = sanitize(content);
+}
+
+export function createId() {
+    return new Date().toISOString();
+}
+/**
+ * On enter key, this function takes DOM values and pass them to addWord.
+ * If the input for word is empty, an error alert is shown.
  * @param  {} event
  */
 export function enterWord(event){
@@ -38,7 +71,7 @@ if(event.code === "Enter"){
     }
 }
 /**
- * Finds words seperated by comma and return them as strings in array. 
+ * Finds words seperated by comma and return them as strings in array.
  * @param  {string} tags
  * @returns {Array<string>} tags_array
  */
@@ -47,7 +80,7 @@ export function seperateTags(tags){
     if(tags.length > 0){
       tags_array = tags.split(",");
     }
-    return tags_array; 
+    return tags_array;
   }
 /**
  * Adds (puts) a word-object to the database
@@ -56,10 +89,9 @@ export function seperateTags(tags){
  * @param  {string} dictionary
  * @param  {Array<string>} tags
  */
-export function addWord(text, definition, dictionary, tags){
-
+export function addWord(text, definition, dictionary, tags) {
     var word = {
-        _id: new Date().toISOString(),
+        _id: createId(),
         title: text,
         abbreviation: '', // todo: get from input
         searchTitle: text.searchify(),
@@ -82,7 +114,6 @@ export function removeWord(word){
     db.remove(word);
 }
 
-   
 /**
  * Update word object in database
  * @param  {Object<word>} word
@@ -105,5 +136,36 @@ export function wordUpdate(word, event){
     }
 }
 
+/**
+ * Create a new document in the database using the given Document object.
+ * @param {Document} doc
+ */
+export function createDocument(doc) {
+    g.db.put(doc).then(res => {
+        console.log("Created document!");
+        return res;
+    }).catch(err => {
+        console.error(err);
+        throw err;
+    });
+}
+
+/**
+ * Update the document title with the specified id in the database. Make sure to sanitize input!
+ * @param {Document} doc
+ */
+export function updateDocument(doc) {
+    g.db.get(doc._id).then(res => {
+        console.log("Updated document!");
+        res.title = doc.title;
+        res.abbreviation = doc.abbreviation;
+        res.definition = doc.content;
+        res.tags = doc.tags;
+        return g.db.put(res);
+    }).catch(err => {
+        console.error(err);
+        throw err;
+    });
+}
 
 window.onload = init;

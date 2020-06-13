@@ -1,6 +1,6 @@
 import * as g from './modules/global.mjs';
 import * as s from './modules/search.mjs';
-import * as q from './modules/query.mjs';
+import * as q from './modules/db/db-query.mjs';
 
 'use strict';
 
@@ -32,4 +32,4 @@ app.onSearchChange = function (event, elem) {
     }
 };
 
-window.onload = app.init;
+window.addEventListener('load', app.init);

@@ -3,51 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duke</title>
+    <title>Dictionary</title>
     <link rel="stylesheet" type="text/css" href="style/style-mda.css">
 </head>
 <body>
 <div id="app">
     <div id="toolbar">
-        <h1>Duke</h1>
-        <button id="button-dictionary" class="button-toolbar">Dictionaries</button>
-        <button id="button-terms" class="button-toolbar">Terms</button>
+<!--        <h1 id="app-title">Dictionary</h1>-->
+        <button id="button-dictionaryToggle" class="button-toolbar"><img src="icons/genericons-neue/book.svg" alt="toggle dictionary"></button>
+        <button id="button-termToggle" class="button-toolbar"><img src="icons/genericons-neue/category.svg" alt="toggle terms"></button>
     </div>
     <div id="views">
         <div id="view-dictionary">
-            <input id="search-dictionary" class="search-field" aria-placeholder="Search for dictionary" placeholder="Dictionary">
+            <div class="search-create">
+                <input id="search-dictionary" class="search-field" aria-label="Search for dictionary" placeholder="Dictionary">
+                <button id="new-dictionary"><img alt="add dictionary" src="icons/genericons-neue/plus.svg"></button>
+            </div>
+            <ul id="dictionary-list"><!-- list items from js/modules/seach.mjs --></ul>
         </div>
-        <div id="view-search">
-            <input id="search-term" class="search-field" aria-placeholder="Search for term" placeholder="Term">
+        <div id="view-term">
+            <div class="search-create">
+                <input id="search-term" class="search-field" aria-label="Search for term" placeholder="Term">
+                <button id="new-term"><img alt="add term" src="icons/genericons-neue/plus.svg"></button>
+            </div>
+            <ul id="term-list"><!-- list items from js/modules/search.mjs --></ul>
         </div>
         <div id="view-document">
-            <article>
-                <h1>Pellentesque Nec Turpis </h1>
-                <h2>PNT</h2>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                    totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                    dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-                    sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
-                    est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
-                    modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
-                    veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
-                    commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
-                    molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
-                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
-                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
-                    provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
-                    fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis
-                    est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis
-                    voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis
-                    aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non
-                    recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus
-                    maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum.</p>
-            </article>
+            <form id="document-editor">
+                <input type="text" id="document-title" aria-label="title" placeholder="Title">
+                <input type="text" id="document-abbreviation" aria-label="abbreviation" placeholder="Abbreviation">
+                <div id="document-content" aria-label="content" contenteditable=""></div>
+            </form>
         </div>
     </div>
     <div id="statusbar">
@@ -58,10 +44,15 @@
 </div>
 </body>
 </html>
-<script type="module" src="js/lib/pouchdb-7.1.1.min.js"></script>
-<script type="module" src="js/lib/pouchdb.find.js"></script>
+<script type="application/javascript" src="js/lib/pouchdb-7.1.1.min.js"></script>
+<script type="application/javascript" src="js/lib/pouchdb.find.js"></script>
+<script type="application/javascript" src="js/lib/purify.min.js"></script>
+
 <script type="module" src="js/modules/global.mjs"></script>
-<script type="module" src="js/modules/query.mjs"></script>
+<script type="module" src="js/modules/db/db-query.mjs"></script>
+<script type="module" src="js/modules/db/db-actions.mjs"></script>
 <script type="module" src="js/modules/search.mjs"></script>
-<script src="js/modules/extensions.js"></script>
+<script type="module" src="js/modules/document-controller.mjs"></script>
+<script type="module" src="js/modules/view-controller.mjs"></script>
+<script type="module" src="js/modules/extensions.mjs"></script>
 <script type="module" src="js/app-mda.js"></script>

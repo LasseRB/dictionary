@@ -1,6 +1,6 @@
 import * as g from './modules/global.mjs';
 import * as s from './modules/search.mjs';
-import * as q from './modules/query.mjs';
+import * as q from './modules/db/db-query.mjs';
 import * as ui from './modules/drawUI.mjs';
 import * as dbaction from './modules/db/db-actions.mjs';
 

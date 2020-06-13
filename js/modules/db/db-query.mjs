@@ -1,11 +1,18 @@
-import * as g from './global.mjs';
+import * as g from '../global.mjs';
 
 /**
  * Returns a document based on its _id
- * @returns {Object}
+ * @param id
+ * @returns {Promise<Object>}
  */
 export function getDocFromId(id) {
-    return g.db.get(id);
+    return new Promise((resolve, reject) => {
+        g.db.get(id).then(res => {
+            resolve(res);
+        }).catch(err => {
+            reject(err);
+        });
+    });
 }
 
 /**
@@ -39,8 +46,8 @@ export function getDocFromTitle(title) {
  * Returns an object with documents objects with the fields: _id, title, abbreviation, searchTitle and searchAbbreviation
  * @returns {Promise<Object>}
  */
-export function getSearchDocs() {
-    // an index must be created first, if it already then exists nothing is done
+export function getTermList() {
+    // an index must be created first, if it already exists then nothing is done
     return new Promise((resolve, reject) => {
         g.db.createIndex({
             index: {fields: ['title']}

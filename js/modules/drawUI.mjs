@@ -77,18 +77,22 @@ export function createWordListItem(word){
     var tags = document.createElement('ul');
     tags.id = 'tags_' + word._id;
     tags.className = 'tags';
-    for(let i = 0; i < word.tags.length; i++){
-      var randomColor = Math.floor(Math.random()*16777215).toString(16);
-      var li = document.createElement('li');
-      var div = document.createElement('div');
-      div.id = 'tag_'+[i]+'_' + word._id;
-      li.id = 'li_'+[i]+'_' + word._id;
-      div.className ='tag_div';
-      li.appendChild(document.createTextNode(word.tags[i]));
-      div.appendChild(li);
-      tags.appendChild(div);
-      div.style.backgroundColor = "#" + randomColor;
-      div.style.right = 20+ (i*10) + 'px';
+    try {
+        for(let i = 0; i < word.tags.length; i++){
+          var randomColor = Math.floor(Math.random()*16777215).toString(16);
+          var li = document.createElement('li');
+          var div = document.createElement('div');
+          div.id = 'tag_'+[i]+'_' + word._id;
+          li.id = 'li_'+[i]+'_' + word._id;
+          div.className ='tag_div';
+          li.appendChild(document.createTextNode(word.tags[i]));
+          div.appendChild(li);
+          tags.appendChild(div);
+          div.style.backgroundColor = "#" + randomColor;
+          div.style.right = 20+ (i*10) + 'px';
+        }
+    } catch (e) {
+        console.error(e);
     }
     tags.addEventListener('click', ()=> {
       if(tags.className === "tags"){
