@@ -56,11 +56,10 @@ function init() {
 export function databaseUpdated(change) {
     // todo
     if (change.deleted) {
-
         // note: the deleted document object is not passed completely, however _id and _rev is passed
-        console.log(`change (deleted): ${change.doc._id}`);
+        //
     } else {
-        console.log(`change (added/modified): ${change.doc._id}`);
+        // modified document
     }
 }
 
@@ -74,7 +73,11 @@ export function createTermList() {
             let item = document.createElement('li');
             item.setAttribute('id', res.docs[i]._id);
             item.setAttribute('data-id', res.docs[i]._id);
-            item.innerHTML = sanitize(res.docs[i].title);
+            let title = sanitize(res.docs[i].title);
+            if (title === "") {
+                title = "Untitled";
+            }
+            item.innerHTML = title;
             item.addEventListener('click', event => {
                 onTermClicked(event)
             })
@@ -84,6 +87,9 @@ export function createTermList() {
 }
 
 export function updateTermTitle(id, title) {
+    if (id === null || id === "")
+        return;
+
     document.getElementById(id).innerHTML = sanitize(title);
 }
 

@@ -228,18 +228,6 @@ button {
     opacity: 0.3;
 }
 
-#document-content {
-    display: block;
-    width: 100%;
-    margin-bottom: 15px;
-    flex-grow: 1;
-
-    color: #313131;
-    font-size: 14px;
-    text-align: justify;
-    line-height: 1.5;
-}
-
 /* Statusbar items */
 #statusbar p {
     display: inline-block;
@@ -305,3 +293,47 @@ ul#dictionary-list li:hover, ul#term-list li:hover {
     color: #fff;
     background-color: #719eff;
 }
+
+/* Editor.js */
+#editorjs {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    flex-grow: 1;
+
+    color: #313131;
+    font-size: 14px;
+    text-align: justify;
+    line-height: 1.5;
+}
+
+.cdx-block {
+    padding: 10px 0 !important;
+}
+
+.ce-header {
+    padding: 30px 0 15px !important;
+    margin: 0 !important;
+    line-height: 1.5em !important;
+    outline: none !important;
+
+    font-weight: 600;
+}
+
+h1.ce-header {
+    font-size: 25px;
+}
+
+h2.ce-header {
+    font-size: 21px;
+}
+
+h3.ce-header {
+    font-size: 17px;
+}
+
+.ce-paragraph {
+    line-height: 1.5 !important;
+    outline: none !important;
+}
+

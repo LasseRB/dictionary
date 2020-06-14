@@ -32,7 +32,7 @@
             <form id="document-editor">
                 <input type="text" id="document-title" aria-label="title" placeholder="Title">
                 <input type="text" id="document-abbreviation" aria-label="abbreviation" placeholder="Abbreviation">
-                <div id="document-content" aria-label="content" contenteditable=""></div>
+                <div id="editorjs" aria-label="content"></div>
             </form>
         </div>
     </div>
@@ -44,10 +44,20 @@
 </div>
 </body>
 </html>
+<!-- PouchDB -->
 <script type="application/javascript" src="js/lib/pouchdb-7.1.1.min.js"></script>
 <script type="application/javascript" src="js/lib/pouchdb.find.js"></script>
+<!-- DOMPurify-->
 <script type="application/javascript" src="js/lib/purify.min.js"></script>
-
+<!-- Editor.js -->
+<script type="application/javascript" src="js/lib/editorjs/editor.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/code/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/header/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/inline-code/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/list/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/marker/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/quote/bundle.js"></script>
+<!-- User -->
 <script type="module" src="js/modules/global.mjs"></script>
 <script type="module" src="js/modules/db/db-query.mjs"></script>
 <script type="module" src="js/modules/db/db-actions.mjs"></script>
