@@ -2,7 +2,6 @@ import * as q from "./db/db-query.mjs";
 import * as a from "./db/db-actions.mjs";
 import * as s from "./search.mjs";
 
-// todo: make sure to save document if app is closed
 // todo: ability to delete documents
 // todo: empty page instead of editor on open?
 // todo: create new document when clicking plus
@@ -101,14 +100,29 @@ function onDocumentChanged(event) {
         clearTimeout(saveTimer);
     }
 
-    // restart timer, save document after 500 ms inactivity
-    saveTimer = setTimeout(saveDocument, 500);
+    // restart timer, save document after 1000 ms inactivity
+    saveTimer = setTimeout(saveDocument, 1000);
 }
 
+/**
+ * Saves the current document to the database.
+ */
 export function saveDocument() {
     console.log("Save document!");
 
     editor.save().then(data => {
+        if (elem.title.value === "") {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toPaddedString();
+            const day = date.getDate().toPaddedString();
+            const hours = date.getHours().toPaddedString();
+            const minutes = date.getMinutes().toPaddedString();
+            const seconds = date.getSeconds().toPaddedString();
+
+            elem.title.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
         // sanitize the input
         let doc = new a.Document(
             sanitize(elem.title.value),
@@ -135,12 +149,17 @@ export function saveDocument() {
     });
 }
 
+/**
+ * Saves the current document and shows the document with the given id
+ * @param id
+ */
 export function displayDocument(id) {
     // save existing first
     if (hasChanged) {
         saveDocument();
     }
 
+    // remove event listeners to prevent firing after changing
     removeEventListeners();
 
     // show new document
@@ -161,8 +180,23 @@ export function displayDocument(id) {
         console.error(err);
     });
 
+    // re-add event listeners
     hasChanged = false;
     addEventListeners();
 }
 
+/**
+ * Display the top-most document
+ */
+export function displayTopDocument() {
+    let elem = s.getTopElement();
+    if (elem === null) {
+        return;
+    }
+
+    elem.click();
+    displayDocument(elem.id);
+}
+
 window.addEventListener('load', init);
+window.addEventListener('beforeunload', saveDocument);

@@ -6,7 +6,9 @@ import * as q from "./db/db-query.mjs";
 
 let elem = {};
 let sanitize = DOMPurify.sanitize;
+let selected = [];
 let searchList = [];
+let searchMatches = [];
 let fuse = undefined;
 
 /**
@@ -34,21 +36,15 @@ function init() {
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
 
-    // // respond to search button click event
-    // elem.searchButton.addEventListener('click', event => {
-    //     getDocFromTitle(elem.searchTerm.value).then(res => {
-    //         console.log(res);
-    //     });
-    // })
-
     // create visible list of titles, setup search array and initialize Fuse
     createTermList();
 }
 
 /**
- * Initialize Fuse. Should be done whenever a document has been changed or added.
+ * Update Fuse. Should be done whenever a document has been changed or added.
  */
-function initFuse() {
+export function updateFuse() {
+    // todo: update searchList when document is changed, maybe query database instead of maintaining searchList
     const options = {
         isCaseSensitive: false,
         // includeScore: false,
@@ -57,41 +53,49 @@ function initFuse() {
         // findAllMatches: false,
         // minMatchCharLength: 1,
         // location: 0,
-        // threshold: 0.6,
+        threshold: 0.4,
         // distance: 100,
         // useExtendedSearch: false,
         keys: [
-            "title",
-            "abbreviation"
+            "doc.title",
+            "doc.abbreviation",
+            "doc.tags"
         ]
     };
 
     fuse = new Fuse(searchList, options);
 }
 
+/**
+ * Updates the search results and orders the elements
+ * @param event
+ */
 function onSearchChange(event) {
-    if (event.code === "Enter") {
-        // for reference
-    }
+    // clear array
+    searchMatches.splice(0, searchMatches.length);
 
-    // todo: not best way to filter, and doesn't sort results
     if (event.target.value === "") {
-        let children = elem.termList.getElementsByTagName('li')
+        let children = elem.termList.getElementsByTagName('input')
         for (let i = 0; i < children.length; i++) {
             children[i].style.removeProperty('display');
         }
+        // todo: revert order back to default
     } else {
-        // todo: reflect the matches in the term list
-        const matches = getSearchResults(event.target.value);
+        searchMatches = getSearchResults(event.target.value);
 
-        let children = elem.termList.getElementsByTagName('li')
+        let children = elem.termList.getElementsByTagName('input')
         for (let i = 0; i < children.length; i++) {
             children[i].style.setProperty('display', 'none');
         }
 
-        matches.forEach(match => {
-            document.getElementById(match.item._id).style.removeProperty('display');
+        searchMatches.forEach(match => {
+            document.getElementById(match.item.doc._id).style.removeProperty('display');
+            match.item.element.parentNode.appendChild(match.item.element); // sorts the displayed list
         });
+    }
+
+    if (event.code === "Enter") {
+        dc.displayTopDocument();
     }
 }
 
@@ -106,11 +110,15 @@ export function getSearchResults(pattern) {
 
 /**
  * Add a new item to the search array
+ * @param {Element} elem
  * @param {Object} doc
  */
-export function addSearchItem(doc) {
+export function addSearchItem(elem, doc) {
     const ref = searchList.length;
-    searchList.push(doc);
+    searchList.push({
+        "element": elem,
+        "doc": doc,
+    });
 }
 
 /**
@@ -128,13 +136,17 @@ export function databaseUpdated(change) {
 }
 
 export function updateDictionaryList() {
-    // todo
+    // todo: show list of dictionaries (or maybe tags?)
 }
 
+/**
+ * Creates the list of documents that are displayed and can be searched.
+ */
 export function createTermList() {
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
-            let item = document.createElement('li');
+            let item = document.createElement('input');
+            item.setAttribute('type', 'checkbox');
             item.setAttribute('id', res.docs[i]._id);
             item.setAttribute('data-id', res.docs[i]._id);
 
@@ -142,30 +154,64 @@ export function createTermList() {
             if (title === "") {
                 title = "Untitled";
             }
-
             item.innerHTML = title;
+
             item.addEventListener('click', event => {
                 onTermClicked(event)
             })
-            elem.termList.appendChild(item);
 
-            addSearchItem(res.docs[i]);
+            elem.termList.appendChild(item);
+            addSearchItem(item, res.docs[i]);
         }
     }).then(() => {
-        initFuse();
+        updateFuse(); // always re-initialize Fuse after changing content
     });
 }
 
-export function updateTermTitle(id, title) {
-    if (id === null || id === "")
+/**
+ * Updates the title of element in the document list
+ * @param {string} id
+ * @param {string} newTitle
+ */
+export function updateTermTitle(id, newTitle) {
+    if (id === undefined || id === "")
         return;
 
-    document.getElementById(id).innerHTML = sanitize(title);
+    document.getElementById(id).innerHTML = sanitize(newTitle);
 }
 
+/**
+ * Get the id of the top-most search result
+ * @returns {Element|null}
+ */
+export function getTopElement() {
+    if (searchMatches.length === 0) {
+        return null;
+    }
+
+    return searchMatches[0].item.element;
+}
+
+/**
+ * Handles list selection
+ * @param event
+ */
 function onTermClicked(event) {
-    let id = event.target.getAttribute('data-id');
-    dc.displayDocument(id);
+    // de-select previous
+    for (let i = 0; i < selected.length; i++)
+    {
+        selected[i].checked = false;
+    }
+    selected.splice(0, selected.length);
+
+    // select new
+    const checkbox = event.target;
+    if (checkbox.checked === true)
+    {
+        let id = checkbox.getAttribute('data-id');
+        selected.push(checkbox);
+        dc.displayDocument(id);
+    }
 }
 
 window.addEventListener("load", init);

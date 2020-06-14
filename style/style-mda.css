@@ -280,18 +280,22 @@ ul#dictionary-list, ul#term-list {
     padding: 0;
 }
 
-ul#dictionary-list li, ul#term-list li {
-    list-style-type: none;
-    list-style-position: inside;
+#dictionary-list input, #term-list input {
+    display: block;
     line-height: 1.5;
     margin: 0;
     padding: 3px 15px;
     cursor: pointer;
 }
 
-ul#dictionary-list li:hover, ul#term-list li:hover {
+#dictionary-list input:hover, #term-list input:hover {
     color: #fff;
     background-color: #719eff;
+}
+
+#dictionary-list input:checked, #term-list input:checked {
+    color: #fff;
+    background-color: #404040;
 }
 
 /* Editor.js */
