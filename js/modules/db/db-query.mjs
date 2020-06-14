@@ -54,7 +54,7 @@ export function getTermList() {
         }).then(() => {
             g.db.find({
                 selector: {title: {$gt: null}},
-                fields: ['_id', '_rev', 'title', 'abbreviation', 'searchTitle', 'searchAbbreviation'],
+                // fields: ['_id', '_rev', 'title', 'abbreviation', 'searchTitle', 'searchAbbreviation'],
                 sort: [{'_id': 'desc'}]
             }).then(res => {
                 resolve(res);

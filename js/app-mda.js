@@ -28,7 +28,6 @@ app.onSearchChange = function (event, elem) {
         // todo: select top result
     } else {
         let str = elem.value.searchify();
-        console.log(str);
     }
 };
 
