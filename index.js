@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
     // domain root redirect to index.html
     let filePath = '.' + req.url;
     if (filePath === './') {
-        filePath = 'index.html';
+        filePath = 'index-mda.html';
     }
 
     // determine mime type

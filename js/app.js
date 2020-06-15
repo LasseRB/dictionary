@@ -3,6 +3,7 @@ import * as s from './modules/search.mjs';
 import * as q from './modules/db/db-query.mjs';
 import * as ui from './modules/drawUI.mjs';
 import * as dbaction from './modules/db/db-actions.mjs';
+import * as dbexport from './modules/db/db-save.mjs';
 
 'use strict';
 
@@ -37,7 +38,9 @@ app.init = function () {
         searchTerm.addEventListener('keyup', event => {
             app.onSearchChange(event, app.inputs.searchTerm);
             });
-    
+     
+            dbexport.handleExport();
+        
             // updates the window on changes to database
     g.db.changes({
         since: 'now',

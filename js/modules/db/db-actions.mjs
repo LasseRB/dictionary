@@ -102,6 +102,7 @@ export function addWord(text, definition, dictionary, tags) {
     }
     db.put(word).then(function (result){
         console.log(word);
+       
     }).catch(function(error){
         console.log(error);
     });
@@ -166,6 +167,8 @@ export function updateDocument(doc) {
         console.error(err);
         throw err;
     });
+
+
 }
 
 window.onload = init;

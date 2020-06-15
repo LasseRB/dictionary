@@ -1,8 +1,10 @@
+
 let elem = {};
 
 function init() {
     elem.dictionaryButton = document.getElementById('button-dictionaryToggle');
     elem.termButton = document.getElementById('button-termToggle');
+    elem.exportButton = document.getElementById('button-export');
     elem.dictionaryView = document.getElementById('view-dictionary');
     elem.termView = document.getElementById('view-term');
 
@@ -13,6 +15,8 @@ function init() {
     elem.termButton.addEventListener('click', event => {
         onTermButtonClicked(event);
     })
+  
+ 
 }
 
 function onDictionaryButtonClicked(event) {
