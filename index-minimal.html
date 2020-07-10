@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Succinctly</title>
+    <link rel="stylesheet" type="text/css" href="style/style-minimal.css">
+</head>
+<body>
+<div id="app">
+    <div id="toolbar">
+    </div>
+    <div id="views">
+    
+        <div id="view-term">
+           
+               <!-- / <input id="search-term" class="search-field" aria-label="Search for term" placeholder="Term"> -->
+                
+        
+            <div id="term-list"><!-- list items from js/modules/search.mjs --></div>
+        </div>
+        <div id="view-document">
+            <form id="document-editor">
+                <span>
+                    <div class="search-create">
+                <input type="text" id="search-term" class="search-field" aria-label="Search for term" placeholder="Search or add new term">
+                <button id="new-term"><img alt="add term" src="icons/genericons-neue/plus.svg"></button></span>
+            </div>
+                <input type="text" id="document-abbreviation" aria-label="abbreviation" placeholder="Abbreviation">
+                <div id="editorjs" aria-label="content"></div>
+            </form>
+        </div>
+    </div>
+  
+</div>
+</body>
+</html>
+<!-- PouchDB -->
+<script type="application/javascript" src="js/lib/pouchdb-7.1.1.min.js"></script>
+<script type="application/javascript" src="js/lib/pouchdb.find.js"></script>
+<!-- <script type="application/javascript" src="js/lib/pouchdb.replication-stream.min.js"></script> -->
+<!-- DOMPurify-->
+<script type="application/javascript" src="js/lib/purify.min.js"></script>
+<!-- Fuse -->
+<script type="application/javascript" src="js/lib/fuse.min.js"></script>
+<!-- Editor.js -->
+<script type="application/javascript" src="js/lib/editorjs/editor.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/code/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/header/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/inline-code/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/list/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/marker/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/quote/bundle.js"></script>
+<!-- User -->
+<script type="module" src="js/modules/global.mjs"></script>
+<script type="module" src="js/modules/db/db-query.mjs"></script>
+<script type="module" src="js/modules/db/db-actions.mjs"></script>
+
+<script type="module" src="js/modules/search.mjs"></script>
+<script type="module" src="js/modules/document-controller.mjs"></script>
+<script type="module" src="js/modules/view-controller.mjs"></script>
+<script type="module" src="js/modules/extensions.mjs"></script>
+<script type="module" src="js/app-mda.js"></script>

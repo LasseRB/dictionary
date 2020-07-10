@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+html, body {
+    color: #313131;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+body {
+}
+
+html, p, input, textarea, button {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+}
+
+input, textarea {
+    /* reset input appearance */
+    display: inline-block;
+    border: none;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: text;
+    resize: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+[contenteditable] {
+    outline: 0 none;
+}
+
+button {
+    /* reset button appearance */
+    display: inline-block;
+    border: none;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Main layout */
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#toolbar {
+    position: relative;
+    color: #404040;
+    background-color: #fefefe;
+    display: flex;
+    align-items: center;
+    flex-basis: 40px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 40px;
+}
+
+#toolbar:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    bottom: -2px;
+    background: transparent;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+}
+
+#views {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    min-height: 0;
+}
+
+#statusbar {
+    position: relative;
+    color: #757473;
+    background-color: #fefefe;
+    display: flex;
+    align-items: center;
+    flex-basis: 30px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+#statusbar:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -2px;
+    bottom: 100%;
+    background: transparent;
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
+}
+
+#view-dictionary {
+    background-color: #e6e5e4;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    flex-basis: 200px;
+    flex-grow: 50;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#view-term {
+    background-color: #f2f1f0;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    flex-basis: 200px;
+    flex-grow: 100;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#view-document {
+    background-color: #fff;
+    min-width: 300px;
+    flex-basis: 600px;
+    flex-grow: 600;
+    flex-shrink: 1;
+    overflow: auto;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: row;
+}
+
+/* Toolbar items */
+.button-toolbar {
+    display: inline-block;
+    margin-left: 10px;
+    height: 32px;
+    flex-basis: 32px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-items: center;
+}
+
+.button-toolbar img {
+    fill: #404040;
+    width: 24px;
+    height: 24px;
+    display: block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+
+#app-title {
+    display: block;
+    position: absolute;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+}
+
+/* View items */
+#document-editor {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+
+#document-title {
+    display: inline-block;
+    width: 90%;
+    margin: 20px 0 5px;
+    flex-grow: 0;
+
+    color: #404040;
+    font-size: 27px;
+    line-height: 1.5;
+}
+
+#document-abbreviation {
+    display: block;
+    width: 100%;
+    margin: 0 0 15px;
+    flex-grow: 0;
+
+    color: #505050;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+#document-title::placeholder,
+#document-abbreviation::placeholder {
+    color: #505050;
+    opacity: 0.3;
+}
+
+/* Statusbar items */
+#statusbar p {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+/* Search */
+.search-create {
+    display: flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    flex-grow: 0;
+    align-items: center;
+    /* padding: 0 15px; */
+}
+
+.search-field {
+    display: inline-block;
+    width: 90%;
+    margin: 20px 0 5px;
+    flex-grow: 0;
+
+    color: #404040;
+    font-size: 27px;
+    line-height: 1.5;
+}
+
+#new-dictionary, #new-term {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    line-height: 0;
+    text-align: right;
+}
+
+#new-dictionary img, #new-term img {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+ul#dictionary-list, ul#term-list {
+    margin: 0;
+    padding: 0;
+}
+
+#dictionary-list input, #term-list input {
+    display: block;
+    line-height: 1.5;
+    margin: 0;
+    padding: 3px 15px;
+    cursor: pointer;
+}
+
+#dictionary-list input:hover, #term-list input:hover {
+    color: #fff;
+    background-color: #719eff;
+}
+
+#dictionary-list input:checked, #term-list input:checked {
+    color: #fff;
+    background-color: #404040;
+}
+
+/* Editor.js */
+#editorjs {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    flex-grow: 1;
+
+    color: #313131;
+    font-size: 14px;
+    text-align: justify;
+    line-height: 1.5;
+}
+
+.cdx-block {
+    padding: 10px 0 !important;
+}
+
+.ce-header {
+    padding: 30px 0 15px !important;
+    margin: 0 !important;
+    line-height: 1.5em !important;
+    outline: none !important;
+
+    font-weight: 600;
+}
+
+h1.ce-header {
+    font-size: 25px;
+}
+
+h2.ce-header {
+    font-size: 21px;
+}
+
+h3.ce-header {
+    font-size: 17px;
+}
+
+.ce-paragraph {
+    line-height: 1.5 !important;
+    outline: none !important;
+}
+

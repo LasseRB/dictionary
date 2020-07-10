@@ -174,10 +174,8 @@ export function createTermList() {
  * @param {string} newTitle
  */
 export function updateTermTitle(id, newTitle) {
-    if (id === undefined || id === ""){
-        console.log("undefined title");
+    if (id === undefined || id === "")
         return;
-    }
 
     document.getElementById(id).innerHTML = sanitize(newTitle);
 }

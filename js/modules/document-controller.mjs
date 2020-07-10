@@ -17,7 +17,8 @@ let hasChanged = false;
 function init() {
     // get elements
     elem.article = document.getElementById('document-article');
-    elem.title = document.getElementById('document-title');
+    // elem.title = document.getElementById('document-title');
+    elem.title = document.getElementById('search-term');
     elem.abbreviation = document.getElementById('document-abbreviation');
     elem.content = document.getElementById('editorjs');
 
@@ -191,9 +192,9 @@ export function displayDocument(id) {
 export function displayTopDocument() {
     let elem = s.getTopElement();
     if (elem === null) {
+        console.log("display top document error!");
         return;
     }
-
     elem.click();
     displayDocument(elem.id);
 }
