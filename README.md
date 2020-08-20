@@ -21,7 +21,7 @@ This will start a local node server which will restart everytime a js file is up
 - briefly
 - Lexicon
 - Flexicon
-- Complixicon
+- Complexicon
 - HYPONYM
 - Hypernym
 - Apponym
