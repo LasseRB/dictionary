@@ -4,44 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dictionary</title>
-    <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" type="text/css" href="style/style-mda.css">
 </head>
 <body>
-    <section id="app">
-        <header id="header">
-            <h1>Ritz</h1>
-            <input id="new_word" placeholder="Type a word here" autofocus>
-            <br />
-            <textarea id="new_definition" name="txtarea" placeholder="Type definition here" autofocus></textarea>
-        </header>
-        <section id="main">
-            <select id="dictionaries">
-                <option value="general">General</option>
-                <option value="silly">Silly</option>
-                <option value="javascript">Javascript</option>
-            </select>
-            <input id="tags" placeholder="Seperate tags with comma"></input>
-            <ul id="word_list"></ul>
-            
-        </section>
-        <footer id="footer"></footer>
-        <section id="search">
-            <header id="search-header">
-                <input type="search" id="search-term" placeholder="Search for term..." aria-label="search for term" >
-                <button id="search-button">Search</button>
-            </header>
-        </section>
-    </section>
+<div id="app">
+    <div id="toolbar">
+<!--        <h1 id="app-title">Dictionary</h1>-->
+        <button id="button-dictionaryToggle" class="button-toolbar"><img src="icons/genericons-neue/book.svg" alt="toggle dictionary"></button>
+        <button id="button-termToggle" class="button-toolbar"><img src="icons/genericons-neue/category.svg" alt="toggle terms"></button>
+        <button id="button-export">Export</button>
+        <input id="file-import" type="file"/>
+        <input type="submit">
+    </div>
+    <div id="views">
+        <div id="view-dictionary">
+            <div class="search-create">
+                <input id="search-dictionary" class="search-field" aria-label="Search for dictionary" placeholder="Dictionary">
+                <button id="new-dictionary"><img alt="add dictionary" src="icons/genericons-neue/plus.svg"></button>
+            </div>
+            <ul id="dictionary-list"><!-- list items from js/modules/seach.mjs --></ul>
+        </div>
+        <div id="view-term">
+            <div class="search-create">
+                <input id="search-term" class="search-field" aria-label="Search for term" placeholder="Term">
+                <button id="new-term"><img alt="add term" src="icons/genericons-neue/plus.svg"></button>
+            </div>
+            <div id="term-list"><!-- list items from js/modules/search.mjs --></div>
+        </div>
+        <div id="view-document">
+            <form id="document-editor">
+                <input type="text" id="document-title" aria-label="title" placeholder="Title">
+                <input type="text" id="document-abbreviation" aria-label="abbreviation" placeholder="Abbreviation">
+                <div id="editorjs" aria-label="content"></div>
+            </form>
+        </div>
+    </div>
+    <div id="statusbar">
+        <p>Dictionary</p>
+        <p>|</p>
+        <p>123 terms</p>
+    </div>
+</div>
 </body>
 </html>
-
-<script src="js/lib/pouchdb-7.1.1.min.js"></script>
-<script src="js/lib/pouchdb.find.js"></script>
-<script src="js/lib/pouchdb.replication-stream.min.js"></script>
-<script src="js/lib/purify.min.js"></script>
+<!-- PouchDB -->
+<script type="application/javascript" src="js/lib/pouchdb-7.1.1.min.js"></script>
+<script type="application/javascript" src="js/lib/pouchdb.find.js"></script>
+<!-- <script type="application/javascript" src="js/lib/pouchdb.replication-stream.min.js"></script> -->
+<!-- DOMPurify-->
+<script type="application/javascript" src="js/lib/purify.min.js"></script>
+<!-- Fuse -->
+<script type="application/javascript" src="js/lib/fuse.min.js"></script>
+<!-- Editor.js -->
+<script type="application/javascript" src="js/lib/editorjs/editor.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/code/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/header/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/inline-code/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/list/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/marker/bundle.js"></script>
+<script type="application/javascript" src="js/lib/editorjs/quote/bundle.js"></script>
+<!-- User -->
 <script type="module" src="js/modules/global.mjs"></script>
 <script type="module" src="js/modules/db/db-query.mjs"></script>
+<script type="module" src="js/modules/db/db-actions.mjs"></script>
+
 <script type="module" src="js/modules/search.mjs"></script>
-<script src="js/modules/extensions.mjs"></script>
-<script type="module" src="./js/app.js"></script>
-<script type="module" src="./db-save.js"></script>
+<script type="module" src="js/modules/document-controller.mjs"></script>
+<script type="module" src="js/modules/view-controller.mjs"></script>
+<script type="module" src="js/modules/extensions.mjs"></script>
+<script type="module" src="js/app-mda.js"></script>
