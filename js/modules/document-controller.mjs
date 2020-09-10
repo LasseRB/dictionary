@@ -21,6 +21,14 @@ function init() {
     elem.abbreviation = document.getElementById('document-abbreviation');
     elem.content = document.getElementById('editorjs');
 
+
+    // add from search functionality
+    elem.newTermButton = document.getElementById('new-term');
+    elem.newTerm = document.getElementById('search-term');   
+
+  
+  
+
     // clear contents
     elem.title.value = "";
     elem.abbreviation.value = "";
@@ -38,6 +46,7 @@ function addEventListeners() {
     elem.abbreviation.addEventListener('input', onDocumentChanged);
     elem.content.addEventListener('input', onDocumentChanged);
     editor.onChange = onDocumentChanged;
+    elem.newTermButton.addEventListener('click', saveDocument);
 }
 
 function removeEventListeners() {
@@ -111,7 +120,10 @@ export function saveDocument() {
     console.log("Save document!");
 
     editor.save().then(data => {
-        if (elem.title.value === "") {
+        // If no title, term gets todays date
+        // This I might remove in the new design with search bar
+  
+        if (elem.title.value === "" && elem.newTerm.value === "") {
             const date = new Date();
             const year = date.getFullYear();
             const month = (date.getMonth() + 1).toPaddedString();
@@ -121,6 +133,11 @@ export function saveDocument() {
             const seconds = date.getSeconds().toPaddedString();
 
             elem.title.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        } else if(elem.newTerm.value != "" && elem.title.value != elem.newTerm.value){
+            elem.title.value = elem.newTerm.value;
+            elem.newTerm.value = '';
+            updateDoc();
+
         }
 
         // sanitize the input
@@ -131,6 +148,13 @@ export function saveDocument() {
             JSON.stringify(data)
         );
 
+        updateDoc();
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
+export function updateDoc(){
         // create new document or update existing
         let id = elem.title.getAttribute('data-id');
 
@@ -144,9 +168,6 @@ export function saveDocument() {
         }
 
         documentId = id;
-    }).catch(err => {
-        console.error(err);
-    });
 }
 
 /**

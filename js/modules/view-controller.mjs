@@ -15,7 +15,8 @@ function init() {
     elem.termButton.addEventListener('click', event => {
         onTermButtonClicked(event);
     })
-  
+
+ 
  
 }
 
@@ -40,5 +41,7 @@ function onTermButtonClicked(event) {
         elem.termView.style.setProperty('display', 'none');
     }
 }
+
+
 
 window.addEventListener('load', init);
