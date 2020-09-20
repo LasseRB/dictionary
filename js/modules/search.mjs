@@ -37,9 +37,9 @@ function init() {
     
     // create visible list of titles, setup search array and initialize Fuse
     createContextList();
-    console.log("1");
+
     createTermList();
-    console.log("2");
+
    
 
 
@@ -81,7 +81,10 @@ function onSearchChange(event) {
     searchMatches.splice(0, searchMatches.length);
     
     let c_children = elem.contextList.getElementsByTagName('input');
-    let t_children = elem.termList.getElementsByTagName('li');
+    let t_children =document.getElementsByClassName('li_wrapper');
+    for(let a=0; a < t_children.length; a++){
+        console.log(t_children[a]);
+    }
    
     if (event.target.value === "") {
         for (let i = 0; i < c_children.length; i++) {
@@ -93,8 +96,9 @@ function onSearchChange(event) {
         searchMatches = getSearchResults(event.target.value);
 
         for (let i = 0; i < c_children.length; i++) {
-            c_children[i].style.setProperty('display', 'none');
             t_children[i].style.setProperty('display', 'none');
+            c_children[i].style.setProperty('display', 'none');
+            
         }
 
         searchMatches.forEach(match => {

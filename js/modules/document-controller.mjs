@@ -240,6 +240,7 @@ export function displayDocument(id) {
 export function createTermDom(doc){
 
     let li = document.createElement('li'); 
+    li.className = 'li_wrapper';
     li.setAttribute('id', "term " + doc._id);
     li.setAttribute('data-id', doc._id);
     let form = document.createElement('form');
