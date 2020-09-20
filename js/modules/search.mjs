@@ -157,6 +157,7 @@ export function updateDictionaryList() {
 export function createContextList() {
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
+            dc.crea
             let item = document.createElement('input');
             item.setAttribute('type', 'checkbox');
             item.setAttribute('id', "cntx " + res.docs[i]._id);
@@ -181,41 +182,12 @@ export function createContextList() {
 }
 
 export function createTermList(){
-  
     q.getTermList().then(res => {
-        for (let i = 0; i < res.docs.length; i++) {
-                let li = document.createElement('li'); 
-                li.setAttribute('id', "term " + res.docs[i]._id);
-                li.setAttribute('data-id', res.docs[i]._id);
-                let form = document.createElement('form');
-                    form.className="document-editor";
-                let title = document.createElement('input');
-                    title.id="document-title";
-                    title.setAttribute("aria-label","term");
-                    title.setAttribute("placeholder","Term");
-                let title_val = sanitize(res.docs[i].title);
-                    if (title_val === "") {
-                        title_val = "Untitled";
-                    }
-                    title.value = title_val;
-                let dictionaries = document.createElement('input');
-                    dictionaries.id="document-dictionaries-"+res.docs[i];
-                    dictionaries.setAttribute("aria-label","dictionaries");
-                    dictionaries.setAttribute("placeholder","Dictionaries");
-                let abbreviation = document.createElement('input');
-                    abbreviation.setAttribute("aria-label","abbreviation");
-                    abbreviation.setAttribute("placeholder","Abbreviation");
-                let editorjs = document.createElement('div');
-                    editorjs.setAttribute("aria-label","content");
-                                        
-                li.appendChild(form)
-                    .appendChild(title);
-                form.appendChild(dictionaries);
-                form.appendChild(abbreviation);
-                form.appendChild(editorjs);
-
-                elem.termList.appendChild(li);
-                addSearchItem(li, res.docs[i]);
+        for (let i = 0; i < res.docs.length1; i++) {
+            let term = dc.createTermDom(res.docs[i]);
+                elem.termList.appendChild(term);
+                dc.setupEditor(res.docs[i]);    
+                addSearchItem(term, res.docs[i]);
             }
         }).then(() => {
             updateFuse(); // always re-initialize Fuse after changing content

@@ -120,22 +120,7 @@ export function removeWord(word){
  * @param  {Object<word>} word
  * @param  {} event
  */
-export function wordUpdate(word, event){
-    let inputWord = document.getElementById('input_title_' + word._id).value.trim();
-    let inputDef = document.getElementById('input_def_' + word._id).value.trim();
-    let inputTag = document.getElementById('input_tag_' + word._id).value.trim();
-    if(!inputWord){
-        db.remove(word);
-    } else{
-        word.title = inputWord;
-        word.definition = inputDef;
-        word.tags = seperateTags(inputTag);
-        word.abbreviation = ''; // todo: get from input
-        word.searchTitle = inputWord.searchify();
-        word.searchAbbreviation = ''; // todo: use searchify() on abbreviation
-        db.put(word);
-    }
-}
+
 
 /**
  * Create a new document in the database using the given Document object.
