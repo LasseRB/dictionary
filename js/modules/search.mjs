@@ -37,8 +37,9 @@ function init() {
     
     // create visible list of titles, setup search array and initialize Fuse
     createContextList();
+    console.log("1");
     createTermList();
-
+    console.log("2");
    
 
 
@@ -182,15 +183,20 @@ export function createContextList() {
 }
 
 export function createTermList(){
+    console.log("called");
     q.getTermList().then(res => {
-        for (let i = 0; i < res.docs.length1; i++) {
+        for (let i = 0; i < res.docs.length; i++) {
+            console.log("createTermList() called!");
             let term = dc.createTermDom(res.docs[i]);
+            console.log(term);
                 elem.termList.appendChild(term);
                 dc.setupEditor(res.docs[i]);    
                 addSearchItem(term, res.docs[i]);
             }
         }).then(() => {
             updateFuse(); // always re-initialize Fuse after changing content
+        }).catch((err) => {
+            console.log(err);
         });
 }
 

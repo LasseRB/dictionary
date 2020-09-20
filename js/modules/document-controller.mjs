@@ -239,10 +239,6 @@ export function displayDocument(id) {
 
 export function createTermDom(doc){
 
-        // setup editor.js
-     
-    
-
     let li = document.createElement('li'); 
     li.setAttribute('id', "term " + doc._id);
     li.setAttribute('data-id', doc._id);
