@@ -11,12 +11,14 @@ const app = {};
 
 app.init = function () {
     //hvorfor kan jeg ikke gøre dette i et af modulerne? For disallowed mime-type errors. 
-    const exportbtn = document.getElementById('button-export');
-    const importbtn = document.getElementById('file-import');
-    exportbtn.addEventListener('click', event =>{
-        dbf.handleImport();
-    });
-    importbtn.addEventListener('change', dbf.handleImport);
+    // const exportbtn = document.getElementById('button-export');
+    // const importbtn = document.getElementById('file-import');
+    // exportbtn.addEventListener('click', event =>{
+    //     dbf.handleImport();
+    // });
+    // importbtn.addEventListener('change', dbf.handleImport);
+
+  
 };
 
 window.addEventListener('load', app.init);

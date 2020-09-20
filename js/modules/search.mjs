@@ -29,16 +29,21 @@ function init() {
 
     // setup document elements
     elem.searchTerm = document.getElementById('search-term');
-    // elem.searchButton = document.getElementById('search-button');
-    elem.dictionaryList = document.getElementById('dictionary-list');
     elem.termList = document.getElementById('term-list');
-
+    elem.contextList = document.getElementById('context-list');
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
 
+    
     // create visible list of titles, setup search array and initialize Fuse
+    createContextList();
     createTermList();
+
+   
+
+
 }
+
 
 /**
  * Update Fuse. Should be done whenever a document has been changed or added.
@@ -73,24 +78,29 @@ export function updateFuse() {
 function onSearchChange(event) {
     // clear array
     searchMatches.splice(0, searchMatches.length);
-
+    
+    let c_children = elem.contextList.getElementsByTagName('input');
+    let t_children = elem.termList.getElementsByTagName('li');
+   
     if (event.target.value === "") {
-        let children = elem.termList.getElementsByTagName('input')
-        for (let i = 0; i < children.length; i++) {
-            children[i].style.removeProperty('display');
+        for (let i = 0; i < c_children.length; i++) {
+            c_children[i].style.removeProperty('display');
+            t_children[i].style.removeProperty('display');
         }
         // todo: revert order back to default
     } else {
         searchMatches = getSearchResults(event.target.value);
 
-        let children = elem.termList.getElementsByTagName('input')
-        for (let i = 0; i < children.length; i++) {
-            children[i].style.setProperty('display', 'none');
+        for (let i = 0; i < c_children.length; i++) {
+            c_children[i].style.setProperty('display', 'none');
+            t_children[i].style.setProperty('display', 'none');
         }
 
         searchMatches.forEach(match => {
-            document.getElementById(match.item.doc._id).style.removeProperty('display');
-            match.item.element.parentNode.appendChild(match.item.element); // sorts the displayed list
+           document.getElementById("cntx " + match.item.doc._id).style.removeProperty('display');
+           document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
+           match.item.element.parentNode.appendChild(match.item.element);
+      
         });
     }
 
@@ -126,6 +136,8 @@ export function addSearchItem(elem, doc) {
  * @param {Object} change: The document object that has changed
  */
 export function databaseUpdated(change) {
+
+   
     // todo: respond to database changes?
     if (change.deleted) {
         // note: the deleted document object is not passed completely, however _id and _rev is passed
@@ -142,12 +154,12 @@ export function updateDictionaryList() {
 /**
  * Creates the list of documents that are displayed and can be searched.
  */
-export function createTermList() {
+export function createContextList() {
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
             let item = document.createElement('input');
             item.setAttribute('type', 'checkbox');
-            item.setAttribute('id', res.docs[i]._id);
+            item.setAttribute('id', "cntx " + res.docs[i]._id);
             item.setAttribute('data-id', res.docs[i]._id);
 
             let title = sanitize(res.docs[i].title);
@@ -160,12 +172,54 @@ export function createTermList() {
                 onTermClicked(event)
             })
 
-            elem.termList.appendChild(item);
+            elem.contextList.appendChild(item);
             addSearchItem(item, res.docs[i]);
         }
     }).then(() => {
         updateFuse(); // always re-initialize Fuse after changing content
     });
+}
+
+export function createTermList(){
+  
+    q.getTermList().then(res => {
+        for (let i = 0; i < res.docs.length; i++) {
+                let li = document.createElement('li'); 
+                li.setAttribute('id', "term " + res.docs[i]._id);
+                li.setAttribute('data-id', res.docs[i]._id);
+                let form = document.createElement('form');
+                    form.className="document-editor";
+                let title = document.createElement('input');
+                    title.id="document-title";
+                    title.setAttribute("aria-label","term");
+                    title.setAttribute("placeholder","Term");
+                let title_val = sanitize(res.docs[i].title);
+                    if (title_val === "") {
+                        title_val = "Untitled";
+                    }
+                    title.value = title_val;
+                let dictionaries = document.createElement('input');
+                    dictionaries.id="document-dictionaries-"+res.docs[i];
+                    dictionaries.setAttribute("aria-label","dictionaries");
+                    dictionaries.setAttribute("placeholder","Dictionaries");
+                let abbreviation = document.createElement('input');
+                    abbreviation.setAttribute("aria-label","abbreviation");
+                    abbreviation.setAttribute("placeholder","Abbreviation");
+                let editorjs = document.createElement('div');
+                    editorjs.setAttribute("aria-label","content");
+                                        
+                li.appendChild(form)
+                    .appendChild(title);
+                form.appendChild(dictionaries);
+                form.appendChild(abbreviation);
+                form.appendChild(editorjs);
+
+                elem.termList.appendChild(li);
+                addSearchItem(li, res.docs[i]);
+            }
+        }).then(() => {
+            updateFuse(); // always re-initialize Fuse after changing content
+        });
 }
 
 /**
@@ -215,3 +269,4 @@ function onTermClicked(event) {
 }
 
 window.addEventListener("load", init);
+//window.addEventListener("load", updateCount);

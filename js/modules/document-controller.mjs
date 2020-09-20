@@ -11,16 +11,16 @@ let documentId = "";
 let elem = {};
 let saveTimer = undefined;
 let sanitize = DOMPurify.sanitize;
-let editor = undefined;
+let editor = [];
 let hasChanged = false;
 
 function init() {
     // get elements
-    elem.article = document.getElementById('document-article');
-    elem.title = document.getElementById('document-title');
-    elem.abbreviation = document.getElementById('document-abbreviation');
-    elem.content = document.getElementById('editorjs');
-
+    // elem.article = document.getElementById('document-article');
+    // elem.title = document.getElementById('document-title');
+    // elem.abbreviation = document.getElementById('document-abbreviation');
+    // elem.content = document.getElementById('editorjs');
+    elem.termList = document.getElementById('term-list');
 
     // add from search functionality
     elem.newTermButton = document.getElementById('new-term');
@@ -30,9 +30,9 @@ function init() {
   
 
     // clear contents
-    elem.title.value = "";
-    elem.abbreviation.value = "";
-    elem.content.innerHTML = "";
+    // elem.title.value = "";
+    // elem.abbreviation.value = "";
+    // elem.content.innerHTML = "";
 
     // setup editor.js
     setupEditor();
@@ -42,59 +42,71 @@ function init() {
 }
 
 function addEventListeners() {
-    elem.title.addEventListener('input', onDocumentChanged);
-    elem.abbreviation.addEventListener('input', onDocumentChanged);
-    elem.content.addEventListener('input', onDocumentChanged);
-    editor.onChange = onDocumentChanged;
-    elem.newTermButton.addEventListener('click', saveDocument);
+    let t_children = elem.termList.getElementsByTagName('li');
+    for (let i = 0; i < t_children.length; i++) {
+        t_children[i].title.addEventListener('input', onDocumentChanged);
+        t_children[i].abbreviation.addEventListener('input', onDocumentChanged);
+        t_children[i].content.addEventListener('input', onDocumentChanged);
+      //  t_children[i].editor[i].onChange = onDocumentChanged;
+        t_children[i].newTermButton.addEventListener('click', saveDocument);
+    }
 }
 
 function removeEventListeners() {
-    elem.title.removeEventListener('input', onDocumentChanged);
-    elem.abbreviation.removeEventListener('input', onDocumentChanged);
-    elem.content.removeEventListener('input', onDocumentChanged);
-    editor.onChange = undefined;
+    let t_children = elem.termList.getElementsByTagName('li');
+    for (let i = 0; i < t_children.length; i++) {
+        t_children[i].title.removeEventListener('input', onDocumentChanged);
+        t_children[i].abbreviation.removeEventListener('input', onDocumentChanged);
+        t_children[i].content.removeEventListener('input', onDocumentChanged);
+    }
+    //editor.onChange = undefined;
 }
 
 function setupEditor() {
-    editor = new EditorJS({
-        holder: 'editorjs',
-        tools: {
-            code: {
-                class: CodeTool
-            },
-            header: {
-                class: Header,
-                inlineToolbar: ['link', 'Marker'],
-                config: {
-                    placeholder: '',
-                    levels: [1, 2, 3],
-                    defaultLevel: 1,
+    let t_children = elem.termList.getElementsByTagName('li');
+    console.log("halloo");
+    for (let i = 0; i < t_children.length; i++) {
+        console.log(editor[i]);
+        editor[i] = new EditorJS({
+            holder: 'editorjs',
+            tools: {
+                code: {
+                    class: CodeTool
                 },
-            },
-            inlineCode: {
-                class: InlineCode,
-                shortcut: 'CMD+SHIFT+C',
-            },
-            list: {
-                class: List,
-                inlineToolbar: true,
-            },
-            Marker: {
-                class: Marker,
-                shortcut: 'CMD+SHIFT+M',
-            },
-            quote: {
-                class: Quote,
-                inlineToolbar: true,
-                shortcut: 'CMD+SHIFT+O',
-                config: {
-                    quotePlaceholder: 'Quote',
-                    captionPlaceholder: 'Author',
+                header: {
+                    class: Header,
+                    inlineToolbar: ['link', 'Marker'],
+                    config: {
+                        placeholder: '',
+                        levels: [1, 2, 3],
+                        defaultLevel: 1,
+                    },
                 },
-            },
-        }
-    });
+                inlineCode: {
+                    class: InlineCode,
+                    shortcut: 'CMD+SHIFT+C',
+                },
+                list: {
+                    class: List,
+                    inlineToolbar: true,
+                },
+                Marker: {
+                    class: Marker,
+                    shortcut: 'CMD+SHIFT+M',
+                },
+                quote: {
+                    class: Quote,
+                    inlineToolbar: true,
+                    shortcut: 'CMD+SHIFT+O',
+                    config: {
+                        quotePlaceholder: 'Quote',
+                        captionPlaceholder: 'Author',
+                    },
+                },
+            }
+        });
+        t_children[i].appendChild(editor[i]);
+    }
 }
 
 function onDocumentChanged(event) {
@@ -183,13 +195,14 @@ export function displayDocument(id) {
     // remove event listeners to prevent firing after changing
     removeEventListeners();
 
-    // show new document
+// @TODO: find element with correct content instead of populating the one and only element
+    
+// show new document
     q.getDocFromId(id).then(doc => {
         documentId = id;
         elem.title.value = doc.title;
         elem.title.setAttribute('data-id', id);
         elem.abbreviation.value = doc.abbreviation;
-
         editor.clear();
         try {
             let data = JSON.parse(doc.definition);
