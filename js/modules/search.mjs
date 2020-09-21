@@ -23,6 +23,7 @@ function init() {
     }).on('change', change => {
         // one event per changed document
         databaseUpdated(change);
+        
     }).on('error', err => {
         console.error(err);
     });
@@ -33,15 +34,12 @@ function init() {
     elem.contextList = document.getElementById('context-list');
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
-
+   
     
     // create visible list of titles, setup search array and initialize Fuse
     createContextList();
 
     createTermList();
-
-   
-
 
 }
 
@@ -77,23 +75,28 @@ export function updateFuse() {
  * @param event
  */
 function onSearchChange(event) {
+    updateSearch(event.target);
+    if (event.code === "Enter") {
+        dc.displayTopDocument();
+    }
+}
+function updateSearch(searchTerm){
+    console.debug("updateSearch called on "+ searchTerm.value);
     // clear array
     searchMatches.splice(0, searchMatches.length);
     
     let c_children = elem.contextList.getElementsByTagName('input');
     let t_children =document.getElementsByClassName('li_wrapper');
-    for(let a=0; a < t_children.length; a++){
-        console.log(t_children[a]);
-    }
-   
-    if (event.target.value === "") {
+  
+    if (searchTerm.value === "") {
         for (let i = 0; i < c_children.length; i++) {
             c_children[i].style.removeProperty('display');
             t_children[i].style.removeProperty('display');
         }
         // todo: revert order back to default
     } else {
-        searchMatches = getSearchResults(event.target.value);
+        
+        searchMatches = getSearchResults(searchTerm.value);
 
         for (let i = 0; i < c_children.length; i++) {
             t_children[i].style.setProperty('display', 'none');
@@ -107,10 +110,6 @@ function onSearchChange(event) {
            match.item.element.parentNode.appendChild(match.item.element);
       
         });
-    }
-
-    if (event.code === "Enter") {
-        dc.displayTopDocument();
     }
 }
 
@@ -141,8 +140,8 @@ export function addSearchItem(elem, doc) {
  * @param {Object} change: The document object that has changed
  */
 export function databaseUpdated(change) {
+    //location.reload(); 
 
-   
     // todo: respond to database changes?
     if (change.deleted) {
         // note: the deleted document object is not passed completely, however _id and _rev is passed
@@ -162,7 +161,6 @@ export function updateDictionaryList() {
 export function createContextList() {
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
-            dc.crea
             let item = document.createElement('input');
             item.setAttribute('type', 'checkbox');
             item.setAttribute('id', "cntx " + res.docs[i]._id);
@@ -187,10 +185,9 @@ export function createContextList() {
 }
 
 export function createTermList(){
-    console.log("called");
+    
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
-            console.log("createTermList() called!");
             let term = dc.createTermDom(res.docs[i]);
             console.log(term);
                 elem.termList.appendChild(term);
@@ -202,6 +199,7 @@ export function createTermList(){
         }).catch((err) => {
             console.log(err);
         });
+       
 }
 
 /**
