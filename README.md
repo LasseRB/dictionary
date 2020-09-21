@@ -30,3 +30,4 @@ This will start a local node server which will restart everytime a js file is up
 - bright
 - Lumos (HP spell)
 - Accio (HP spell)
+- **Clarify**
