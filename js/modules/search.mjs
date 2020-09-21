@@ -80,7 +80,7 @@ function onSearchChange(event) {
         dc.displayTopDocument();
     }
 }
-function updateSearch(searchTerm){
+export function updateSearch(searchTerm){
     console.debug("updateSearch called on "+ searchTerm.value);
     // clear array
     searchMatches.splice(0, searchMatches.length);
@@ -140,7 +140,7 @@ export function addSearchItem(elem, doc) {
  * @param {Object} change: The document object that has changed
  */
 export function databaseUpdated(change) {
-    //location.reload(); 
+    location.reload(); 
 
     // todo: respond to database changes?
     if (change.deleted) {
