@@ -62,6 +62,7 @@ export function updateFuse() {
         // useExtendedSearch: false,
         keys: [
             "doc.title",
+            "doc.dictionary",
             "doc.abbreviation",
             "doc.tags"
         ]

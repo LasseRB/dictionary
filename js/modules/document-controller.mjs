@@ -43,38 +43,27 @@ function init() {
     addEventListeners();
 }
 
-function addEventListeners() {
+function addEventListeners(element) {
     let t_children = document.getElementsByClassName('li_wrapper');
     elem.newTermButton.addEventListener('click', saveDocument);
-   
+
+    console.debug('eventListener started');;
     //loop over all docs
-    q.getTermList().then(res => {
-        for(let i = 0; i < res.docs.length; i++){
-            t_children[i].title.addEventListener('input', onDocumentChanged);
-            t_children[i].dictionary.removeEventListener('input', onDocumentChanged);
-            t_children[i].abbreviation.addEventListener('input', onDocumentChanged);
-            t_children[i].document.getElementById('editorjs ' + res.docs[i]._id).addEventListener('input', onDocumentChanged);
-           t_children[i].editor[i].onChange = onDocumentChanged;
-        }
-       
-       
-    }).catch(err => {
-        console.log(err);
-    });
+   
        
     
 }
 
-function removeEventListeners() {
-    let t_children = elem.termList.getElementsByTagName('li');
-    for (let i = 0; i < t_children.length; i++) {
-        t_children[i].title.removeEventListener('input', onDocumentChanged);
-        t_children[i].dictionary.removeEventListener('input', onDocumentChanged);
-        t_children[i].abbreviation.removeEventListener('input', onDocumentChanged);
-        t_children[i].content.removeEventListener('input', onDocumentChanged);
-    }
-    //editor.onChange = undefined;
-}
+// function removeEventListeners() {
+//     let t_children = elem.termList.getElementsByTagName('li');
+//     for (let i = 0; i < t_children.length; i++) {
+//         t_children[i].title.removeEventListener('input', onDocumentChanged);
+//         t_children[i].dictionary.removeEventListener('input', onDocumentChanged);
+//         t_children[i].abbreviation.removeEventListener('input', onDocumentChanged);
+//         t_children[i].content.removeEventListener('input', onDocumentChanged);
+//     }
+//     //editor.onChange = undefined;
+// }
 
 export function setupEditor(doc) {
        const editor = new EditorJS({
@@ -121,18 +110,36 @@ export function setupEditor(doc) {
 function onDocumentChanged(event) {
     hasChanged = true;
 
+    let currentID = event.currentTarget.id.substring(4);
+    
+    let currentTitle = event.currentTarget.childNodes[0][0].value;
+    let currentDict = event.currentTarget.childNodes[0][1].value;
+    let currentAbbriv = event.currentTarget.childNodes[0][2].value;
+    let currentEditor = event.currentTarget.childNodes[0][3].value;
+    console.debug("id "+ currentID + "\n"
+                 + "title "+ currentTitle + "\n"
+                 + "dict "+ currentDict + "\n"
+                 + "abbriv "+ currentAbbriv + "\n"
+                 + "editor "+ currentEditor + "\n");
+
+
+
+    console.debug(currentEditor);
+
+    s.updateTermTitle("cntx" + currentID, event.target.value);
+
     // update title in list
-    if (event.target === elem.title) {
-        s.updateTermTitle(documentId, elem.title.value);
+    if (event.target.title === elem.title) {
     }
 
     if (saveTimer !== undefined) {
         clearTimeout(saveTimer);
     }
 
-    // restart timer, save document after 1000 ms inactivity
-    saveTimer = setTimeout(saveDocument(event.target), 1000);
+    // // restart timer, save document after 1000 ms inactivity
+    // saveTimer = setTimeout(saveDocument(event.target), 1000);
 }
+
 
 /**
  * Saves the current document to the database.
@@ -303,6 +310,8 @@ export function createTermDom(doc){
     form.appendChild(abbreviation);
     form.appendChild(editorjs);
 
+
+    li.addEventListener('input', onDocumentChanged);
     return li;
 }
 
