@@ -2,6 +2,7 @@ import * as q from "./db/db-query.mjs";
 import * as a from "./db/db-actions.mjs";
 import * as s from "./search.mjs";
 import * as g from "./global.mjs";
+import { getDocFromId } from "./db/db-query.mjs";
 
 // // todo: ability to delete documents
 // // todo: empty page instead of editor on open?
@@ -12,16 +13,22 @@ let documentId = "";
 let elem = {};
 let saveTimer = undefined;
 let sanitize = DOMPurify.sanitize;
-// let editor = undefined;
+let editors = new Map();
 let hasChanged = false;
 
 
 function init() {
     // get elements
-    // elem.article = document.getElementById('document-article');
-    // 
-    // elem.abbreviation = document.getElementById('document-abbreviation');
-    // 
+    
+
+    elem.currentID = undefined; 
+    elem.currentTitle = undefined;
+    elem.currentDict = undefined;
+    elem.currentAbbriv =undefined;
+    elem.currentEditor =undefined;
+
+
+    //
     elem.termList = document.getElementById('term-list');
     elem.contextList = document.getElementById('context-list');
     // add from search functionality
@@ -41,11 +48,14 @@ function init() {
 
     // setup event listeners
     addEventListeners();
+
+    
 }
 
 function addEventListeners(element) {
     let t_children = document.getElementsByClassName('li_wrapper');
     elem.newTermButton.addEventListener('click', saveDocument);
+    elem.newTerm.addEventListener('input', clearFocusOnElement);
 
     console.debug('eventListener started');;
     //loop over all docs
@@ -104,108 +114,127 @@ export function setupEditor(doc) {
                 },
             }
         });
+       // console.debug(doc._id + ": " + editor);
+        editors.set(doc._id, editor);
         return editor;
+}
+
+export function assignFocusOnElement(event){
+    elem.currentID = event.currentTarget.id.substring(4).trim();
+    elem.currentTitle = event.currentTarget.childNodes[0][0];
+    elem.currentDict = event.currentTarget.childNodes[0][1];
+    elem.currentAbbriv = event.currentTarget.childNodes[0][2];
+    elem.currentEditor = editors.get(elem.currentID);
+
+    
+}
+export function clearFocusOnElement(event){
+    elem.currentID = undefined; 
+    elem.currentTitle = undefined;
+    elem.currentDict = undefined;
+    elem.currentAbbriv =undefined;
+    elem.currentEditor =undefined;
 }
 
 function onDocumentChanged(event) {
     hasChanged = true;
 
-    let currentID = event.currentTarget.id.substring(4);
-    
-    let currentTitle = event.currentTarget.childNodes[0][0].value;
-    let currentDict = event.currentTarget.childNodes[0][1].value;
-    let currentAbbriv = event.currentTarget.childNodes[0][2].value;
-    let currentEditor = event.currentTarget.childNodes[0][3].value;
-    console.debug("id "+ currentID + "\n"
-                 + "title "+ currentTitle + "\n"
-                 + "dict "+ currentDict + "\n"
-                 + "abbriv "+ currentAbbriv + "\n"
-                 + "editor "+ currentEditor + "\n");
+    assignFocusOnElement(event);
+   
+// 
+    console.debug("id "+ elem.currentID + "\n")
 
+    console.debug("id "+ elem.currentID + "\n"
+                 + "title "+ elem.currentTitle.value + "\n"
+                 + "dict "+ elem.currentDict.value + "\n"
+                 + "abbriv "+ elem.currentAbbriv.value + "\n"
+                 + "editor "+ elem.currentEditor + "\n");
 
-
-    console.debug(currentEditor);
-
-    s.updateTermTitle("cntx" + currentID, event.target.value);
 
     // update title in list
-    if (event.target.title === elem.title) {
-    }
-
+    s.updateTermTitle("cntx " + elem.currentID, elem.currentTitle.value);
+   
     if (saveTimer !== undefined) {
         clearTimeout(saveTimer);
     }
 
-    // // restart timer, save document after 1000 ms inactivity
-    // saveTimer = setTimeout(saveDocument(event.target), 1000);
+    // restart timer, save document after 1000 ms inactivity
+    saveTimer = setTimeout(saveDocument(), 1000);
 }
 
 
 /**
  * Saves the current document to the database.
  */
-export function saveDocument(doc) {
+export function saveDocument() {
     console.log("Save document!");
 
-    if(s.getSearchResults(event.target.value).length === 0){
-        let doc = new a.Document(
-            sanitize(elem.newTerm.value),
-            sanitize(elem.newTerm.value),
-          //  sanitize(elem.abbreviation.value),
-            [],
-            //JSON.stringify(data)
-        );
-    
-        updateDoc(doc);
-
-    }
+    // if(s.getSearchResults(elem.newTerm).length === 0){}
+          
      // sanitize the input
-    
-    else{
-         //get the editor in quesion.. unlike now:
-    editor.save().then(data => {
-        // If no title, term gets todays date
-        // This I might remove in the new design with search bar
-       
-        if (elem.title.value === "" && elem.newTerm.value === "") {
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toPaddedString();
-            const day = date.getDate().toPaddedString();
-            const hours = date.getHours().toPaddedString();
-            const minutes = date.getMinutes().toPaddedString();
-            const seconds = date.getSeconds().toPaddedString();
+    if(elem.currentEditor === undefined){
+        setNewDoc("");
+    }else{
+        elem.currentEditor.isReady.then(
+            elem.currentEditor.save().then(data => {
+            // If no title, term gets todays date
+            // This I might remove in the new design with search bar
+        
+            // if (elem.currentTitle.value === "" && elem.newTerm.value === "") {
+            //     const date = new Date();
+            //     const year = date.getFullYear();
+            //     const month = (date.getMonth() + 1).toPaddedString();
+            //     const day = date.getDate().toPaddedString();
+            //     const hours = date.getHours().toPaddedString();
+            //     const minutes = date.getMinutes().toPaddedString();
+            //     const seconds = date.getSeconds().toPaddedString();
 
-            elem.title.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        } else if(elem.newTerm.value != "" && elem.title.value != elem.newTerm.value)
-            {
-            elem.title.value = elem.newTerm.value;
-            elem.newTerm.value = '';
-            updateDoc();
-            }
-    
-        let doc = new a.Document(
-            sanitize(elem.newTerm.value),
-            //  sanitize(elem.abbreviation.value),
-            //[],
-            JSON.stringify(data)
-        );
-    
-        updateDoc(doc);
+            //     elem.currentTitle.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            // } else if(elem.newTerm.value != "" && elem.currentTitle.value != elem.newTerm.value)
+            //     {
+            //     elem.currentTitle.value  = elem.newTerm.value;
+            //     elem.newTerm.value = '';
+            //    // updateDoc();
+            //     }
+            setNewDoc();
 
-       
-    }).catch((err) => {
-        console.error(err);
-    });
-
+            }).catch((err) => {
+                console.error(err);
+        })).catch(err =>{
+            console.error(err);
+        });
     }
+    // }
    
+}
+function setNewDoc(data) {
+    let newTitle = "";
+    if (elem.currentTitle.value === undefined && elem.newTerm.value != "") {
+        newTitle = elem.newTerm.value;
+    }
+    else if (elem.currentTitle.value != undefined) {
+        newTitle = elem.currentTitle.value;
+    }
+    
+    let doc = new a.Document(
+        sanitize(newTitle),
+        // abbreviation
+        sanitize(elem.currentAbbriv.value),
+        // dictionary
+        // here, split elements i
+        [sanitize(elem.currentDict.value)],
+        //editor
+        JSON.stringify(data)
+    );
+
+    updateDoc(doc);
+
 }
 
 export function updateDoc(doc){
         // create new document or update existing
         let id = elem.newTerm.getAttribute('data-id');
-        console.log(id);
+        console.debug("## newTerm data id is: "+id);
         if (id === null || id === "") {
             a.createDocument(doc);
             //elem.title.setAttribute('data-id', doc._id);
@@ -227,7 +256,6 @@ export function displayDocument(id) {
     if (hasChanged) {
         saveDocument();
     }
-    console.log(id);
 
     // remove event listeners to prevent firing after changing
     // removeEventListeners();

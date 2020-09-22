@@ -38,7 +38,6 @@ function init() {
     
     // create visible list of titles, setup search array and initialize Fuse
     createContextList();
-
     createTermList();
 
 }
@@ -62,8 +61,8 @@ export function updateFuse() {
         // useExtendedSearch: false,
         keys: [
             "doc.title",
-            "doc.dictionary",
             "doc.abbreviation",
+            "doc.dictionary",
             "doc.tags"
         ]
     };
@@ -77,12 +76,12 @@ export function updateFuse() {
  */
 function onSearchChange(event) {
     updateSearch(event.target);
-    if (event.code === "Enter") {
-        dc.displayTopDocument();
-    }
+    dc.displayTopDocument();
+    // if (event.code === "Enter") {
+    //     dc.displayTopDocument();
+    // }
 }
 export function updateSearch(searchTerm){
-    console.debug("updateSearch called on "+ searchTerm.value);
     // clear array
     searchMatches.splice(0, searchMatches.length);
     
@@ -141,7 +140,7 @@ export function addSearchItem(elem, doc) {
  * @param {Object} change: The document object that has changed
  */
 export function databaseUpdated(change) {
-    location.reload(); 
+   // location.reload(); 
 
     // todo: respond to database changes?
     if (change.deleted) {
@@ -223,7 +222,6 @@ export function getTopElement() {
     if (searchMatches.length === 0) {
         return null;
     }
-
     return searchMatches[0].item.element;
 }
 
