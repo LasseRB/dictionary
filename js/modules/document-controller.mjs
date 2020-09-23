@@ -87,11 +87,11 @@ export function setupEditor(doc) {
                         defaultLevel: 1
                     }
                 },
-                // inlineCode: {
-                    // no longer works when parsed to JSON sadly
-                //     class: InlineCode,
-                //     shortcut: 'CMD+E'
-                // },
+                inlineCode: {
+               
+                    class: InlineCode,
+                    shortcut: 'CMD+E'
+                },
                 list: {
                     class: List,
                     inlineToolbar: true 
@@ -159,7 +159,7 @@ export function assignFocusOnElement(event){
     elem.currentDict = event.currentTarget.childNodes[0][1];
     elem.currentAbbriv = event.currentTarget.childNodes[0][2];
     elem.currentEditor = editors.get(elem.currentID);
-
+ 
     
 }
 export function clearFocusOnElement(event){
@@ -317,7 +317,7 @@ export function displayTopDocument() {
 }
 
 export function createTermDom(doc){
-
+   
     let li = document.createElement('li'); 
     li.className = 'li_wrapper';
     li.setAttribute('id', "term " + doc._id);
@@ -340,7 +340,9 @@ export function createTermDom(doc){
         dictionaries.id="document-dictionaries-"+Math.random;
         dictionaries.setAttribute("aria-label","dictionaries");
         dictionaries.setAttribute("placeholder","Dictionaries");
-        dictionaries.value = doc.tags;
+        doc.tags.forEach(element => {
+            dictionaries.value += element +" ";
+        });;
 
     let abbreviation = document.createElement('input');
         abbreviation.setAttribute("aria-label","abbreviation");

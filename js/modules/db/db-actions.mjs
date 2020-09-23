@@ -31,7 +31,7 @@ export var Document = function(title, abbreviation, tags, content, _id = undefin
     console.debug("content is " + content);
     if (title === undefined) title = "Untitled";
     if (abbreviation === undefined) abbreviation = "";
-    if (tags === undefined) tags = "";   
+    if (tags === undefined) tags = "hvad, var du tom?";   
     if (content === undefined || content == null) content = "";
     
     if (_id === undefined) _id = createId();
@@ -40,7 +40,8 @@ export var Document = function(title, abbreviation, tags, content, _id = undefin
     this.title = sanitize(title);
     this.abbreviation = sanitize(abbreviation.value);
     this.tags = seperateTags(tags);
-    this.content = sanitize(content);
+    //sanitation of the content ruins inline code :S
+    this.content = content;
    
    
     this.tags.forEach((tag, i) => {
@@ -59,8 +60,8 @@ export function createId() {
  */
 export function seperateTags(tags){
     var tags_array = [];
-    if(tags.length > 0){
-      tags_array = tags.split(",");
+    if(tags.value.length > 0){
+      tags_array = tags.value.split(",");
     }
     return tags_array;
   }
