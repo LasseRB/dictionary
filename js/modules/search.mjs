@@ -23,22 +23,25 @@ function init() {
     }).on('change', change => {
         // one event per changed document
         databaseUpdated(change);
+        
     }).on('error', err => {
         console.error(err);
     });
 
     // setup document elements
     elem.searchTerm = document.getElementById('search-term');
-    // elem.searchButton = document.getElementById('search-button');
-    elem.dictionaryList = document.getElementById('dictionary-list');
     elem.termList = document.getElementById('term-list');
-
+    elem.contextList = document.getElementById('context-list');
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
-
+   
+    
     // create visible list of titles, setup search array and initialize Fuse
+    createContextList();
     createTermList();
+
 }
+
 
 /**
  * Update Fuse. Should be done whenever a document has been changed or added.
@@ -59,6 +62,7 @@ export function updateFuse() {
         keys: [
             "doc.title",
             "doc.abbreviation",
+            "doc.dictionary",
             "doc.tags"
         ]
     };
@@ -71,31 +75,41 @@ export function updateFuse() {
  * @param event
  */
 function onSearchChange(event) {
+    updateSearch(event.target);
+    dc.displayTopDocument();
+    // if (event.code === "Enter") {
+    //     dc.displayTopDocument();
+    // }
+}
+export function updateSearch(searchTerm){
     // clear array
     searchMatches.splice(0, searchMatches.length);
-
-    if (event.target.value === "") {
-        let children = elem.termList.getElementsByTagName('input')
-        for (let i = 0; i < children.length; i++) {
-            children[i].style.removeProperty('display');
+    
+    let c_children = elem.contextList.getElementsByTagName('input');
+    let t_children =document.getElementsByClassName('li_wrapper');
+  
+    if (searchTerm.value === "") {
+        for (let i = 0; i < c_children.length; i++) {
+            c_children[i].style.removeProperty('display');
+            t_children[i].style.removeProperty('display');
         }
         // todo: revert order back to default
     } else {
-        searchMatches = getSearchResults(event.target.value);
+        
+        searchMatches = getSearchResults(searchTerm.value);
 
-        let children = elem.termList.getElementsByTagName('input')
-        for (let i = 0; i < children.length; i++) {
-            children[i].style.setProperty('display', 'none');
+        for (let i = 0; i < c_children.length; i++) {
+            t_children[i].style.setProperty('display', 'none');
+            c_children[i].style.setProperty('display', 'none');
+            
         }
 
         searchMatches.forEach(match => {
-            document.getElementById(match.item.doc._id).style.removeProperty('display');
-            match.item.element.parentNode.appendChild(match.item.element); // sorts the displayed list
+           document.getElementById("cntx " + match.item.doc._id).style.removeProperty('display');
+           document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
+           match.item.element.parentNode.appendChild(match.item.element);
+      
         });
-    }
-
-    if (event.code === "Enter") {
-        dc.displayTopDocument();
     }
 }
 
@@ -126,6 +140,8 @@ export function addSearchItem(elem, doc) {
  * @param {Object} change: The document object that has changed
  */
 export function databaseUpdated(change) {
+   // location.reload(); 
+
     // todo: respond to database changes?
     if (change.deleted) {
         // note: the deleted document object is not passed completely, however _id and _rev is passed
@@ -142,12 +158,12 @@ export function updateDictionaryList() {
 /**
  * Creates the list of documents that are displayed and can be searched.
  */
-export function createTermList() {
+export function createContextList() {
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
             let item = document.createElement('input');
             item.setAttribute('type', 'checkbox');
-            item.setAttribute('id', res.docs[i]._id);
+            item.setAttribute('id', "cntx " + res.docs[i]._id);
             item.setAttribute('data-id', res.docs[i]._id);
 
             let title = sanitize(res.docs[i].title);
@@ -160,12 +176,30 @@ export function createTermList() {
                 onTermClicked(event)
             })
 
-            elem.termList.appendChild(item);
+            elem.contextList.appendChild(item);
             addSearchItem(item, res.docs[i]);
         }
     }).then(() => {
         updateFuse(); // always re-initialize Fuse after changing content
     });
+}
+
+export function createTermList(){
+    
+    q.getTermList().then(res => {
+        for (let i = 0; i < res.docs.length; i++) {
+            let term = dc.createTermDom(res.docs[i]);
+            //console.log(term);
+                elem.termList.appendChild(term);
+                dc.setupEditor(res.docs[i]);    
+                addSearchItem(term, res.docs[i]);
+            }
+        }).then(() => {
+            updateFuse(); // always re-initialize Fuse after changing content
+        }).catch((err) => {
+            console.log(err);
+        });
+       
 }
 
 /**
@@ -188,7 +222,7 @@ export function getTopElement() {
     if (searchMatches.length === 0) {
         return null;
     }
-
+    
     return searchMatches[0].item.element;
 }
 
@@ -215,3 +249,4 @@ function onTermClicked(event) {
 }
 
 window.addEventListener("load", init);
+//window.addEventListener("load", updateCount);

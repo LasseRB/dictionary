@@ -9,40 +9,46 @@
 <body>
 <div id="app">
     <div id="toolbar">
-<!--        <h1 id="app-title">Dictionary</h1>-->
-        <button id="button-dictionaryToggle" class="button-toolbar"><img src="icons/genericons-neue/book.svg" alt="toggle dictionary"></button>
-        <button id="button-termToggle" class="button-toolbar"><img src="icons/genericons-neue/category.svg" alt="toggle terms"></button>
-        <button id="button-export">Export</button>
-        <input id="file-import" type="file"/>
-        <input type="submit">
+       <!-- <h1 id="app-title">Dictionary</h1> -->
+        <button id="button-contextToggle" class="button-toolbar">
+            <img src="icons/genericons-neue/category.svg" alt="toggle terms">
+        </button>
+        <!-- <button id="button-export">Export</button>
+        <input id="file-import" type="file"/> -->
+        <!-- <input type="submit"> -->
+    
+        <div class="search-create">
+            <input id="search-term"  class="search-field" aria-label="Search for term" placeholder="Term" autofocus="true"></input>
+            <button id="new-term"></button>
+        </div>
     </div>
     <div id="views">
-        <div id="view-dictionary">
-            <div class="search-create">
-                <input id="search-dictionary" class="search-field" aria-label="Search for dictionary" placeholder="Dictionary">
-                <button id="new-dictionary"><img alt="add dictionary" src="icons/genericons-neue/plus.svg"></button>
-            </div>
-            <ul id="dictionary-list"><!-- list items from js/modules/seach.mjs --></ul>
-        </div>
-        <div id="view-term">
-            <div class="search-create">
+        <div id="view-context">
+            <!-- <div class="search-create">
                 <input id="search-term" class="search-field" aria-label="Search for term" placeholder="Term">
                 <button id="new-term"><img alt="add term" src="icons/genericons-neue/plus.svg"></button>
-            </div>
-            <div id="term-list"><!-- list items from js/modules/search.mjs --></div>
+            </div> -->
+            <div id="context-list"><!-- list items from js/modules/search.mjs --></div>
         </div>
+
         <div id="view-document">
-            <form id="document-editor">
-                <input type="text" id="document-title" aria-label="title" placeholder="Title">
-                <input type="text" id="document-abbreviation" aria-label="abbreviation" placeholder="Abbreviation">
-                <div id="editorjs" aria-label="content"></div>
-            </form>
+            <ul id="term-list">
+               
+                <!-- <li>
+                    <form id="document-editor">
+                        <input type="text" id="document-title" aria-label="title" placeholder="Title">
+                        <input type="text" id="document-dictionaries" aria-label="dictionaries" placeholder="Dictionaries">
+                        <input type="text" id="document-abbreviation" aria-label="abbreviation" placeholder="Abbreviation">
+                        <div id="editorjs" aria-label="content"></div>
+                    </form>
+            </li> -->
+            </ul>
         </div>
     </div>
     <div id="statusbar">
         <p>Dictionary</p>
         <p>|</p>
-        <p>123 terms</p>
+        <p id='dbsize'></p>
     </div>
 </div>
 </body>
