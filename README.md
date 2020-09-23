@@ -17,4 +17,17 @@ This will start a local node server which will restart everytime a js file is up
 - Deefine
 - fine
 - fine deer
-
+- Succinct/Succinctly ("in a brief and clearly expressed manner")
+- briefly
+- Lexicon
+- Flexicon
+- Complexicon
+- HYPONYM
+- Hypernym
+- Apponym
+- verbo
+- verbose
+- bright
+- Lumos (HP spell)
+- Accio (HP spell)
+- **Clarify**
