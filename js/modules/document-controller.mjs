@@ -31,18 +31,14 @@ function init() {
     //
     elem.termList = document.getElementById('term-list');
     elem.contextList = document.getElementById('context-list');
-    // add from search functionality
+
+
+    // add and search functionality
     elem.newTermButton = document.getElementById('new-term');
     elem.newTerm = document.getElementById('search-term');   
-   // elem.newTermButton.addEventListener('click', saveDocument);
+
   
    elem.searchTerm = document.getElementById('search-term');
-
-
-    // clear contents
-    // elem.title.value = "";
-    // elem.abbreviation.value = "";
-    // elem.content.innerHTML = "";
 
 
 
@@ -54,7 +50,7 @@ function init() {
 
 function addEventListeners(element) {
     let t_children = document.getElementsByClassName('li_wrapper');
-    elem.newTermButton.addEventListener('click', saveDocument);
+    elem.newTermButton.addEventListener('click', onNewTermButton);
     elem.newTerm.addEventListener('input', clearFocusOnElement);
 
     console.debug('eventListener started');;
@@ -80,7 +76,7 @@ export function setupEditor(doc) {
             holder: 'editorjs '+ doc._id,
             tools: {
                 code: {
-                    class: CodeTool
+                    class: CodeTool     
                 },
                 header: {
                     class: Header,
@@ -88,20 +84,21 @@ export function setupEditor(doc) {
                     config: {
                         placeholder: '',
                         levels: [1, 2, 3],
-                        defaultLevel: 1,
-                    },
+                        defaultLevel: 1
+                    }
                 },
-                inlineCode: {
-                    class: InlineCode,
-                    shortcut: 'CMD+E',
-                },
+                // inlineCode: {
+                    // no longer works when parsed to JSON sadly
+                //     class: InlineCode,
+                //     shortcut: 'CMD+E'
+                // },
                 list: {
                     class: List,
-                    inlineToolbar: true,
+                    inlineToolbar: true 
                 },
                 Marker: {
                     class: Marker,
-                    shortcut: 'CMD+SHIFT+M',
+                    shortcut: 'CMD+SHIFT+M'
                 },
                 quote: {
                     class: Quote,
@@ -109,14 +106,51 @@ export function setupEditor(doc) {
                     shortcut: 'CMD+SHIFT+O',
                     config: {
                         quotePlaceholder: 'Quote',
-                        captionPlaceholder: 'Author',
-                    },
-                },
+                        captionPlaceholder: 'Author'
+                    }
+                }
+            
             }
         });
        // console.debug(doc._id + ": " + editor);
+        
+        addDataFromDatabase(doc, editor);
         editors.set(doc._id, editor);
         return editor;
+}
+
+
+
+export function addDataFromDatabase(doc, editor){
+    let newdef = doc.definition;
+    
+    if(newdef === undefined || newdef === null ||newdef === "" ) newdef = `{"blocks":[
+                                                                                {"type":"paragraph",
+                                                                                "data":{
+                                                                                    "text":""}
+                                                                                }],
+                                                                            "version":"2.18.0"}`;
+   // console.debug("JSON: " + newdef);
+    editor.isReady.then(() => {
+        editor.clear();
+        try {
+            let data = JSON.parse(newdef);
+            console.debug(data);
+            editor.render(data);
+        } catch (err) {
+            // could not parse JSON
+            console.error("could not parse JSON: \n" +err + "\n" +
+                            "JSON that couldn't be parsed " + newdef);
+            
+        }
+
+    }).catch(err =>{
+        console.error(err);
+    })
+       
+
+
+
 }
 
 export function assignFocusOnElement(event){
@@ -161,7 +195,10 @@ function onDocumentChanged(event) {
     // restart timer, save document after 1000 ms inactivity
     saveTimer = setTimeout(saveDocument(), 1000);
 }
-
+function onNewTermButton(){
+   location.reload();
+    saveDocument();
+}
 
 /**
  * Saves the current document to the database.
@@ -169,8 +206,6 @@ function onDocumentChanged(event) {
 export function saveDocument() {
     console.log("Save document!");
 
-    // if(s.getSearchResults(elem.newTerm).length === 0){}
-          
      // sanitize the input
     if(elem.currentEditor === undefined){
         setNewDoc("");
@@ -196,7 +231,7 @@ export function saveDocument() {
             //     elem.newTerm.value = '';
             //    // updateDoc();
             //     }
-            setNewDoc();
+            setNewDoc(data);
 
             }).catch((err) => {
                 console.error(err);
@@ -208,23 +243,21 @@ export function saveDocument() {
    
 }
 function setNewDoc(data) {
+    console.debug(elem.newTerm.value);
     let newTitle = "";
-    if (elem.currentTitle.value === undefined && elem.newTerm.value != "") {
+
+    if (elem.currentTitle === undefined && elem.newTerm.value != "") {
         newTitle = elem.newTerm.value;
     }
     else if (elem.currentTitle.value != undefined) {
         newTitle = elem.currentTitle.value;
     }
-    
+s
     let doc = new a.Document(
-        sanitize(newTitle),
-        // abbreviation
-        sanitize(elem.currentAbbriv.value),
-        // dictionary
-        // here, split elements i
-        [sanitize(elem.currentDict.value)],
-        //editor
-        JSON.stringify(data)
+        newTitle,
+        elem.currentAbbriv,
+        elem.currentDict,
+        JSON.stringify(data),
     );
 
     updateDoc(doc);
@@ -232,10 +265,11 @@ function setNewDoc(data) {
 }
 
 export function updateDoc(doc){
+
+    console.debug("updateDoc called!");
         // create new document or update existing
-        let id = elem.newTerm.getAttribute('data-id');
-        console.debug("## newTerm data id is: "+id);
-        if (id === null || id === "") {
+   let id = elem.currentID;
+        if (id === null || id === ""|| id === undefined) {
             a.createDocument(doc);
             //elem.title.setAttribute('data-id', doc._id);
             console.log('Creating new document: ' + doc._id);
@@ -256,42 +290,24 @@ export function displayDocument(id) {
     if (hasChanged) {
         saveDocument();
     }
-
     // remove event listeners to prevent firing after changing
-    // removeEventListeners();
+    // @TODO: fix error here.. not super important
     document.getElementById("term " + id).scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
 
-    
-// // @TODO: find element with correct content instead of populating the one and only element
-    
-// // show new document
-//     q.getDocFromId(id).then(doc => {
-//         console.log(doc);
-//         documentId = id;
-//         elem.title.value = doc.title;
-//         elem.title.setAttribute('data-id', id);
-//         elem.abbreviation.value = doc.abbreviation;
-//         editor.clear();
-//         try {
-//             let data = JSON.parse(doc.definition);
-//             editor.render(data);
-//         } catch (err) {
-//             // could not parse JSON
-//         }
-//     }).catch(err => {
-//         console.error(err);
-//     });
+   
 
-//     // re-add event listeners
-//     hasChanged = false;
-//     addEventListeners();
+
+    hasChanged = false;
+
 }
 
 /**
  * Display the top-most document
  */
 export function displayTopDocument() {
+
     let elem = s.getTopElement();
+
     if (elem === null) {
         return;
     }
@@ -315,7 +331,7 @@ export function createTermDom(doc){
         title.id="document-title";
         title.setAttribute("aria-label","term");
         title.setAttribute("placeholder","Term");
-    let title_val = sanitize(doc.title);
+    let title_val = doc.title;
         if (title_val === "") {
             title_val = "Untitled";
         }
@@ -324,13 +340,17 @@ export function createTermDom(doc){
         dictionaries.id="document-dictionaries-"+Math.random;
         dictionaries.setAttribute("aria-label","dictionaries");
         dictionaries.setAttribute("placeholder","Dictionaries");
+        dictionaries.value = doc.tags;
+
     let abbreviation = document.createElement('input');
         abbreviation.setAttribute("aria-label","abbreviation");
         abbreviation.setAttribute("placeholder","Abbreviation");
+        abbreviation.value = doc.abbreviation;
     let editorjs = document.createElement('div');
         editorjs.id="editorjs "+ doc._id;
         editorjs.setAttribute("aria-label","content"); 
-                            
+        //add content from database
+        
     li.appendChild(form)
         .appendChild(date);
     form.appendChild(title);
@@ -342,6 +362,7 @@ export function createTermDom(doc){
     li.addEventListener('input', onDocumentChanged);
     return li;
 }
+
 
 window.addEventListener('load', init);
 // window.addEventListener('beforeunload', saveDocument);

@@ -189,7 +189,7 @@ export function createTermList(){
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
             let term = dc.createTermDom(res.docs[i]);
-            console.log(term);
+            //console.log(term);
                 elem.termList.appendChild(term);
                 dc.setupEditor(res.docs[i]);    
                 addSearchItem(term, res.docs[i]);
@@ -222,6 +222,7 @@ export function getTopElement() {
     if (searchMatches.length === 0) {
         return null;
     }
+    
     return searchMatches[0].item.element;
 }
 
