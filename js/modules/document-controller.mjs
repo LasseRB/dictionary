@@ -46,6 +46,7 @@ function init() {
     addEventListeners();
     elem.newTerm.focus();
     addBorder();
+
     
 }
 
@@ -273,7 +274,7 @@ export function displayDocument(id) {
     }
     // remove event listeners to prevent firing after changing
     // @TODO: fix error here.. not super important
-    document.getElementById("term " + id).scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    document.getElementById("term " + id).scrollIntoView({behavior: "smooth", block: "end", inline: "start"});
 
    
 

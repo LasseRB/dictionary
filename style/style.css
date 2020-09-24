@@ -13,6 +13,7 @@ html, body {
 
 
 html, p, input, textarea, button {
+    outline:none;
     font-family: 'Rufina', serif;
     font-size: 14px;
 }
@@ -32,6 +33,7 @@ h1, h2, h3, h4, h5, h6, p {
     border:solid 0px #FFFFFF;
   
 }
+
 /* not in use
 #search-create-box > input:focus{
     animation-play-state: paused;
@@ -154,6 +156,7 @@ button {
 #view-context {
     position: relative;
     background-color: #f2f1f0;
+    
     border-right: 1px solid rgba(0, 0, 0, 0.2);
 
     max-width: 300px;
@@ -218,6 +221,7 @@ button {
     position: relative;
     width: 100%;
     padding: 20px;
+    margin: 0;
 }
 .document-editor {
     position: relative;
@@ -407,9 +411,7 @@ ul#term-list{
     overflow-x: hidden;
     overflow-y: scroll;
 }
-ul#term-list li{
-    margin: 10px;
-}
+
 ul#dictionary-list, ul#context-list {
     margin: 0;
     padding: 0;
@@ -417,9 +419,12 @@ ul#dictionary-list, ul#context-list {
 
 #dictionary-list input, #context-list input {
     display: block;
+    text-align: start;
+    width: 100%;
     line-height: 1.5;
     margin: 0;
     padding: 3px 15px;
+    text-justify: left;
     cursor: pointer;  
 }
 
@@ -428,9 +433,11 @@ ul#dictionary-list, ul#context-list {
     background-color: #719eff;
 }
 
-#dictionary-list input:checked, #context-list input:checked {
+#dictionary-list input:focus, #context-list input:focus{
     color: #fff;
     background-color: #404040;
+    outline: none;
+    
 }
 
 /* Editor.js */
@@ -476,5 +483,32 @@ h3.ce-header {
 .ce-paragraph {
     line-height: 1.5 !important;
     outline: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+body{
+    color: #F0F0F0;
+}
+#view-dictionary, #view-context,#view-document, #toolbar, #statusbar  {
+    background-color: #212121;
+    
+
+}
+.search-create{
+    background-color: #555555;
+}
+
+.document-editor{
+    background-color: rgb(42, 42, 42);
+    color: #F0F0F0;
+}
+
+a,p, input, .editorjs-wrapper, .document-title, #toolbar{
+    color: #F0F0F0;
+}
+
+
+
+
 }
 
