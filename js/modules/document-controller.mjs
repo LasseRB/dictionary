@@ -19,13 +19,13 @@ let hasChanged = false;
 
 function init() {
     // get elements
-    
 
     elem.currentID = undefined; 
     elem.currentTitle = undefined;
     elem.currentDict = undefined;
     elem.currentAbbriv =undefined;
     elem.currentEditor =undefined;
+    elem.currentCrossRef =undefined;
 
 
     //
@@ -39,12 +39,13 @@ function init() {
 
   
    elem.searchTerm = document.getElementById('search-term');
-
+   elem.allApp = document.getElementById('app');
 
 
     // setup event listeners
     addEventListeners();
-
+    elem.newTerm.focus();
+    addBorder();
     
 }
 
@@ -52,24 +53,12 @@ function addEventListeners(element) {
     let t_children = document.getElementsByClassName('li_wrapper');
     elem.newTermButton.addEventListener('click', onNewTermButton);
     elem.newTerm.addEventListener('input', clearFocusOnElement);
-
+    elem.allApp.addEventListener('click', addBorder);
     console.debug('eventListener started');;
-    //loop over all docs
-   
-       
+
     
 }
 
-// function removeEventListeners() {
-//     let t_children = elem.termList.getElementsByTagName('li');
-//     for (let i = 0; i < t_children.length; i++) {
-//         t_children[i].title.removeEventListener('input', onDocumentChanged);
-//         t_children[i].dictionary.removeEventListener('input', onDocumentChanged);
-//         t_children[i].abbreviation.removeEventListener('input', onDocumentChanged);
-//         t_children[i].content.removeEventListener('input', onDocumentChanged);
-//     }
-//     //editor.onChange = undefined;
-// }
 
 export function setupEditor(doc) {
        const editor = new EditorJS({
@@ -135,7 +124,7 @@ export function addDataFromDatabase(doc, editor){
         editor.clear();
         try {
             let data = JSON.parse(newdef);
-            console.debug(data);
+            
             editor.render(data);
         } catch (err) {
             // could not parse JSON
@@ -152,22 +141,33 @@ export function addDataFromDatabase(doc, editor){
 
 
 }
+function addBorder(event){
+    if(document.getElementById('search-term') === document.activeElement){
+        document.getElementById('search-create-box').setAttribute("style", "border:solid 1px #00A3FF");
+    } else{
+        document.getElementById('search-create-box').setAttribute("style", "border:solid 0px #FFFFFF");
+    }
 
+}
 export function assignFocusOnElement(event){
+
     elem.currentID = event.currentTarget.id.substring(4).trim();
     elem.currentTitle = event.currentTarget.childNodes[0][0];
-    elem.currentDict = event.currentTarget.childNodes[0][1];
-    elem.currentAbbriv = event.currentTarget.childNodes[0][2];
+    elem.currentDict = document.getElementById('doc-dictionaries-'+elem.currentID);
     elem.currentEditor = editors.get(elem.currentID);
- 
+   // elem.currentAbbriv = event.currentTarget.childNodes[0][2];
+    elem.currentAbbriv = document.getElementById('doc-abbreviation-'+elem.currentID);
+    elem.currentCrossRef = document.getElementById('doc-crossref-'+elem.currentID);
+    console.debug("event.currentTarget.id: " + event.currentTarget.id);
     
-}
+}   
 export function clearFocusOnElement(event){
     elem.currentID = undefined; 
     elem.currentTitle = undefined;
     elem.currentDict = undefined;
-    elem.currentAbbriv =undefined;
     elem.currentEditor =undefined;
+    elem.currentAbbriv =undefined;
+    elem.currentCrossRef=undefined;
 }
 
 function onDocumentChanged(event) {
@@ -175,13 +175,11 @@ function onDocumentChanged(event) {
 
     assignFocusOnElement(event);
    
-// 
-    console.debug("id "+ elem.currentID + "\n")
-
     console.debug("id "+ elem.currentID + "\n"
                  + "title "+ elem.currentTitle.value + "\n"
                  + "dict "+ elem.currentDict.value + "\n"
                  + "abbriv "+ elem.currentAbbriv.value + "\n"
+                 + "crossref"+ elem.currentCrossRef.value + "\n"
                  + "editor "+ elem.currentEditor + "\n");
 
 
@@ -212,25 +210,6 @@ export function saveDocument() {
     }else{
         elem.currentEditor.isReady.then(
             elem.currentEditor.save().then(data => {
-            // If no title, term gets todays date
-            // This I might remove in the new design with search bar
-        
-            // if (elem.currentTitle.value === "" && elem.newTerm.value === "") {
-            //     const date = new Date();
-            //     const year = date.getFullYear();
-            //     const month = (date.getMonth() + 1).toPaddedString();
-            //     const day = date.getDate().toPaddedString();
-            //     const hours = date.getHours().toPaddedString();
-            //     const minutes = date.getMinutes().toPaddedString();
-            //     const seconds = date.getSeconds().toPaddedString();
-
-            //     elem.currentTitle.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-            // } else if(elem.newTerm.value != "" && elem.currentTitle.value != elem.newTerm.value)
-            //     {
-            //     elem.currentTitle.value  = elem.newTerm.value;
-            //     elem.newTerm.value = '';
-            //    // updateDoc();
-            //     }
             setNewDoc(data);
 
             }).catch((err) => {
@@ -258,6 +237,7 @@ s
         elem.currentAbbriv,
         elem.currentDict,
         JSON.stringify(data),
+        elem.currentCrossRef,
     );
 
     updateDoc(doc);
@@ -286,6 +266,7 @@ export function updateDoc(doc){
  * @param id
  */
 export function displayDocument(id) {
+    console.debug("term " + id);
     //save existing first
     if (hasChanged) {
         saveDocument();
@@ -325,10 +306,11 @@ export function createTermDom(doc){
     let form = document.createElement('form');
         form.className="document-editor";
     let date = document.createElement('div');
-        date.id="doc_date";
+        date.className="doc-date";
         date.innerHTML=doc._id.substring(0,10);
     let title = document.createElement('input');
-        title.id="document-title";
+        title.className="document-title";
+        title.id="doc-title-"+doc._id;
         title.setAttribute("aria-label","term");
         title.setAttribute("placeholder","Term");
     let title_val = doc.title;
@@ -337,28 +319,41 @@ export function createTermDom(doc){
         }
         title.value = title_val;
     let dictionaries = document.createElement('input');
-        dictionaries.id="document-dictionaries-"+Math.random;
+        dictionaries.id="doc-dictionaries-"+doc._id;
         dictionaries.setAttribute("aria-label","dictionaries");
         dictionaries.setAttribute("placeholder","Dictionaries");
-        doc.tags.forEach(element => {
-            dictionaries.value += element +" ";
-        });;
+        dictionaries.value = doc.tags;
+        // doc.tags.forEach(element => {
+        //     dictionaries.value += element +" ";
+        // });;
+
+    
+    let editorjs = document.createElement('div');
+        editorjs.id="editorjs "+ doc._id;
+        editorjs.className = "editorjs-wrapper";
+        editorjs.setAttribute("aria-label","content");
+        //add content from database
 
     let abbreviation = document.createElement('input');
+        abbreviation.id="doc-abbreviation-"+doc._id;
+        abbreviation.className = "abbreviation-wrapper";
         abbreviation.setAttribute("aria-label","abbreviation");
         abbreviation.setAttribute("placeholder","Abbreviation");
         abbreviation.value = doc.abbreviation;
-    let editorjs = document.createElement('div');
-        editorjs.id="editorjs "+ doc._id;
-        editorjs.setAttribute("aria-label","content"); 
-        //add content from database
+    let crossref = document.createElement('input');
+        crossref.id="doc-crossref-"+doc._id;
+        crossref.className = "crossref-wrapper";
+        crossref.setAttribute("aria-label","crossref");
+        crossref.setAttribute("placeholder","See also");
+        crossref.value = doc.crossref;
         
     li.appendChild(form)
         .appendChild(date);
     form.appendChild(title);
     form.appendChild(dictionaries);
-    form.appendChild(abbreviation);
     form.appendChild(editorjs);
+    form.appendChild(abbreviation);
+    form.appendChild(crossref);
 
 
     li.addEventListener('input', onDocumentChanged);

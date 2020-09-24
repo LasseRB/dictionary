@@ -10,6 +10,7 @@ let selected = [];
 let searchList = [];
 let searchMatches = [];
 let fuse = undefined;
+let dictionaries = new Map();
 
 /**
  * Initialize the database and search event listeners.
@@ -39,6 +40,7 @@ function init() {
     // create visible list of titles, setup search array and initialize Fuse
     createContextList();
     createTermList();
+    updateDictionaryList();
 
 }
 
@@ -153,14 +155,41 @@ export function databaseUpdated(change) {
 
 export function updateDictionaryList() {
     // todo: show list of dictionaries (or maybe tags?)
+    q.getTermList().then(res => {
+        for (let i = 0; i < res.docs.length; i++) {
+            let all_words = [];
+            all_words.push(res.docs[i].title);
+            
+            res.docs[i].tags.forEach(tag => {
+                dictionaries.set(tag, all_words);
+               
+                // let array = dictionaries.get(res.docs[i].title);
+            console.debug(tag+ ": "+ all_words);
+            });
+          
+        }
+       return dictionaries;
+
+    }).catch(err =>{
+        console.error(err);
+    });
 }
 
 /**
  * Creates the list of documents that are displayed and can be searched.
  */
 export function createContextList() {
+    // updateDictionaryList.then(res =>{
+    //     for(let i = 0; i < res.length; i++)
+    //     let dict = document.createElement('input');
+    //     console.log("hej");
+
+    // });
+
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
+          
+            // create actual term text //
             let item = document.createElement('input');
             item.setAttribute('type', 'checkbox');
             item.setAttribute('id', "cntx " + res.docs[i]._id);

@@ -27,21 +27,26 @@ export var db = g.db;
  * @param {string} content
  * @param {string|undefined} _id
  */
-export var Document = function(title, abbreviation, tags, content, _id = undefined) {
-    console.debug("content is " + content);
+export var Document = function(title, abbreviation, tags, content, crossref, _id = undefined) {
     if (title === undefined) title = "Untitled";
     if (abbreviation === undefined) abbreviation = "";
-    if (tags === undefined) tags = "hvad, var du tom?";   
+    if (crossref === undefined) crossref = "";    
+    if (tags === undefined){
+        tags = []; 
+        tags.value = []; 
+    }  
     if (content === undefined || content == null) content = "";
     
     if (_id === undefined) _id = createId();
 
     this._id = _id;
     this.title = sanitize(title);
-    this.abbreviation = sanitize(abbreviation.value);
+    this.abbreviation = sanitize(abbreviation.value); 
+    this.crossref = sanitize(crossref.value); // should become links eventually
     this.tags = seperateTags(tags);
     //sanitation of the content ruins inline code :S
     this.content = content;
+  
    
    
     this.tags.forEach((tag, i) => {
@@ -104,6 +109,7 @@ export function updateDocument(doc) {
         console.log("Updated document!");
         res.title = doc.title;
         res.abbreviation = doc.abbreviation;
+        res.crossref = doc.crossref;
         res.definition = doc.content;
         res.tags = doc.tags;
         return g.db.put(res);
