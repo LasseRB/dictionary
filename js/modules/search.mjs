@@ -39,10 +39,10 @@ function init() {
     
     // create visible list of titles, setup search array and initialize Fuse
     
-    updateDictionaryList();
-    createContextList();
+    createDictionaryList();
+    
     createTermList();
-
+  
 }
 
 
@@ -88,7 +88,7 @@ export function updateSearch(searchTerm){
     // clear array
     searchMatches.splice(0, searchMatches.length);
     
-    let c_children = elem.contextList.getElementsByTagName('input');
+    let c_children = elem.contextList.getElementsByTagName('context-list');
     let t_children =document.getElementsByClassName('li_wrapper');
   
     if (searchTerm.value === "") {
@@ -154,7 +154,7 @@ export function databaseUpdated(change) {
     }
 }
 
-export function updateDictionaryList() {
+export function createDictionaryList() {
     // todo: show list of dictionaries (or maybe tags?)
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
@@ -179,19 +179,10 @@ export function updateDictionaryList() {
         
           
         }
-        // dictionaries.forEach((docarray, key)=>{
-        //     let vals = [];
-        //     docarray.forEach(doc => {console.debug(doc.title)});
-        //     //console.debug(key+ ": " + vals);
-        // })
 
-        dictionaries.forEach((v,k) =>{
-            console.debug(k + " "+ v.length +" \n");
-            console.debug(v.forEach(val => console.debug(val.title)));
-  
-           })
-       return dictionaries;
-
+    }).then(() => {
+        //run here for 
+        createContextList();
     }).catch(err =>{
         console.error(err);
     });
@@ -201,43 +192,59 @@ export function updateDictionaryList() {
  * Creates the list of documents that are displayed and can be searched.
  */
 export function createContextList() {
-    new Promise = ((resolve,reject) => {
-        
-        dictionaries.forEach((value,key)=> {
+  
+    let y = document.createElement('div');
+    y.value = dictionaries.get("HTML");
+    elem.contextList.appendChild(y);
+
+
+   console.debug(y.value);
+   dictionaries.forEach((value,key) =>{
+    console.debug(key + " "+ value.length +" \n");
+    console.debug(value.forEach(val => console.debug(val.title)));});
+
+
+        dictionaries.forEach((value,key) =>{
+            console.debug(key + " "+ value.length +" \n");
+            console.debug(value.forEach(val => console.debug(val.title)));
+
             let dictionary = document.createElement('input');
                 dictionary.className= "cntx dictionary";
                 dictionary.id = "cntx dictionary " + Date.now();
-        //         item.setAttribute('data-id', res.docs[i]._id);
+
                 dictionary.setAttribute("type", "button");
                 dictionary.value = key;
             let ul = document.createElement('ul');
-                dictionary.appendChild(ul);
+                ul.id = "cntx dictionary ul " + Date.now();
+                
 
-                for(let i = 0; i < value.length; i++){
-                    dictionary.appendChild(termContextElement(value[i]));
-                    console.debug("append document: " + value[i].title)
-                }
-                elem.contextList.appendChild(dictionary);
+            value.forEach(val => {
+                console.debug("context "+val.title)
+                dictionary.appendChild(ul).appendChild(contextDOM(val))
+            });
 
+    
+   
+    elem.contextList.appendChild(dictionary);  
     });
-    
-}).then(() => {
+
     updateFuse(); // always re-initialize Fuse after changing content
-})
-    
   
+
 }
 
-function termContextElement(doc){
+function contextDOM(doc){
     //  create actual term text //
+            let li = document.createElement('li');
+            li.id = "cntx list " + doc._id;
             let item = document.createElement('input');
-            item.setAttribute('id', "cntx " + res.docs._id);
-            item.setAttribute('data-id', res.docs._id);
+            item.setAttribute('id', "cntx term " + doc._id);
+            item.setAttribute('data-id', doc._id);
             item.setAttribute("type", "button");
             // item.setAttribute('type', 'checkbox');
             
 
-            let title = sanitize(res.docs.title);
+            let title = sanitize(doc.title);
             if (title === "") {
                 title = "Untitled";
             }
@@ -250,7 +257,8 @@ function termContextElement(doc){
             })
 
             addSearchItem(item, doc);
-            return item;
+            li.appendChild(item);
+            return li;
 
 }
 

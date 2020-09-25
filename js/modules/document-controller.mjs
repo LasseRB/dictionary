@@ -185,7 +185,7 @@ function onDocumentChanged(event) {
 
 
     // update title in list
-    s.updateTermTitle("cntx " + elem.currentID, elem.currentTitle.value);
+    s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
    
     if (saveTimer !== undefined) {
         clearTimeout(saveTimer);
