@@ -160,27 +160,36 @@ export function updateDictionaryList() {
         for (let i = 0; i < res.docs.length; i++) {
             
             res.docs[i].tags.forEach(tag => {
+               
                 if(dictionaries.has(tag)){
-                    let all_words = [];
-                    all_words.push(dictionaries.get(tag));
-                    all_words.push(res.docs[i].title +"#ID:" + res.docs[i]._id);
+                   let all_words;
+                   all_words = dictionaries.get(tag);
+                    all_words.push(res.docs[i]);
                     dictionaries.set(tag, all_words);
                 } else{
-                    let all_words = [];
-                    all_words.push(res.docs[i].title+"#ID:" + res.docs[i]._id);
-                    dictionaries.set(tag, all_words);
+           
+                    dictionaries.set(tag, [res.docs[i]]);
                 }
-               
-               
-                // let array = dictionaries.get(res.docs[i].title);
+                   // let array = dictionaries.get(res.docs[i].title);
             
             });
-           
+        
+               
+          
+        
           
         }
-        dictionaries.forEach((value, key)=>{
-            console.debug(key+ ": " + value);
-        })
+        // dictionaries.forEach((docarray, key)=>{
+        //     let vals = [];
+        //     docarray.forEach(doc => {console.debug(doc.title)});
+        //     //console.debug(key+ ": " + vals);
+        // })
+
+        dictionaries.forEach((v,k) =>{
+            console.debug(k + " "+ v.length +" \n");
+            console.debug(v.forEach(val => console.debug(val.title)));
+  
+           })
        return dictionaries;
 
     }).catch(err =>{
@@ -192,47 +201,57 @@ export function updateDictionaryList() {
  * Creates the list of documents that are displayed and can be searched.
  */
 export function createContextList() {
+    new Promise = ((resolve,reject) => {
+        
+        dictionaries.forEach((value,key)=> {
+            let dictionary = document.createElement('input');
+                dictionary.className= "cntx dictionary";
+                dictionary.id = "cntx dictionary " + Date.now();
+        //         item.setAttribute('data-id', res.docs[i]._id);
+                dictionary.setAttribute("type", "button");
+                dictionary.value = key;
+            let ul = document.createElement('ul');
+                dictionary.appendChild(ul);
 
-    dictionaries.forEach((value,key)=> {
-        let dictionary = document.createElement('input');
-            dictionary.className= "cntx dictionary";
-            dictionary.id = "cntx dictionary " + Date.now();
-    //         item.setAttribute('data-id', res.docs[i]._id);
-            dictionary.setAttribute("type", "button");
-            dictionary.value = key;
-            elem.contextList.appendChild(dictionary);
+                for(let i = 0; i < value.length; i++){
+                    dictionary.appendChild(termContextElement(value[i]));
+                    console.debug("append document: " + value[i].title)
+                }
+                elem.contextList.appendChild(dictionary);
 
     });
+    
+}).then(() => {
     updateFuse(); // always re-initialize Fuse after changing content
+})
+    
   
+}
 
-    // q.getTermList().then(res => {
-    //     for (let i = 0; i < res.docs.length; i++) {
-          
-    //         // create actual term text //
-    //         let item = document.createElement('input');
-    //         item.setAttribute('id', "cntx " + res.docs[i]._id);
-    //         item.setAttribute('data-id', res.docs[i]._id);
-    //         item.setAttribute("type", "button");
-    //         // item.setAttribute('type', 'checkbox');
+function termContextElement(doc){
+    //  create actual term text //
+            let item = document.createElement('input');
+            item.setAttribute('id', "cntx " + res.docs._id);
+            item.setAttribute('data-id', res.docs._id);
+            item.setAttribute("type", "button");
+            // item.setAttribute('type', 'checkbox');
             
 
-    //         let title = sanitize(res.docs[i].title);
-    //         if (title === "") {
-    //             title = "Untitled";
-    //         }
-    //         item.value = title;
-    //         // item.innerText = title;
-    //         // item.innerHTML = title;
-    //         item.addEventListener('click', event => {
-    //             console.log("clicked " + item.id);
-    //             onTermClicked(event)
-    //         })
+            let title = sanitize(res.docs.title);
+            if (title === "") {
+                title = "Untitled";
+            }
+            item.value = title;
+            // item.innerText = title;
+            // item.innerHTML = title;
+            item.addEventListener('click', event => {
+                console.log("clicked " + item.id);
+                onTermClicked(event)
+            })
 
-    //         elem.contextList.appendChild(item);
-    //         addSearchItem(item, res.docs[i]);
-    //     }
-    // })
+            addSearchItem(item, doc);
+            return item;
+
 }
 
 export function createTermList(){
