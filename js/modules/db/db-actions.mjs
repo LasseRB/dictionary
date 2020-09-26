@@ -29,7 +29,7 @@ export var db = g.db;
  */
 export var Document = function(title, abbreviation, tags, content, crossref, _id = undefined) {
    // let dictionary = document.createElement('input');
-   let dictionary = [{}];
+
    
    console.debug("tags html object:");
    console.debug(tags);
@@ -40,12 +40,11 @@ export var Document = function(title, abbreviation, tags, content, crossref, _id
     if (abbreviation === undefined) abbreviation = "";
     if (crossref === undefined) crossref = "";    
     if (tags === undefined || tags === null || tags === ""){
-        this.tags[0] = ["Unsorted terms"];
+        this.tags = ["Unsorted terms"];
         // dictionary.push("Unsorted terms"); 
     }else{
-        dictionary[0]=(seperateTags(tags.value));
-        this.tags = [];
-        this.tags[0]=dictionary.values;
+        const dictionary=(seperateTags(tags.value));
+        this.tags=dictionary;
     }  
     if (content === undefined || content == null) content = "";
     
@@ -132,11 +131,11 @@ export function updateDocument(doc) {
         res.abbreviation = doc.abbreviation;
         res.crossref = doc.crossref;
         res.definition = doc.content;
-        res.tags.forEach((tag, j) =>{
-            newTags[j]=sanitize(tag.trim());
-        });
+        // res.tags.forEach((tag, j) =>{
+        //     newTags[j]=sanitize(tag.trim());
+        // });
         console.debug(newTags);
-        res.tags = newTags;
+        res.tags = doc.tags;
 
         
         

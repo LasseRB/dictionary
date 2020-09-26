@@ -324,11 +324,11 @@ export function createTermDom(doc){
         dictionaries.setAttribute("placeholder","Dictionaries");
         //dictionaries.value = doc.tags;
         doc.tags.forEach(element => {
-            // if(element === "Unsorted terms" || element === ["Unsorted terms"]){
-            //     dictionaries.value += "";
-            // }else{
-                dictionaries.value += element + ", ";
-            // }
+            if(element === "Unsorted terms" || element === ["Unsorted terms"]){
+                dictionaries.value += "";
+            }else{
+                dictionaries.value += element.trim() + ", ";
+            }
            
         });;
         // remove the last comma
