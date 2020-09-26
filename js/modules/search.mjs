@@ -155,28 +155,29 @@ export function databaseUpdated(change) {
     }
 }
 
+// create dictionary Map<String, Doc>
 export function createDictionaryList() {
-    // todo: show list of dictionaries (or maybe tags?)
+
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
-            
+            console.debug(res.docs[i]);
             res.docs[i].tags.forEach(tag => {
                
                 if(dictionaries.has(tag)){
                    let all_words;
-                   all_words = dictionaries.get(tag);
+                    all_words = dictionaries.get(tag);
                     all_words.push(res.docs[i]);
                     dictionaries.set(tag, all_words);
                 } else{
-           
                     dictionaries.set(tag, [res.docs[i]]);
                 }
                    // let array = dictionaries.get(res.docs[i].title);
-            
             });
         }
-
+    
     }).then(() => {
+        console.warn("Dictionary Map created:")
+        console.debug([...dictionaries]);
         //run here for 
         createContextList();
     }).catch(err =>{
@@ -240,6 +241,7 @@ function contextDOM(doc){
             let li = document.createElement('li');
             li.id = "cntx list " + doc._id;
             li.className = "li_cntx";
+            
             let item = document.createElement('input');
             item.setAttribute('id', "cntx term " + doc._id);
             item.className = "cntx term";
@@ -257,8 +259,8 @@ function contextDOM(doc){
             // item.innerHTML = title;
             item.addEventListener('click', event => {
                 console.log("clicked " + item.id);
-                onTermClicked(event)
-            })
+                onTermClicked(event);
+            });
 
             addSearchItem(item, doc);
             li.appendChild(item);
@@ -314,7 +316,7 @@ export function getTopElement() {
 function onTermClicked(event) {
     let btn = event.target;
     let id = btn.getAttribute('data-id');
-        selected.push(btn);
+       // selected.push(btn);
         dc.displayDocument(id);
     // de-select previous
     // for (let i = 0; i < selected.length; i++)

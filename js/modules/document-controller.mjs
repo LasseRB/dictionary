@@ -181,11 +181,15 @@ function onDocumentChanged(event) {
 
    //console.debug("cntx term " + elem.currentID);
     // update title in list
+    let test = "attempt at getting " + "cntx term " + elem.currentID;
+    console.debug(test);
     s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
    
     if (saveTimer !== undefined) {
         clearTimeout(saveTimer);
     }
+    //      term 2020-09-26T11:07:37.256Z
+    // cntx term 2020-09-26T11:07:37.256Z
 
     // restart timer, save document after 1000 ms inactivity
     saveTimer = setTimeout(saveDocument(), 1000);
@@ -236,7 +240,8 @@ s
         JSON.stringify(data),
         elem.currentCrossRef,
     );
-
+        // console.debug(elem.currentDict.value);
+        console.debug(doc);
     updateDoc(doc);
 
 }
@@ -317,13 +322,13 @@ export function createTermDom(doc){
         dictionaries.id="doc-dictionaries-"+doc._id;
         dictionaries.setAttribute("aria-label","dictionaries");
         dictionaries.setAttribute("placeholder","Dictionaries");
-        // dictionaries.value = doc.tags;
+        //dictionaries.value = doc.tags;
         doc.tags.forEach(element => {
-            if(element === "Unsorted terms"){
-                dictionaries.value += "";
-            }else{
+            // if(element === "Unsorted terms" || element === ["Unsorted terms"]){
+            //     dictionaries.value += "";
+            // }else{
                 dictionaries.value += element + ", ";
-            }
+            // }
            
         });;
         // remove the last comma

@@ -28,14 +28,24 @@ export var db = g.db;
  * @param {string|undefined} _id
  */
 export var Document = function(title, abbreviation, tags, content, crossref, _id = undefined) {
-    let dictionary = document.createElement('input');
+   // let dictionary = document.createElement('input');
+   let dictionary = [{}];
+   
+   console.debug("tags html object:");
+   console.debug(tags);
+   console.debug("tags html value:");
+  // console.debug(tags.value);
+
     if (title === undefined) title = "Untitled";
     if (abbreviation === undefined) abbreviation = "";
     if (crossref === undefined) crossref = "";    
     if (tags === undefined || tags === null || tags === ""){
-        dictionary.value = "Unsorted terms"; 
+        this.tags[0] = ["Unsorted terms"];
+        // dictionary.push("Unsorted terms"); 
     }else{
-        dictionary = tags;
+        dictionary[0]=(seperateTags(tags.value));
+        this.tags = [];
+        this.tags[0]=dictionary.values;
     }  
     if (content === undefined || content == null) content = "";
     
@@ -45,7 +55,7 @@ export var Document = function(title, abbreviation, tags, content, crossref, _id
     this.title = sanitize(title);
     this.abbreviation = sanitize(abbreviation.value); 
     this.crossref = sanitize(crossref.value); // should become links eventually
-    this.tags = seperateTags(dictionary);
+    //this.tags = dictionary;
     //sanitation of the content ruins inline code :S
     this.content = content;
   
@@ -64,13 +74,20 @@ export function createId() {
  * @returns {Array<string>} tags_array
  */
 export function seperateTags(tags){
-    var tags_array = [];
-    if(tags.value.length > 0){
-      tags_array = tags.value.split(",");
+    let tags_array = [];
+
+    if(tags.length > 0){
+    console.debug("before:");
+    console.debug(tags);
+    tags_array = tags.split(",");
+    console.debug("after:");
+    console.debug(tags_array);
     }
      tags_array.forEach((tag, i) => {
-        tags_array[i] = sanitize(tag);
+        console.debug(i+" tag is: " + tag.trim());
+        tags_array[i] = new String((sanitize(tag.trim())));
     });
+    console.debug(tags_array);
     return tags_array;
   }
 
@@ -110,11 +127,19 @@ export function createDocument(doc) {
 export function updateDocument(doc) {
     g.db.get(doc._id).then(res => {
         console.log("Updated document!");
+        let newTags = doc.tags;
         res.title = doc.title;
         res.abbreviation = doc.abbreviation;
         res.crossref = doc.crossref;
         res.definition = doc.content;
-        res.tags = doc.tags;
+        res.tags.forEach((tag, j) =>{
+            newTags[j]=sanitize(tag.trim());
+        });
+        console.debug(newTags);
+        res.tags = newTags;
+
+        
+        
         return g.db.put(res);
     }).catch(err => {
         console.error(err);
