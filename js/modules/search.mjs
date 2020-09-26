@@ -32,7 +32,7 @@ function init() {
     // setup document elements
     elem.searchTerm = document.getElementById('search-term');
     elem.termList = document.getElementById('term-list');
-    elem.contextList = document.getElementById('context-list');
+    elem.contextList = document.getElementById('context-list-ul');
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
    
@@ -54,7 +54,7 @@ export function updateFuse() {
     const options = {
         isCaseSensitive: false,
         // includeScore: false,
-        // shouldSort: true,
+        shouldSort: true,
         // includeMatches: false,
         // findAllMatches: false,
         // minMatchCharLength: 1,
@@ -88,12 +88,13 @@ export function updateSearch(searchTerm){
     // clear array
     searchMatches.splice(0, searchMatches.length);
     
-    let c_children = elem.contextList.getElementsByTagName('context-list');
-    let t_children =document.getElementsByClassName('li_wrapper');
-  
+    let c_children = document.getElementsByClassName('cntx term');
+    let t_children = document.getElementsByClassName('li_term_wrapper');
     if (searchTerm.value === "") {
-        for (let i = 0; i < c_children.length; i++) {
-            c_children[i].style.removeProperty('display');
+        for (let i = 0; i < t_children.length; i++) {
+            
+           
+            c_children[i].parentElement.style.removeProperty('display');
             t_children[i].style.removeProperty('display');
         }
         // todo: revert order back to default
@@ -101,14 +102,14 @@ export function updateSearch(searchTerm){
         
         searchMatches = getSearchResults(searchTerm.value);
 
-        for (let i = 0; i < c_children.length; i++) {
+        for (let i = 0; i < t_children.length; i++) {
             t_children[i].style.setProperty('display', 'none');
-            c_children[i].style.setProperty('display', 'none');
+            c_children[i].parentElement.style.setProperty('display', 'none');
             
         }
 
         searchMatches.forEach(match => {
-           document.getElementById("cntx " + match.item.doc._id).style.removeProperty('display');
+           document.getElementById("cntx term " + match.item.doc._id).parentElement.style.removeProperty('display');
            document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
            match.item.element.parentNode.appendChild(match.item.element);
       
@@ -173,11 +174,6 @@ export function createDictionaryList() {
                    // let array = dictionaries.get(res.docs[i].title);
             
             });
-        
-               
-          
-        
-          
         }
 
     }).then(() => {
@@ -193,39 +189,45 @@ export function createDictionaryList() {
  */
 export function createContextList() {
   
-    let y = document.createElement('div');
-    y.value = dictionaries.get("HTML");
-    elem.contextList.appendChild(y);
+    // let y = document.createElement('div');
+    // y.value = dictionaries.get("HTML");
+    // elem.contextList.appendChild(y);
 
 
-   console.debug(y.value);
-   dictionaries.forEach((value,key) =>{
-    console.debug(key + " "+ value.length +" \n");
-    console.debug(value.forEach(val => console.debug(val.title)));});
+//    console.debug(y.value);
+//    dictionaries.forEach((value,key) =>{
+    // console.debug(key + " "+ value.length +" \n");
+    // console.debug(value.forEach(val => console.debug(val.title)));});
 
 
         dictionaries.forEach((value,key) =>{
-            console.debug(key + " "+ value.length +" \n");
-            console.debug(value.forEach(val => console.debug(val.title)));
-
+            // console.debug(key + " "+ value.length +" \n");
+            // console.debug(value.forEach(val => console.debug(val.title)));
+            let li = document.createElement('li');
+                li.id = "cntx dictionary li " + Date.now();
+                
             let dictionary = document.createElement('input');
                 dictionary.className= "cntx dictionary";
                 dictionary.id = "cntx dictionary " + Date.now();
 
                 dictionary.setAttribute("type", "button");
-                dictionary.value = key;
-            let ul = document.createElement('ul');
-                ul.id = "cntx dictionary ul " + Date.now();
+                dictionary.value = key.trim();
+            let ol = document.createElement('ol');
                 
-
+            
+               
             value.forEach(val => {
-                console.debug("context "+val.title)
-                dictionary.appendChild(ul).appendChild(contextDOM(val))
+                // console.debug("context "+val.title)
+                ol.appendChild(contextDOM(val))
+                //elem.contextList.appendChild(contextDOM(val));
             });
+
+            li.appendChild(dictionary);
+            li.appendChild(ol);
 
     
    
-    elem.contextList.appendChild(dictionary);  
+    elem.contextList.appendChild(li);  
     });
 
     updateFuse(); // always re-initialize Fuse after changing content
@@ -237,14 +239,16 @@ function contextDOM(doc){
     //  create actual term text //
             let li = document.createElement('li');
             li.id = "cntx list " + doc._id;
+            li.className = "li_cntx";
             let item = document.createElement('input');
             item.setAttribute('id', "cntx term " + doc._id);
+            item.className = "cntx term";
             item.setAttribute('data-id', doc._id);
             item.setAttribute("type", "button");
             // item.setAttribute('type', 'checkbox');
             
 
-            let title = sanitize(doc.title);
+            let title = sanitize(doc.title.trim());
             if (title === "") {
                 title = "Untitled";
             }
@@ -288,8 +292,7 @@ export function createTermList(){
 export function updateTermTitle(id, newTitle) {
     if (id === undefined || id === "")
         return;
-
-    document.getElementById(id).innerHTML = sanitize(newTitle);
+    document.getElementById(id).value = sanitize(newTitle);
 }
 
 /**

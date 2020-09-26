@@ -142,7 +142,7 @@ button {
     background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
 }
 
-#view-dictionary {
+.cntx dictionary {
     background-color: #e6e5e4;
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     flex-basis: 200px;
@@ -217,7 +217,7 @@ button {
 }
 
 /* View items */
-.li_wrapper{
+.li_term_wrapper{
     position: relative;
     width: 100%;
     padding: 20px;
@@ -304,18 +304,20 @@ button {
     border-radius: 100px;
     border: none;
   }
-  
+
 .search-create #search-term {
     background-color: transparent;
     position: absolute;
     left: 25px;
     top: 8px;
     width: 80%;
-    height: 50%;
+    height: 60%;
     border: none;
     outline: none;
     font-size: 13px;
   }
+
+
   
 .search-create #new-term {
     position: absolute;
@@ -412,12 +414,12 @@ ul#term-list{
     overflow-y: scroll;
 }
 
-ul#dictionary-list, ul#context-list {
+ul{
     margin: 0;
     padding: 0;
 }
 
-#dictionary-list input, #context-list input {
+#context-list input {
     display: block;
     text-align: start;
     width: 100%;
@@ -428,12 +430,12 @@ ul#dictionary-list, ul#context-list {
     cursor: pointer;  
 }
 
-#dictionary-list input:hover, #context-list input:hover {
+#context-list input:hover {
     color: #fff;
     background-color: #719eff;
 }
 
-#dictionary-list input:focus, #context-list input:focus{
+#context-list input:focus{
     color: #fff;
     background-color: #404040;
     outline: none;

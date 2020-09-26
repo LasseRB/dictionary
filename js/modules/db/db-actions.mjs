@@ -28,12 +28,14 @@ export var db = g.db;
  * @param {string|undefined} _id
  */
 export var Document = function(title, abbreviation, tags, content, crossref, _id = undefined) {
+    let dictionary = document.createElement('input');
     if (title === undefined) title = "Untitled";
     if (abbreviation === undefined) abbreviation = "";
     if (crossref === undefined) crossref = "";    
-    if (tags === undefined){
-        tags = []; 
-        tags.value = []; 
+    if (tags === undefined || tags === null || tags === ""){
+        dictionary.value = "Unsorted terms"; 
+    }else{
+        dictionary = tags;
     }  
     if (content === undefined || content == null) content = "";
     
@@ -43,15 +45,13 @@ export var Document = function(title, abbreviation, tags, content, crossref, _id
     this.title = sanitize(title);
     this.abbreviation = sanitize(abbreviation.value); 
     this.crossref = sanitize(crossref.value); // should become links eventually
-    this.tags = seperateTags(tags);
+    this.tags = seperateTags(dictionary);
     //sanitation of the content ruins inline code :S
     this.content = content;
   
    
    
-    this.tags.forEach((tag, i) => {
-        tags[i] = sanitize(tag);
-    });
+   
 }
 
 export function createId() {
@@ -68,6 +68,9 @@ export function seperateTags(tags){
     if(tags.value.length > 0){
       tags_array = tags.value.split(",");
     }
+     tags_array.forEach((tag, i) => {
+        tags_array[i] = sanitize(tag);
+    });
     return tags_array;
   }
 

@@ -37,8 +37,6 @@ function init() {
     elem.newTermButton = document.getElementById('new-term');
     elem.newTerm = document.getElementById('search-term');   
 
-  
-   elem.searchTerm = document.getElementById('search-term');
    elem.allApp = document.getElementById('app');
 
 
@@ -51,15 +49,11 @@ function init() {
 }
 
 function addEventListeners(element) {
-    let t_children = document.getElementsByClassName('li_wrapper');
+    let t_children = document.getElementsByClassName('li_term_wrapper');
     elem.newTermButton.addEventListener('click', onNewTermButton);
     elem.newTerm.addEventListener('input', clearFocusOnElement);
     elem.allApp.addEventListener('click', addBorder);
-    console.debug('eventListener started');;
-
-    
 }
-
 
 export function setupEditor(doc) {
        const editor = new EditorJS({
@@ -143,9 +137,11 @@ export function addDataFromDatabase(doc, editor){
 
 }
 function addBorder(event){
+
     if(document.getElementById('search-term') === document.activeElement){
         document.getElementById('search-create-box').setAttribute("style", "border:solid 1px #00A3FF");
-    } else{
+    }
+    else{
         document.getElementById('search-create-box').setAttribute("style", "border:solid 0px #FFFFFF");
     }
 
@@ -183,7 +179,7 @@ function onDocumentChanged(event) {
                  + "crossref"+ elem.currentCrossRef.value + "\n"
                  + "editor "+ elem.currentEditor + "\n");
 
-
+   //console.debug("cntx term " + elem.currentID);
     // update title in list
     s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
    
@@ -195,8 +191,8 @@ function onDocumentChanged(event) {
     saveTimer = setTimeout(saveDocument(), 1000);
 }
 function onNewTermButton(){
-   location.reload();
     saveDocument();
+    location.reload();
 }
 
 /**
@@ -274,11 +270,9 @@ export function displayDocument(id) {
     }
     // remove event listeners to prevent firing after changing
     // @TODO: fix error here.. not super important
-    document.getElementById("term " + id).scrollIntoView({behavior: "smooth", block: "end", inline: "start"});
-
-   
-
-
+    if(document.getElementById("term " + id) != null){
+        document.getElementById("term " + id).scrollIntoView({behavior: "smooth", block: "end", inline: "start"});
+    } 
     hasChanged = false;
 
 }
@@ -301,7 +295,7 @@ export function displayTopDocument() {
 export function createTermDom(doc){
    
     let li = document.createElement('li'); 
-    li.className = 'li_wrapper';
+    li.className = 'li_term_wrapper';
     li.setAttribute('id', "term " + doc._id);
     li.setAttribute('data-id', doc._id);
     let form = document.createElement('form');
@@ -323,10 +317,17 @@ export function createTermDom(doc){
         dictionaries.id="doc-dictionaries-"+doc._id;
         dictionaries.setAttribute("aria-label","dictionaries");
         dictionaries.setAttribute("placeholder","Dictionaries");
-        dictionaries.value = doc.tags;
-        // doc.tags.forEach(element => {
-        //     dictionaries.value += element +" ";
-        // });;
+        // dictionaries.value = doc.tags;
+        doc.tags.forEach(element => {
+            if(element === "Unsorted terms"){
+                dictionaries.value += "";
+            }else{
+                dictionaries.value += element + ", ";
+            }
+           
+        });;
+        // remove the last comma
+        dictionaries.value = dictionaries.value.substring(0,(dictionaries.value.length - 2))
 
     
     let editorjs = document.createElement('div');
