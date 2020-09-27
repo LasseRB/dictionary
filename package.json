@@ -2,14 +2,20 @@
   "name": "dictionary",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "electron.js",
   "scripts": {
-    "dev": "nodemon ./index.js"
+    "dev": "nodemon ./index.js",
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "electron": "^10.1.2",
+    "electron-builder": "^22.8.1",
     "nodemon": "^2.0.4"
   }
 }
+
+
