@@ -1,4 +1,5 @@
 import * as s from "./search.mjs";
+import * as q from "./db/db-query.mjs";
 
 let elem = {};
 
@@ -33,14 +34,19 @@ function onTermButtonClicked(event) {
     
 
 function updateCount(){
-    
     setTimeout(function (){
-        
-            let list = elem.contextList.getElementsByTagName('input');
+        q.getTermList().then(res => {
             elem.dbCount = document.getElementById('dbsize');
-            elem.dbCount.innerHTML = list.length + " terms";
+            elem.dbCount.innerHTML = res.docs.length + " terms";
             s.updateSearch(elem.searchTerm);
             elem.searchTerm.value = "";
+           // for (let i = 0; i < res.docs.length; i++) {}
+        }).catch(err=>{
+            console.error(err);
+        });
+        
+
+               
 
 }, 200);
 }

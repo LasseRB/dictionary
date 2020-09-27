@@ -293,8 +293,6 @@ button {
 }
 
 /* Search */
-
-
 .search-create {
     margin: 0 auto;
     position: relative;
@@ -420,7 +418,8 @@ ul{
 }
 
 #context-list input {
-    display: block;
+    display: inline-block;
+    position: relative;
     text-align: start;
     width: 100%;
     line-height: 1.5;
@@ -440,6 +439,56 @@ ul{
     background-color: #404040;
     outline: none;
     
+}
+#context-list li .li_cntx {
+    position: relative;
+
+   
+}
+#context-list li .li_cntx #cntx_delete{
+    transition: all .1s ease-in-out;
+    display: none;
+}
+
+#context-list li .li_cntx:hover #cntx_delete{
+    display:inline-block;
+    position: absolute;
+    right: 10px;
+    top:5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 30px;
+    background-color: #F0F0F0;
+    overflow: hidden;
+  
+}
+
+#context-list li .li_cntx #cntx_delete::after{
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 1px;
+    background-color: black;
+    transform: translate(-4.5px, -.5px) rotate(-45deg);
+}
+#context-list .li_cntx #cntx_delete::before{
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 1px;
+    background-color: black;
+    transform: translate(-4.5px, -.5px) rotate(45deg);
+}
+#context-list li .li_cntx #cntx_delete.confirmDelete{
+    display:inline-block;
+    position: absolute;
+    right: 10px;
+    top:5px;
+    width: 40px;
+    height: 15px;
+    border-radius: 30px;
+    background-color: rgb(255, 28, 28);
+    overflow: hidden;
 }
 
 /* Editor.js */

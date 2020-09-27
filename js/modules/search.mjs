@@ -1,6 +1,7 @@
 import * as g from "./global.mjs";
 import * as dc from "./document-controller.mjs";
 import * as q from "./db/db-query.mjs";
+import * as a from "./db/db-actions.mjs";
 
 // todo: add newly created documents to term search list
 
@@ -10,7 +11,7 @@ let selected = [];
 let searchList = [];
 let searchMatches = [];
 let fuse = undefined;
-let dictionaries = new Map();
+let dictionaries;
 
 /**
  * Initialize the database and search event listeners.
@@ -54,7 +55,7 @@ export function updateFuse() {
     const options = {
         isCaseSensitive: false,
         // includeScore: false,
-        shouldSort: true,
+        //shouldSort: true,
         // includeMatches: false,
         // findAllMatches: false,
         // minMatchCharLength: 1,
@@ -92,8 +93,6 @@ export function updateSearch(searchTerm){
     let t_children = document.getElementsByClassName('li_term_wrapper');
     if (searchTerm.value === "") {
         for (let i = 0; i < t_children.length; i++) {
-            
-           
             c_children[i].parentElement.style.removeProperty('display');
             t_children[i].style.removeProperty('display');
         }
@@ -104,10 +103,8 @@ export function updateSearch(searchTerm){
 
         for (let i = 0; i < t_children.length; i++) {
             t_children[i].style.setProperty('display', 'none');
-            c_children[i].parentElement.style.setProperty('display', 'none');
-            
+            c_children[i].parentElement.style.setProperty('display', 'none');   
         }
-
         searchMatches.forEach(match => {
            document.getElementById("cntx term " + match.item.doc._id).parentElement.style.removeProperty('display');
            document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
@@ -144,10 +141,12 @@ export function addSearchItem(elem, doc) {
  * @param {Object} change: The document object that has changed
  */
 export function databaseUpdated(change) {
-   // location.reload(); 
+   // 
 
     // todo: respond to database changes?
     if (change.deleted) {
+        location.reload(); 
+        // dc.onDocumentChanged(change.target);
         // note: the deleted document object is not passed completely, however _id and _rev is passed
         //
     } else {
@@ -157,19 +156,25 @@ export function databaseUpdated(change) {
 
 // create dictionary Map<String, Doc>
 export function createDictionaryList() {
-
+  dictionaries =  new Map();
+  while (elem.contextList.firstChild) {
+    elem.contextList.removeChild(elem.contextList.firstChild);
+    }
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
             console.debug(res.docs[i]);
             res.docs[i].tags.forEach(tag => {
-               
-                if(dictionaries.has(tag)){
-                   let all_words;
-                    all_words = dictionaries.get(tag);
-                    all_words.push(res.docs[i]);
-                    dictionaries.set(tag, all_words);
-                } else{
-                    dictionaries.set(tag, [res.docs[i]]);
+                if(tag.trim()!== ""){
+                    console.debug("tag is");
+                    console.debug(tag);
+                    if(dictionaries.has(tag)){
+                    let all_words;
+                        all_words = dictionaries.get(tag);
+                        all_words.push(res.docs[i]);
+                        dictionaries.set(tag, all_words);
+                    } else{
+                            dictionaries.set(tag, [res.docs[i]]);
+                    }
                 }
                    // let array = dictionaries.get(res.docs[i].title);
             });
@@ -189,41 +194,32 @@ export function createDictionaryList() {
  * Creates the list of documents that are displayed and can be searched.
  */
 export function createContextList() {
-  
-    // let y = document.createElement('div');
-    // y.value = dictionaries.get("HTML");
-    // elem.contextList.appendChild(y);
-
-
-//    console.debug(y.value);
-//    dictionaries.forEach((value,key) =>{
-    // console.debug(key + " "+ value.length +" \n");
-    // console.debug(value.forEach(val => console.debug(val.title)));});
-
 
         dictionaries.forEach((value,key) =>{
             // console.debug(key + " "+ value.length +" \n");
             // console.debug(value.forEach(val => console.debug(val.title)));
             let li = document.createElement('li');
-                li.id = "cntx dictionary li " + Date.now();
+                li.id = "cntx dictionary li " + key;
                 
             let dictionary = document.createElement('input');
                 dictionary.className= "cntx dictionary";
-                dictionary.id = "cntx dictionary " + Date.now();
+                dictionary.id = "cntx dictionary " + key;
 
                 dictionary.setAttribute("type", "button");
                 dictionary.value = key.trim();
+        
             let ol = document.createElement('ol');
-                
+           
             
                
             value.forEach(val => {
                 // console.debug("context "+val.title)
-                ol.appendChild(contextDOM(val))
+                ol.appendChild(contextDOM(val));
                 //elem.contextList.appendChild(contextDOM(val));
             });
-
-            li.appendChild(dictionary);
+            
+   
+            li.appendChild(dictionary)
             li.appendChild(ol);
 
     
@@ -235,6 +231,7 @@ export function createContextList() {
   
 
 }
+
 
 function contextDOM(doc){
     //  create actual term text //
@@ -255,8 +252,12 @@ function contextDOM(doc){
                 title = "Untitled";
             }
             item.value = title;
-            // item.innerText = title;
-            // item.innerHTML = title;
+
+            let deleteBtn = document.createElement('button');
+            deleteBtn.id = 'cntx_delete';
+            deleteBtn.addEventListener('click', onDeleteBtn)
+
+          
             item.addEventListener('click', event => {
                 console.log("clicked " + item.id);
                 onTermClicked(event);
@@ -264,12 +265,12 @@ function contextDOM(doc){
 
             addSearchItem(item, doc);
             li.appendChild(item);
+            li.appendChild(deleteBtn);
             return li;
 
 }
 
 export function createTermList(){
-    
     q.getTermList().then(res => {
         for (let i = 0; i < res.docs.length; i++) {
             let term = dc.createTermDom(res.docs[i]);
@@ -328,6 +329,28 @@ function onTermClicked(event) {
     // select new
    
     // }
+}
+function onDeleteBtn(event){
+    let confirmed = false;
+    console.warn("sure you want to delete?") 
+    event.target.classList.toggle("confirmDelete");
+    setTimeout(()=>{
+        event.target.classList.toggle("confirmDelete");
+       
+    },3000);
+    event.currentTarget.addEventListener('click', () =>{
+        confirmed = true;
+        try {        
+            q.getDocFromId(event.target.previousSibling.getAttribute('data-id')).then(doc =>{
+                a.removeTerm(doc, confirmed);
+            });  
+           
+        } catch (error) {
+            console.error(error);
+        }
+       
+       
+    });
 }
 
 window.addEventListener("load", init);

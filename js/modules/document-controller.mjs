@@ -15,6 +15,7 @@ let saveTimer = undefined;
 let sanitize = DOMPurify.sanitize;
 let editors = new Map();
 let hasChanged = false;
+let dictionaryHistory = [];
 
 
 function init() {
@@ -35,9 +36,8 @@ function init() {
 
     // add and search functionality
     elem.newTermButton = document.getElementById('new-term');
-    elem.newTerm = document.getElementById('search-term');   
-
-   elem.allApp = document.getElementById('app');
+    elem.newTerm = document.getElementById('search-term');
+    elem.allApp = document.getElementById('app');
 
 
     // setup event listeners
@@ -49,7 +49,7 @@ function init() {
 }
 
 function addEventListeners(element) {
-    let t_children = document.getElementsByClassName('li_term_wrapper');
+   // let t_children = document.getElementsByClassName('li_term_wrapper');
     elem.newTermButton.addEventListener('click', onNewTermButton);
     elem.newTerm.addEventListener('input', clearFocusOnElement);
     elem.allApp.addEventListener('click', addBorder);
@@ -124,17 +124,11 @@ export function addDataFromDatabase(doc, editor){
         } catch (err) {
             // could not parse JSON
             console.error("could not parse JSON: \n" +err + "\n" +
-                            "JSON that couldn't be parsed " + newdef);
-            
+                            "JSON that couldn't be parsed " + newdef);   
         }
-
     }).catch(err =>{
         console.error(err);
     })
-       
-
-
-
 }
 function addBorder(event){
 
@@ -145,6 +139,11 @@ function addBorder(event){
         document.getElementById('search-create-box').setAttribute("style", "border:solid 0px #FFFFFF");
     }
 
+}
+function updateHistory(event){
+    dictionaryHistory.push(event.target.value);
+    console.debug("dictionary History:")
+    console.debug(...dictionaryHistory);
 }
 export function assignFocusOnElement(event){
 
@@ -167,7 +166,7 @@ export function clearFocusOnElement(event){
     elem.currentCrossRef=undefined;
 }
 
-function onDocumentChanged(event) {
+export function onDocumentChanged(event) {
     hasChanged = true;
 
     assignFocusOnElement(event);
@@ -179,11 +178,11 @@ function onDocumentChanged(event) {
                  + "crossref"+ elem.currentCrossRef.value + "\n"
                  + "editor "+ elem.currentEditor + "\n");
 
-   //console.debug("cntx term " + elem.currentID);
-    // update title in list
-    let test = "attempt at getting " + "cntx term " + elem.currentID;
-    console.debug(test);
+    
     s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
+    s.createDictionaryList();
+    // document.getElementById(("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1]).id = "cntx dictionary " +elem.currentDict.value)
+    //s.updateTermTitle("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1], elem.currentDict.value);
    
     if (saveTimer !== undefined) {
         clearTimeout(saveTimer);
@@ -268,13 +267,12 @@ export function updateDoc(doc){
  * @param id
  */
 export function displayDocument(id) {
-    console.debug("term " + id);
+    
     //save existing first
     if (hasChanged) {
         saveDocument();
     }
-    // remove event listeners to prevent firing after changing
-    // @TODO: fix error here.. not super important
+    
     if(document.getElementById("term " + id) != null){
         document.getElementById("term " + id).scrollIntoView({behavior: "smooth", block: "end", inline: "start"});
     } 
@@ -322,6 +320,7 @@ export function createTermDom(doc){
         dictionaries.id="doc-dictionaries-"+doc._id;
         dictionaries.setAttribute("aria-label","dictionaries");
         dictionaries.setAttribute("placeholder","Dictionaries");
+        dictionaries.addEventListener('beforeinput', updateHistory);
         //dictionaries.value = doc.tags;
         doc.tags.forEach(element => {
             if(element === "Unsorted terms" || element === ["Unsorted terms"]){
@@ -333,6 +332,7 @@ export function createTermDom(doc){
         });;
         // remove the last comma
         dictionaries.value = dictionaries.value.substring(0,(dictionaries.value.length - 2))
+
 
     
     let editorjs = document.createElement('div');
@@ -362,7 +362,7 @@ export function createTermDom(doc){
     form.appendChild(abbreviation);
     form.appendChild(crossref);
 
-
+    
     li.addEventListener('input', onDocumentChanged);
     return li;
 }

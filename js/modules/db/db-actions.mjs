@@ -29,13 +29,6 @@ export var db = g.db;
  */
 export var Document = function(title, abbreviation, tags, content, crossref, _id = undefined) {
    // let dictionary = document.createElement('input');
-
-   
-   console.debug("tags html object:");
-   console.debug(tags);
-   console.debug("tags html value:");
-  // console.debug(tags.value);
-
     if (title === undefined) title = "Untitled";
     if (abbreviation === undefined) abbreviation = "";
     if (crossref === undefined) crossref = "";    
@@ -57,10 +50,6 @@ export var Document = function(title, abbreviation, tags, content, crossref, _id
     //this.tags = dictionary;
     //sanitation of the content ruins inline code :S
     this.content = content;
-  
-   
-   
-   
 }
 
 export function createId() {
@@ -76,15 +65,11 @@ export function seperateTags(tags){
     let tags_array = [];
 
     if(tags.length > 0){
-    console.debug("before:");
-    console.debug(tags);
-    tags_array = tags.split(",");
-    console.debug("after:");
-    console.debug(tags_array);
+        tags_array = tags.split(",");
     }
-     tags_array.forEach((tag, i) => {
+     tags_array.forEach((tag, i) => { 
         console.debug(i+" tag is: " + tag.trim());
-        tags_array[i] = new String((sanitize(tag.trim())));
+        tags_array[i] = sanitize(tag).trim();
     });
     console.debug(tags_array);
     return tags_array;
@@ -94,8 +79,9 @@ export function seperateTags(tags){
  * Removes a word from the database
  * @param {Object<word>} word
  */
-export function removeWord(word){
-    db.remove(word);
+export function removeTerm(doc, confirmation){
+    if(confirmation === true)
+        db.remove(doc);
 }
 
 /**
@@ -126,19 +112,12 @@ export function createDocument(doc) {
 export function updateDocument(doc) {
     g.db.get(doc._id).then(res => {
         console.log("Updated document!");
-        let newTags = doc.tags;
         res.title = doc.title;
         res.abbreviation = doc.abbreviation;
         res.crossref = doc.crossref;
         res.definition = doc.content;
-        // res.tags.forEach((tag, j) =>{
-        //     newTags[j]=sanitize(tag.trim());
-        // });
-        console.debug(newTags);
         res.tags = doc.tags;
 
-        
-        
         return g.db.put(res);
     }).catch(err => {
         console.error(err);
