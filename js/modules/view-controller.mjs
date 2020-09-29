@@ -5,16 +5,17 @@ let elem = {};
 
 function init() {
     elem.termButton = document.getElementById('button-contextToggle');
+    elem.styleButton = document.getElementById('button-style');
     // elem.exportButton = document.getElementById('button-export');
     // elem.dictionaryView = document.getElementById('view-dictionary');
     elem.contextView = document.getElementById('view-context');
     elem.contextList = document.getElementById('context-list');
     
     elem.searchTerm = document.getElementById('search-term');
-    elem.termButton.addEventListener('click', event => {
-        onTermButtonClicked(event);
-    })
+    elem.termButton.addEventListener('click', onTermButtonClicked);
+    elem.styleButton.addEventListener('click', onStyleButtonClicked);
 
+   
     updateCount();
  
 }
@@ -31,7 +32,10 @@ function onTermButtonClicked(event) {
         }
     }
 
-    
+function onStyleButtonClicked(){
+        let style = document.getElementById('style1');
+        style.setAttribute('href', "style/style1.css");
+}    
 
 function updateCount(){
     setTimeout(function (){
@@ -46,10 +50,11 @@ function updateCount(){
         });
         
 
-               
+       
 
 }, 200);
 }
+
 
 
 

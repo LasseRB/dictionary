@@ -32,12 +32,14 @@ export var Document = function(title, abbreviation, tags, content, crossref, _id
     if (title === undefined) title = "Untitled";
     if (abbreviation === undefined) abbreviation = "";
     if (crossref === undefined) crossref = "";    
-    if (tags === undefined || tags === null || tags === ""){
+    if (tags === undefined || tags === null || tags === "" || tags === " " || tags.value === "" || tags.value === null){
         this.tags = ["Unsorted terms"];
+        console.debug("Unsorted is " + this.tags);
         // dictionary.push("Unsorted terms"); 
     }else{
         const dictionary=(seperateTags(tags.value));
         this.tags=dictionary;
+        console.debug("Sorted is "+ this.tags);
     }  
     if (content === undefined || content == null) content = "";
     
@@ -71,7 +73,7 @@ export function seperateTags(tags){
         console.debug(i+" tag is: " + tag.trim());
         tags_array[i] = sanitize(tag).trim();
     });
-    console.debug(tags_array);
+   // console.debug(tags_array);
     return tags_array;
   }
 
@@ -125,6 +127,15 @@ export function updateDocument(doc) {
     });
 
 
+}
+
+export function getPrevVersion(id){
+    db.get(String(id), {
+        revs: true, 
+        open_revs: 'all' // this allows me to also get the removed "docs"
+      }).then(function(found) {
+        console.debug(found);
+      });
 }
 
 window.onload = init;

@@ -44,7 +44,8 @@ function init() {
     addEventListeners();
     elem.newTerm.focus();
     addBorder();
-
+    s.clearContextList();
+    s.createDictionaryList()
     
 }
 
@@ -53,6 +54,13 @@ function addEventListeners(element) {
     elem.newTermButton.addEventListener('click', onNewTermButton);
     elem.newTerm.addEventListener('input', clearFocusOnElement);
     elem.allApp.addEventListener('click', addBorder);
+   
+}
+
+function getOldVersions(){
+ 
+        console.debug("old version:");
+        a.getPrevVersion(elem.currentID);
 }
 
 export function setupEditor(doc) {
@@ -170,6 +178,7 @@ export function onDocumentChanged(event) {
     hasChanged = true;
 
     assignFocusOnElement(event);
+    getOldVersions();
    
     console.debug("id "+ elem.currentID + "\n"
                  + "title "+ elem.currentTitle.value + "\n"
@@ -179,7 +188,8 @@ export function onDocumentChanged(event) {
                  + "editor "+ elem.currentEditor + "\n");
 
     
-    s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
+    //s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
+   
     s.createDictionaryList();
     // document.getElementById(("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1]).id = "cntx dictionary " +elem.currentDict.value)
     //s.updateTermTitle("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1], elem.currentDict.value);
@@ -240,7 +250,7 @@ s
         elem.currentCrossRef,
     );
         // console.debug(elem.currentDict.value);
-        console.debug(doc);
+        //console.debug(doc);
     updateDoc(doc);
 
 }
@@ -261,6 +271,8 @@ export function updateDoc(doc){
 
         documentId = id;
 }
+
+
 
 /**
  * Saves the current document and shows the document with the given id

@@ -1,11 +1,11 @@
 {
   "name": "dictionary",
   "version": "1.0.0",
-  "description": "",
+  "description": "Your personal dictionary",
   "main": "electron.js",
   "scripts": {
     "dev": "nodemon ./index.js",
-    "start": "electron .",
+    "elec": "electron .",
     "build": "electron-builder"
   },
   "keywords": [],
