@@ -44,8 +44,8 @@ function init() {
     addEventListeners();
     elem.newTerm.focus();
     addBorder();
-    s.clearContextList();
-    s.createDictionaryList()
+    // s.clearContextList();
+    // s.createDictionaryList();
     
 }
 
