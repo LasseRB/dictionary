@@ -17,14 +17,13 @@ let dictionaries;
 /**
  * Initialize the database and search event listeners.
  */
-function init() {
+async function init() {
     // respond to database changes
     db.db.changes({
         since: 'now',
         live: true,
         include_docs: true
     }).on('change', change => {
-       
         // one event per changed document
         databaseUpdated(change);
         
@@ -39,12 +38,15 @@ function init() {
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
     // create visible list of titles, setup search array and initialize Fuse
-
-    createContextList();
-    
-
-    createTermList();
+   
+        
+        await g.createDictionaryList();
+        clearContextList();
+        createContextList();
+        createTermList();
+      
   
+    
 }
 
 
@@ -158,16 +160,11 @@ export function databaseUpdated(change) {
 
 // create dictionary Map<String, Doc>
 export function updateContextList() {
-    
-//   dictionaries =  new Map();
-  // clear the list before
-
-         //clearContextList();
-        // console.warn("Dictionary Map created:")
-        // console.debug([...dictionaries]);
-        //run here for 
+ 
+        clearContextList();
+  
         createContextList();
-
+   
 }
 
 
@@ -192,50 +189,39 @@ export function createTermList(){
         }).catch((err) => {
             console.log(err);
         });
-       
 }
-
 
 /**
  * Creates the list of documents that are displayed and can be searched.
  */
 export function createContextList() {
-
-    g.getDictionary().forEach((value,key) =>{
-        // console.debug(key + " "+ value.length +" \n");
-        // console.debug(value.forEach(val => console.debug(val.title)));
-        let li = document.createElement('li');
-            li.id = "cntx dictionary li " + key;
-            
-        let dictionary = document.createElement('input');
-            dictionary.className= "cntx dictionary";
-            dictionary.id = "cntx dictionary " + key;
-
-            dictionary.setAttribute("type", "button");
-            dictionary.value = key.trim();
+        g.getDictionary().forEach((value,key) =>{
+            // console.debug(key + " "+ value.length +" \n");
+            // console.debug(value.forEach(val => console.debug(val.title)));
+            let li = document.createElement('li');
+                li.id = "cntx dictionary li " + key;
+                
+            let dictionary = document.createElement('input');
+                dictionary.className= "cntx dictionary";
+                dictionary.id = "cntx dictionary " + key;
     
-        let ol = document.createElement('ol');
-       
+                dictionary.setAttribute("type", "button");
+                dictionary.value = key.trim();
         
-           
-        value.forEach(val => {
-            // console.debug("context "+val.title)
-            ol.appendChild(contextDOM(val));
-            //elem.contextList.appendChild(contextDOM(val));
-        });
-        
-        
-            li.appendChild(dictionary)
-            li.appendChild(ol);
-       
-
-        elem.contextList.appendChild(li);  
-   
-});
-
+            let ol = document.createElement('ol');
+            
+               
+            value.forEach(val => {
+                // console.debug("context "+val.title)
+                ol.appendChild(contextDOM(val));
+                //elem.contextList.appendChild(contextDOM(val));
+            });
+                li.appendChild(dictionary)
+                li.appendChild(ol);
+    
+            elem.contextList.appendChild(li);  
+    });
 updateFuse(); // always re-initialize Fuse after changing content
-
-
 }
 
 

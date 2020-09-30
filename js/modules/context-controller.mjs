@@ -6,9 +6,9 @@ import * as a from "./db/db-actions.mjs";
 
 
 function init(){
-    g.getDictionary();
-    // s.createContextList();
+  
+    s.createContextList();
 
 }
 
-window.addEventListener("load", init);
+window.addEventListener('load', init);

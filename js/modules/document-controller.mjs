@@ -1,7 +1,7 @@
 
 import * as a from "./db/db-actions.mjs";
+import * as g from "./global.mjs";
 import * as s from "./search.mjs";
-
 // // todo: ability to delete documents
 // // todo: empty page instead of editor on open?
 // // todo: create new document when clicking plus
@@ -172,7 +172,7 @@ export function clearFocusOnElement(event){
     elem.currentCrossRef=undefined;
 }
 
-export function onDocumentChanged(event) {
+export async function onDocumentChanged(event) {
     hasChanged = true;
 
     assignFocusOnElement(event);
@@ -187,7 +187,8 @@ export function onDocumentChanged(event) {
 
     
     //s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
-   
+    await g.createDictionaryList();
+    s.clearContextList();
     s.createContextList();
     // document.getElementById(("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1]).id = "cntx dictionary " +elem.currentDict.value)
     //s.updateTermTitle("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1], elem.currentDict.value);

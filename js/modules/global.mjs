@@ -2,17 +2,18 @@ import * as q from "./db/db-query.mjs";
 // import * as a from "./db/db-actions.mjs";
 
 let dictionaries;
+
+function init(){
+    
+}
+
 export function getDictionary(){
-    if(dictionaries === undefined || dictionaries === null){
-        createDictionaryList();
-    } 
     return dictionaries;
-    
-    
 }
 export function createDictionaryList() {
     dictionaries = new Map();
       q.getTermList().then(res => {
+  
           for (let i = 0; i < res.docs.length; i++) {
               res.docs[i].tags.forEach(tag => {
                   if(tag.trim()!== ""){
@@ -29,13 +30,13 @@ export function createDictionaryList() {
                   }
                      // let array = dictionaries.get(res.docs[i].title);
               });
-          }
-      
-      
-      }).then(() =>{
-          return dictionaries;
-      })
-      .catch(error =>{
+            }
+      }).then(()=>{
+            return true;
+      }).
+      catch(error =>{
           console.error(error);
+          return false;
       })
 }
+window.addEventListener("load", init);
