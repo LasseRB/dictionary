@@ -1,8 +1,6 @@
-import * as q from "./db/db-query.mjs";
+
 import * as a from "./db/db-actions.mjs";
 import * as s from "./search.mjs";
-import * as g from "./global.mjs";
-import { getDocFromId } from "./db/db-query.mjs";
 
 // // todo: ability to delete documents
 // // todo: empty page instead of editor on open?
@@ -44,8 +42,8 @@ function init() {
     addEventListeners();
     elem.newTerm.focus();
     addBorder();
-    s.clearContextList();
-    s.createDictionaryList()
+    // s.clearContextList();
+    // s.createContextList();
     
 }
 
@@ -190,7 +188,7 @@ export function onDocumentChanged(event) {
     
     //s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
    
-    s.createDictionaryList();
+    s.createContextList();
     // document.getElementById(("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1]).id = "cntx dictionary " +elem.currentDict.value)
     //s.updateTermTitle("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1], elem.currentDict.value);
    

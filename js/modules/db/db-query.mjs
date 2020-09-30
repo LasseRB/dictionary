@@ -1,4 +1,4 @@
-import * as g from '../global.mjs';
+import * as db from './db.mjs';
 
 /**
  * Returns a document based on its _id
@@ -7,7 +7,7 @@ import * as g from '../global.mjs';
  */
 export function getDocFromId(id) {
     return new Promise((resolve, reject) => {
-        g.db.get(id).then(res => {
+        db.db.get(id).then(res => {
             resolve(res);
         }).catch(err => {
             reject(err);
@@ -26,10 +26,10 @@ export function getDocFromTitle(title) {
 
     // an index must be created first, if it already then exists nothing is done
     return new Promise((resolve, reject) => {
-        g.db.createIndex({
+        db.db.createIndex({
             index: {fields: ['title']}
         }).then(() => {
-            g.db.find({
+            db.db.find({
                 selector: {title: title},
                 limit: 10
             }).then(res => {
@@ -49,10 +49,10 @@ export function getDocFromTitle(title) {
 export function getTermList() {
     // an index must be created first, if it already exists then nothing is done
     return new Promise((resolve, reject) => {
-        g.db.createIndex({
+        db.db.createIndex({
             index: {fields: ['title']}
         }).then(() => {
-            g.db.find({
+            db.db.find({
                 selector: {title: {$gt: null}},
                 //fields: ['_id', '_rev', 'title', 'abbreviation', 'searchTitle', 'searchAbbreviation'],
                 sort: [{'_id': 'desc'}]

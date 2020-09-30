@@ -1,3 +1,4 @@
+import * as db from "./db/db.mjs";
 import * as g from "./global.mjs";
 import * as dc from "./document-controller.mjs";
 import * as q from "./db/db-query.mjs";
@@ -18,7 +19,7 @@ let dictionaries;
  */
 function init() {
     // respond to database changes
-    g.db.changes({
+    db.db.changes({
         since: 'now',
         live: true,
         include_docs: true
@@ -37,12 +38,11 @@ function init() {
     elem.contextList = document.getElementById('context-list-ul');
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
-   
-    
     // create visible list of titles, setup search array and initialize Fuse
-   
-    createDictionaryList();
+
+    createContextList();
     
+
     createTermList();
   
 }
@@ -157,43 +157,22 @@ export function databaseUpdated(change) {
 }
 
 // create dictionary Map<String, Doc>
-export function createDictionaryList() {
-  dictionaries =  new Map();
-  // clear the list before
- 
-    q.getTermList().then(res => {
-        for (let i = 0; i < res.docs.length; i++) {
-            res.docs[i].tags.forEach(tag => {
-                if(tag.trim()!== ""){
-                    // console.debug("tag is");
-                    // console.debug(tag);
-                    if(dictionaries.has(tag)){
-                    let all_words;
-                        all_words = dictionaries.get(tag);
-                        all_words.push(res.docs[i]);
-                        dictionaries.set(tag, all_words);
-                    } else{
-                            dictionaries.set(tag, [res.docs[i]]);
-                    }
-                }
-                   // let array = dictionaries.get(res.docs[i].title);
-            });
-        }
+export function updateContextList() {
     
-    }).then(() => {
-        clearContextList();
+//   dictionaries =  new Map();
+  // clear the list before
+
+         //clearContextList();
         // console.warn("Dictionary Map created:")
         // console.debug([...dictionaries]);
         //run here for 
         createContextList();
-    }).catch(err =>{
-        console.error(err);
-    });
+
 }
 
 
 export function clearContextList() {
-    while (elem.contextList.firstChild != null) {
+    while (elem.contextList.firstChild != null || elem.contextList.firstChild != undefined) {
         elem.contextList.removeChild(elem.contextList.firstChild);
     }
 }
@@ -222,7 +201,7 @@ export function createTermList(){
  */
 export function createContextList() {
 
-    dictionaries.forEach((value,key) =>{
+    g.getDictionary().forEach((value,key) =>{
         // console.debug(key + " "+ value.length +" \n");
         // console.debug(value.forEach(val => console.debug(val.title)));
         let li = document.createElement('li');
@@ -293,6 +272,7 @@ function contextDOM(doc){
         addSearchItem(item, doc);
         li.appendChild(item);
         li.appendChild(deleteBtn);
+       
         return li;
 
 }
