@@ -43,7 +43,7 @@ function init() {
    
     createDictionaryList();
     
-    // createTermList();
+    createTermList();
   
 }
 
