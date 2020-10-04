@@ -171,23 +171,48 @@ export function clearContextList() {
         elem.contextList.removeChild(elem.contextList.firstChild);
     }
 }
-
+// this to be moved into term-view-controller
 export function createTermList(){
-    q.getTermList().then(res => {
-        for (let i = 0; i < res.docs.length; i++) {
-            console.debug("term:" + res.docs[i].title);
-            let term = dc.createTermDom(res.docs[i]);
-            //console.log(term);
-                elem.termList.appendChild(term);
-                dc.setupEditor(res.docs[i]);    
-                addSearchItem(term, res.docs[i]);
-            }
+    g.createDictionaryList().then( () =>{
+        let res  = g.getDictionary();
+        res.forEach((value,key) =>{
+            let dict = document.createElement('h1');
+                    dict.innerText = key;
+                elem.termList.appendChild(dict);
+            for (let i = 0; i < value.length; i++) {
+                
+                console.debug("term:" + value[i].title);
+                let term = dc.createTermDom(value[i]);
+                //console.log(term);
+                    elem.termList.appendChild(term);
+                    dc.setupEditor(value[i]);    
+                    addSearchItem(term, value[i]);
+                }
+            });
         }).then(() => {
             updateFuse(); // always re-initialize Fuse after changing content
         }).catch((err) => {
             console.log(err);
         });
+
 }
+
+// export function createTermList(){
+//     q.getTermList().then(res => {
+//         for (let i = 0; i < res.docs.length; i++) {
+//             console.debug("term:" + res.docs[i].title);
+//             let term = dc.createTermDom(res.docs[i]);
+//             //console.log(term);
+//                 elem.termList.appendChild(term);
+//                 dc.setupEditor(res.docs[i]);    
+//                 addSearchItem(term, res.docs[i]);
+//             }
+//         }).then(() => {
+//             updateFuse(); // always re-initialize Fuse after changing content
+//         }).catch((err) => {
+//             console.log(err);
+//         });
+// }
 
 /**
  * Creates the list of documents that are displayed and can be searched.

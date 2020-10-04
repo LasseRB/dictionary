@@ -6,7 +6,7 @@ import * as a from "./db/db-actions.mjs";
 
 
 function init(){
-  
+  // contextlist to be moved into this method call
     s.createContextList();
 
 }
