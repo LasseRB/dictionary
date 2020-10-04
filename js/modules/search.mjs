@@ -40,9 +40,9 @@ async function init() {
     // create visible list of titles, setup search array and initialize Fuse
    
         
-        await g.createDictionaryList();
-        clearContextList();
-        createContextList();
+     
+        // clearContextList();
+        // createContextList();
         createTermList();
       
   
@@ -160,9 +160,7 @@ export function databaseUpdated(change) {
 
 // create dictionary Map<String, Doc>
 export function updateContextList() {
- 
         clearContextList();
-  
         createContextList();
    
 }
@@ -194,36 +192,46 @@ export function createTermList(){
 /**
  * Creates the list of documents that are displayed and can be searched.
  */
+
+
 export function createContextList() {
-        g.getDictionary().forEach((value,key) =>{
-            // console.debug(key + " "+ value.length +" \n");
-            // console.debug(value.forEach(val => console.debug(val.title)));
-            let li = document.createElement('li');
-                li.id = "cntx dictionary li " + key;
-                
-            let dictionary = document.createElement('input');
-                dictionary.className= "cntx dictionary";
-                dictionary.id = "cntx dictionary " + key;
-    
-                dictionary.setAttribute("type", "button");
-                dictionary.value = key.trim();
+   g.createDictionaryList().then( () =>{
+    clearContextList();
+     let res  = g.getDictionary();
+      res.forEach((value,key) =>{
+         // console.debug(key + " "+ value.length +" \n");
+         // console.debug(value.forEach(val => console.debug(val.title)));
+         let li = document.createElement('li');
+             li.id = "cntx dictionary li " + key;
+             
+         let dictionary = document.createElement('input');
+             dictionary.className= "cntx dictionary";
+             dictionary.id = "cntx dictionary " + key;
+ 
+             dictionary.setAttribute("type", "button");
+             dictionary.value = key.trim();
+     
+         let ol = document.createElement('ol');
+         
+         
+         value.forEach(val => {
+             // console.debug("context "+val.title)
+             ol.appendChild(contextDOM(val));
+             //elem.contextList.appendChild(contextDOM(val));
+         });
+             li.appendChild(dictionary)
+             li.appendChild(ol);
         
-            let ol = document.createElement('ol');
-            
-               
-            value.forEach(val => {
-                // console.debug("context "+val.title)
-                ol.appendChild(contextDOM(val));
-                //elem.contextList.appendChild(contextDOM(val));
-            });
-                li.appendChild(dictionary)
-                li.appendChild(ol);
-    
-            elem.contextList.appendChild(li);  
-    });
+        
+        
+         elem.contextList.appendChild(li);  
+         
+         });
+        });
+     
+
 updateFuse(); // always re-initialize Fuse after changing content
 }
-
 
 function contextDOM(doc){
 //  create actual term text //
@@ -293,18 +301,8 @@ export function getTopElement() {
 function onTermClicked(event) {
     let btn = event.target;
     let id = btn.getAttribute('data-id');
-       // selected.push(btn);
         dc.displayDocument(id);
-    // de-select previous
-    // for (let i = 0; i < selected.length; i++)
-    // {
-    //     selected[i].checked = false;
-    // }
-    // selected.splice(0, selected.length);
 
-    // select new
-   
-    // }
 }
 function onDeleteBtn(event){
     let confirmed = false;
@@ -321,8 +319,6 @@ function onDeleteBtn(event){
         } catch (error) {
             console.error(error);
         }
-       
-       
     });
 
     setTimeout(()=>{

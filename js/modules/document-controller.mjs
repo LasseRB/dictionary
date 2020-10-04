@@ -187,8 +187,8 @@ export async function onDocumentChanged(event) {
 
     
     //s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
-    await g.createDictionaryList();
-    s.clearContextList();
+   // await g.createDictionaryList();
+   
     s.createContextList();
     // document.getElementById(("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1]).id = "cntx dictionary " +elem.currentDict.value)
     //s.updateTermTitle("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1], elem.currentDict.value);

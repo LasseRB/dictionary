@@ -120,7 +120,7 @@ export function updateDocument(doc) {
         res.definition = doc.content;
         res.tags = doc.tags;
 
-        return db.db.put(res);
+        return database.db.put(res);
     }).catch(err => {
         console.error(err);
         throw err;
