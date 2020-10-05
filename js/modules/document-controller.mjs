@@ -176,7 +176,7 @@ export async function onDocumentChanged(event) {
     hasChanged = true;
 
     assignFocusOnElement(event);
-    getOldVersions();
+   // getOldVersions();
    
     console.debug("id "+ elem.currentID + "\n"
                  + "title "+ elem.currentTitle.value + "\n"
