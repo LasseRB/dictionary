@@ -58,12 +58,12 @@ export function updateFuse() {
     const options = {
         isCaseSensitive: false,
         // includeScore: false,
-        //shouldSort: true,
+        // shouldSort: true,
         // includeMatches: false,
         // findAllMatches: false,
         // minMatchCharLength: 1,
         // location: 0,
-        threshold: 0.4,
+        threshold: 0.1,
         // distance: 100,
         // useExtendedSearch: false,
         keys: [
@@ -91,15 +91,17 @@ function onSearchChange(event) {
 export function updateSearch(searchTerm){
     // clear array
     searchMatches.splice(0, searchMatches.length);
-    let c_children = document.querySelectorAll("li");
-    //console.debug(c_children[1]);
-    let t_children = document.querySelectorAll("li_term_wrapper");
+    let c_children = document.getElementsByClassName("li_cntx");
+    let h1_children = document.getElementsByClassName("li_term_h1");
+    let t_children = document.getElementsByClassName("li_term_wrapper");
+
     if (searchTerm.value === "") {
         for (let i = 0; i < c_children.length; i++) {
            c_children[i].style.removeProperty('display');
            t_children[i].style.removeProperty('display');
+
+
         }
-        // todo: revert order back to default
     } else {
         
         searchMatches = getSearchResults(searchTerm.value);
@@ -107,12 +109,15 @@ export function updateSearch(searchTerm){
         for (let i = 0; i < c_children.length; i++) {
            t_children[i].style.setProperty('display', 'none');
            c_children[i].style.setProperty('display', 'none');   
+
         }
         searchMatches.forEach(match => {
-       // console.debug("cntx term " + match.item.doc._id);
+     
            document.getElementById("cntx term " + match.item.doc._id).parentElement.style.removeProperty('display');
            document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
-           match.item.element.parentNode.appendChild(match.item.element);
+
+           // no reason to append the elements back
+          // match.item.element.parentNode.appendChild(match.item.element);
       
         });
     }
@@ -178,6 +183,7 @@ export function createTermList(){
         res.forEach((value,key) =>{
             let dict = document.createElement('h1');
                     dict.innerText = key;
+                    dict.className = 'li_term_title';
                 elem.termList.appendChild(dict);
             for (let i = 0; i < value.length; i++) {
                 
