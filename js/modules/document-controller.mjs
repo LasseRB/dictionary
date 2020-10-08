@@ -327,10 +327,13 @@ export function createTermDom(doc){
             title_val = "Untitled";
         }
         title.value = title_val;
+    let dictionariesTitle = document.createElement('h4');
+        dictionariesTitle.innerHTML = 'Dictionaries';
+        dictionariesTitle.className = 'term-headers';
     let dictionaries = document.createElement('input');
         dictionaries.id="doc-dictionaries-"+doc._id;
         dictionaries.setAttribute("aria-label","dictionaries");
-        dictionaries.setAttribute("placeholder","Dictionaries");
+        dictionaries.setAttribute("placeholder","");
         dictionaries.addEventListener('beforeinput', updateHistory);
         //dictionaries.value = doc.tags;
         doc.tags.forEach(element => {
@@ -344,20 +347,27 @@ export function createTermDom(doc){
         // remove the last comma
         dictionaries.value = dictionaries.value.substring(0,(dictionaries.value.length - 2))
 
-
+    let editorJSTitle = document.createElement('h4');
+        editorJSTitle.innerHTML = 'Definition';
+        editorJSTitle.className = 'term-headers';
     
     let editorjs = document.createElement('div');
         editorjs.id="editorjs "+ doc._id;
         editorjs.className = "editorjs-wrapper";
         editorjs.setAttribute("aria-label","content");
         //add content from database
-
+    let abbreviationTitle = document.createElement('h4');
+        abbreviationTitle.innerHTML = 'Abbreviation';
+        abbreviationTitle.className = 'term-headers';
     let abbreviation = document.createElement('input');
         abbreviation.id="doc-abbreviation-"+doc._id;
         abbreviation.className = "abbreviation-wrapper";
         abbreviation.setAttribute("aria-label","abbreviation");
-        abbreviation.setAttribute("placeholder","Abbreviation");
+        abbreviation.setAttribute("placeholder","");
         abbreviation.value = doc.abbreviation;
+    let crossrefTitle = document.createElement('h4');
+    crossrefTitle.innerHTML = 'Cross reference';
+    crossrefTitle.className = 'term-headers';
     let crossref = document.createElement('input');
         crossref.id="doc-crossref-"+doc._id;
         crossref.className = "crossref-wrapper";
@@ -368,11 +378,14 @@ export function createTermDom(doc){
     li.appendChild(form)
         .appendChild(date);
     form.appendChild(title);
+    form.appendChild(dictionariesTitle);
     form.appendChild(dictionaries);
+    form.appendChild(editorJSTitle);
     form.appendChild(editorjs);
+    form.appendChild(abbreviationTitle);
     form.appendChild(abbreviation);
+    form.appendChild(crossrefTitle);
     form.appendChild(crossref);
-
     
     li.addEventListener('input', onDocumentChanged);
     return li;

@@ -91,25 +91,25 @@ function onSearchChange(event) {
 export function updateSearch(searchTerm){
     // clear array
     searchMatches.splice(0, searchMatches.length);
-    
-    let c_children = document.querySelectorAll("li_cntx");
+    let c_children = document.querySelectorAll("li");
+    //console.debug(c_children[1]);
     let t_children = document.querySelectorAll("li_term_wrapper");
     if (searchTerm.value === "") {
-        for (let i = 0; i < t_children.length; i++) {
-            c_children[i].style.removeProperty('display');
-            t_children[i].style.removeProperty('display');
+        for (let i = 0; i < c_children.length; i++) {
+           c_children[i].style.removeProperty('display');
+           t_children[i].style.removeProperty('display');
         }
         // todo: revert order back to default
     } else {
         
         searchMatches = getSearchResults(searchTerm.value);
 
-        for (let i = 0; i < t_children.length; i++) {
-            t_children[i].style.setProperty('display', 'none');
-            c_children[i].style.setProperty('display', 'none');   
+        for (let i = 0; i < c_children.length; i++) {
+           t_children[i].style.setProperty('display', 'none');
+           c_children[i].style.setProperty('display', 'none');   
         }
         searchMatches.forEach(match => {
-        console.debug("cntx term " + match.item.doc._id);
+       // console.debug("cntx term " + match.item.doc._id);
            document.getElementById("cntx term " + match.item.doc._id).parentElement.style.removeProperty('display');
            document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
            match.item.element.parentNode.appendChild(match.item.element);
@@ -181,7 +181,7 @@ export function createTermList(){
                 elem.termList.appendChild(dict);
             for (let i = 0; i < value.length; i++) {
                 
-                console.debug("term:" + value[i].title);
+               // console.debug("term:" + value[i].title);
                 let term = dc.createTermDom(value[i]);
                 //console.log(term);
                     elem.termList.appendChild(term);

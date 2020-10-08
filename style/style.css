@@ -247,11 +247,15 @@ button {
            -moz-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.08);
                 box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.08);
 }
-
+.document-editor input{
+    padding: 2px 0px 5px 0px;
+}
+.term-headers{
+    border-bottom: solid 1px #bdbdbd;
+    color: #bdbdbd;
+}
 .codex-editor, .ce-block__content, .ce-toolbar__content{
     max-width: inherit;
-
-   
 }   
 
 .document-title {
@@ -263,7 +267,7 @@ button {
     color: #404040;
     font-size: 45px;
     line-height: 1.5;
-    border-top: solid 1px #bdbdbd;
+    /* border-top: solid 1px #bdbdbd; */
     
 }
 .doc-date{
@@ -558,6 +562,7 @@ body{
     background-color: rgb(42, 42, 42);
     color: #F0F0F0;
 }
+
 
 a,p, input, .editorjs-wrapper, .document-title, #toolbar{
     color: #F0F0F0;
