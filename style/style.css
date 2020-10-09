@@ -234,7 +234,7 @@ button {
     flex-direction: column;
     flex-grow: 1;
     width: 90%;
-    height: 300px;
+    /* height: 300px; */
     /* max-height: 500px; */
    
     padding: 15px 40px 40px 40px;
@@ -256,6 +256,10 @@ button {
 }
 .codex-editor, .ce-block__content, .ce-toolbar__content{
     max-width: inherit;
+    /* min-height: min-content; */
+}
+.codex-editor__redactor{
+    padding: 0px;
 }   
 
 .document-title {
@@ -506,7 +510,7 @@ ul{
     width: 100%;
     margin-bottom: 15px;
     flex-grow: 1;
-    max-height: inherit;
+
     color: #313131;
     font-size: 14px;
     text-align: justify;
