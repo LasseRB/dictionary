@@ -12,7 +12,7 @@ let selected = [];
 let searchList = [];
 let searchMatches = [];
 let fuse = undefined;
-let dictionaries;
+
 
 /**
  * Initialize the database and search event listeners.
@@ -241,6 +241,17 @@ export function createContextList() {
  
              dictionary.setAttribute("type", "button");
              dictionary.value = key.trim();
+             dictionary.addEventListener('dblclick', ()=>{
+                 
+                    dictionary.setAttribute("type", "input");
+                    dictionary.focus();
+                 
+             });
+             dictionary.addEventListener('blur', ()=>{
+                dictionary.className= "cntx dictionary";
+                dictionary.setAttribute("type", "button");
+
+             });
      
          let ol = document.createElement('ol');
          
