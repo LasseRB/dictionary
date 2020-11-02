@@ -37,6 +37,20 @@ h1, h2, h3, h4, h5, h6, p {
     border:solid 1px #00A3FF;
 }
 
+#notification {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 200px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+  .hidden {
+    display: none;
+  }
+
 /* not in use
 #search-create-box > input:focus{
     animation-play-state: paused;
@@ -527,10 +541,8 @@ ul{
     max-width: inherit;
  }
  .codex-editor__redactor{
-     padding-bottom: 10px !important;
-     
+     padding-bottom: 10px !important;     
  } 
-
 
 .ce-header {
     padding: 30px 0 15px !important;
