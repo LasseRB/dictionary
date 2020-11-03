@@ -41,14 +41,8 @@ function init() {
     // setup event listeners
     addEventListeners();
     elem.newTerm.focus();
-<<<<<<< HEAD
 
 
-=======
-    addBorder();
-    // s.clearContextList();
-    // s.createDictionaryList();
->>>>>>> master
     
 }
 
@@ -329,21 +323,13 @@ export function createTermDom(doc){
             title_val = "Untitled";
         }
         title.value = title_val;
-<<<<<<< HEAD
     let dictionariesTitle = document.createElement('h3');
-=======
-    let dictionariesTitle = document.createElement('h4');
->>>>>>> master
         dictionariesTitle.innerHTML = 'Dictionaries';
         dictionariesTitle.className = 'term-headers';
     let dictionaries = document.createElement('input');
         dictionaries.id="doc-dictionaries-"+doc._id;
         dictionaries.setAttribute("aria-label","dictionaries");
-<<<<<<< HEAD
         dictionaries.setAttribute("placeholder","Unsorted terms");
-=======
-        dictionaries.setAttribute("placeholder","");
->>>>>>> master
         dictionaries.addEventListener('beforeinput', updateHistory);
         //dictionaries.value = doc.tags;
         doc.tags.forEach(element => {
@@ -357,11 +343,7 @@ export function createTermDom(doc){
         // remove the last comma
         dictionaries.value = dictionaries.value.substring(0,(dictionaries.value.length - 2))
 
-<<<<<<< HEAD
     let editorJSTitle = document.createElement('h3');
-=======
-    let editorJSTitle = document.createElement('h4');
->>>>>>> master
         editorJSTitle.innerHTML = 'Definition';
         editorJSTitle.className = 'term-headers';
     
@@ -371,11 +353,7 @@ export function createTermDom(doc){
         editorjs.setAttribute("aria-label","content");
   
         //add content from database
-<<<<<<< HEAD
     let abbreviationTitle = document.createElement('h3');
-=======
-    let abbreviationTitle = document.createElement('h4');
->>>>>>> master
         abbreviationTitle.innerHTML = 'Abbreviation';
         abbreviationTitle.className = 'term-headers';
     let abbreviation = document.createElement('input');
@@ -384,11 +362,7 @@ export function createTermDom(doc){
         abbreviation.setAttribute("aria-label","abbreviation");
         abbreviation.setAttribute("placeholder","");
         abbreviation.value = doc.abbreviation;
-<<<<<<< HEAD
     let crossrefTitle = document.createElement('h3');
-=======
-    let crossrefTitle = document.createElement('h4');
->>>>>>> master
     crossrefTitle.innerHTML = 'Cross reference';
     crossrefTitle.className = 'term-headers';
     let crossref = document.createElement('input');
