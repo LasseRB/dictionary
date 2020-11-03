@@ -270,6 +270,7 @@ button {
 .document-editor input{
     padding: 2px 0px 5px 0px;
 }
+<<<<<<< HEAD
 .document-editor:focus-within{
     background-color: #FFF;
     border: solid 1px #00A3FF;
@@ -283,6 +284,15 @@ button {
 
   
 
+=======
+.term-headers{
+    border-bottom: solid 1px #bdbdbd;
+    color: #bdbdbd;
+}
+.codex-editor, .ce-block__content, .ce-toolbar__content{
+    max-width: inherit;
+}   
+>>>>>>> master
 
 .document-title {
     position: relative;
@@ -601,6 +611,7 @@ body{
     border: solid 1px #ff5100;
     border-radius: 2px;   
 }
+
 
 
 a,p, input, .editorjs-wrapper, .document-title, #toolbar{
