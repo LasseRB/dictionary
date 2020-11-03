@@ -1,5 +1,5 @@
 {
-  "name": "Dictionary",
+  "name": "Define",
   "version": "1.0.1",
   "description": "Your personal dictionary",
   "main": "electron.js",
