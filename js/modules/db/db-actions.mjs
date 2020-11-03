@@ -1,4 +1,4 @@
-import * as g from '../global.mjs';
+import * as database from './db.mjs';
 import * as q from './db-query.mjs';
 
 /**
@@ -16,7 +16,7 @@ export function init (){
     //leave this here for later
 }
 
-export var db = g.db;
+export var db = database.db;
    //respond to enter-pressed
 
 /**
@@ -98,7 +98,7 @@ export function removeTerm(doc, confirmation){
  * @param {Document} doc
  */
 export function createDocument(doc) {
-    g.db.put(doc).then(res => {
+    database.db.put(doc).then(res => {
         console.log("Created document!");
         return res;
     }).catch(err => {
@@ -112,7 +112,7 @@ export function createDocument(doc) {
  * @param {Document} doc
  */
 export function updateDocument(doc) {
-    g.db.get(doc._id).then(res => {
+    database.db.get(doc._id).then(res => {
         console.log("Updated document!");
         res.title = doc.title;
         res.abbreviation = doc.abbreviation;
@@ -120,7 +120,7 @@ export function updateDocument(doc) {
         res.definition = doc.content;
         res.tags = doc.tags;
 
-        return g.db.put(res);
+        return database.db.put(res);
     }).catch(err => {
         console.error(err);
         throw err;
@@ -130,7 +130,7 @@ export function updateDocument(doc) {
 }
 
 export function getPrevVersion(id){
-    db.get(String(id), {
+    database.db.get(String(id), {
         revs: true, 
         open_revs: 'all' // this allows me to also get the removed "docs"
       }).then(function(found) {

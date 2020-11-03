@@ -30,9 +30,26 @@ h1, h2, h3, h4, h5, h6, p {
 
 #search-create-box{
     transition:all .2s ease-in;
-    border:solid 0px #FFFFFF;
+    border:solid 0px transparent;
   
 }
+#search-create-box:focus-within{
+    border:solid 1px #00A3FF;
+}
+
+#notification {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 200px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+  .hidden {
+    display: none;
+  }
 
 /* not in use
 #search-create-box > input:focus{
@@ -156,6 +173,7 @@ button {
     flex-direction: column;
 }
 
+
 #view-context {
     position: relative;
     background-color: #f2f1f0;
@@ -172,7 +190,7 @@ button {
 
 #view-document {
     position: relative;
-    background-color: #fff;
+    background-color: #FBFBFB;
     min-width: 300px;
     flex-basis: 600vw;
     flex-grow: 600;
@@ -224,25 +242,27 @@ button {
 /* View items */
 .li_term_wrapper{
     position: relative;
-    width: 100%;
+    max-width: 500px;
     padding: 20px;
-    margin: 0;
+    margin: 0 auto;
 }
 .document-editor {
+    transition: all .2s ease-in-out;
+    border: solid 1px transparent;
     position: relative;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     width: 90%;
-    height: 300px;
+    /* height: 300px; */
     /* max-height: 500px; */
    
     padding: 15px 40px 40px 40px;
     /* temp */
     resize: vertical;
-    overflow: auto;
+    /* overflow: auto; */
     
-    background-color: #FFF;
+    background-color: #FBFBFB;
         -webkit-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.08);
            -moz-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.08);
                 box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.08);
@@ -250,13 +270,19 @@ button {
 .document-editor input{
     padding: 2px 0px 5px 0px;
 }
+.document-editor:focus-within{
+    background-color: #FFF;
+    border: solid 1px #00A3FF;
+    border-radius: 2px;   
+}
+
 .term-headers{
-    border-bottom: solid 1px #bdbdbd;
+    /* border-bottom: solid 1px #bdbdbd; */
     color: #bdbdbd;
 }
-.codex-editor, .ce-block__content, .ce-toolbar__content{
-    max-width: inherit;
-}   
+
+  
+
 
 .document-title {
     position: relative;
@@ -368,29 +394,10 @@ button {
   }
   
 
-/* 
-.search-create {
-    display: flex;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    flex-grow: 0;
-    align-items: center;
-    padding: 0 15px;
-}
-*/
-/* .search-field {
-    color: rgba(0, 0, 0, 0.7);
-    background-color: transparent;
-    padding: 0;
-    margin: 0;
-    border: none;
-    height: 30px;
-    display: inline-block;
-    flex-grow: 1;
-    font-weight: 600;
-}  */
 #context-list{
     overflow-x: hidden;
     overflow-y: scroll;
+    padding: 5px;
 }
 
 #new-dictionary, #new-term {
@@ -419,8 +426,14 @@ ul#term-list{
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    
 }
-
+h1.li_term_title{
+ 
+    width: 480px;
+    padding: 20px 0 5px 20px;
+    margin: 0 auto;
+}
 ul{
     margin: 0;
     padding: 0;
@@ -440,7 +453,8 @@ ul{
 
 #context-list input:hover {
     color: #fff;
-    background-color: #719eff;
+    background-color: #00A3FF;
+    border-radius: 3px;
 }
 
 #context-list input:focus{
@@ -449,6 +463,10 @@ ul{
     outline: none;
     
 }
+/* #context-list input[type=input]:hover {
+    background-color: #404040;
+    outline: none;
+} */
 #context-list li .li_cntx {
     position: relative;
 
@@ -502,22 +520,29 @@ ul{
 
 /* Editor.js */
 .editorjs-wrapper {
+   
     display: block;
     width: 100%;
     margin-bottom: 15px;
     flex-grow: 1;
-    max-height: inherit;
+
     color: #313131;
     font-size: 14px;
     text-align: justify;
     line-height: 2;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    background-color: transparent;
+    padding: 15px 0 0 0;
 }
-
 .cdx-block {
     padding: 10px 0 !important;
 }
+
+.ce-block__content, .ce-paragraph, .cdx-block{
+    max-width: inherit;
+ }
+ .codex-editor__redactor{
+     padding-bottom: 10px !important;     
+ } 
 
 .ce-header {
     padding: 30px 0 15px !important;
@@ -540,9 +565,13 @@ h3.ce-header {
     font-size: 17px;
 }
 
-.ce-paragraph {
-    line-height: 1.5 !important;
+/* .ce-paragraph {
+    line-height: 1px !important;
     outline: none !important;
+} */
+
+.ce-toolbar, .ce-inline-toolbar{
+    z-index: 3;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -552,22 +581,35 @@ body{
 #view-dictionary, #view-context,#view-document, #toolbar, #statusbar  {
     background-color: #212121;
     
-
+}
+.search-create #new-term {
+    background-color: #ff5100;
 }
 .search-create{
     background-color: #555555;
 }
-
+#search-create-box:focus-within{
+    border:solid 1px #ff5100;
+}
 .document-editor{
     background-color: rgb(42, 42, 42);
     color: #F0F0F0;
+   
 }
+.document-editor:focus-within{
+    background-color: rgb(68, 68, 68);
+    border: solid 1px #ff5100;
+    border-radius: 2px;   
+}
+
 
 
 a,p, input, .editorjs-wrapper, .document-title, #toolbar{
     color: #F0F0F0;
 }
-
+#context-list input:hover {
+    background-color: #ff5100;
+}
 
 
 

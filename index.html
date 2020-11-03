@@ -14,16 +14,17 @@
         <button id="button-contextToggle" class="button-toolbar">
             <img src="genericons/genericons-neue/category.svg" alt="toggle terms">
         </button>
-        <button id="button-style" class="button-toolbar">
+        <p id="version"></p>
+        <!-- <button id="button-style" class="button-toolbar">
             <img src="genericons/genericons-neue/paintbrush.svg" alt="toggle style">
-        </button>
+        </button> -->
         <!-- <button id="button-export">Export</button>
         <input
          id="file-import" type="file"/> -->
         <!-- <input type="submit"> -->
     
         <div id = 'search-create-box' class="search-create">
-            <input id="search-term"  class="search-field" aria-label="Search for term" placeholder="Term" autofocus="true"></input>
+            <input id="search-term"  class="search-field" aria-label="Search for term" placeholder="Define term" autofocus="true"></input>
             <button id="new-term"></button>
         </div>
     </div>
@@ -61,6 +62,47 @@
         <p id='dbsize'></p>
     </div>
 </div>
+
+<div id="notification" class="hidden">
+    <p id="message"></p>
+    <button id="close-button" onClick="closeNotification()">
+      Close
+    </button>
+    <button id="restart-button" onClick="restartApp()" class="hidden">
+      Restart
+    </button>
+  </div>
+<!-- bare en test til at auto-opdatere appen -->
+<script>
+    const { ipcRenderer } = require('electron');
+    const version = document.getElementById('version');
+    
+    ipcRenderer.send('app_version');
+    ipcRenderer.on('app_version', (event, arg) => {
+      ipcRenderer.removeAllListeners('app_version');
+      version.innerText = 'Version ' + arg.version;
+    });
+
+    const notification = document.getElementById('notification');
+    const message = document.getElementById('message');
+    const restartButton = document.getElementById('restart-button');ipcRenderer.on('update_available', () => {
+    ipcRenderer.removeAllListeners('update_available');
+    message.innerText = 'A new update is available. Downloading now...';
+    notification.classList.remove('hidden');
+    });ipcRenderer.on('update_downloaded', () => {
+    ipcRenderer.removeAllListeners('update_downloaded');
+    message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
+    restartButton.classList.remove('hidden');
+    notification.classList.remove('hidden');
+    });
+
+    function closeNotification() {
+        notification.classList.add('hidden');
+    }function restartApp() {
+        ipcRenderer.send('restart_app');
+    }
+  </script>
+
 </body>
 </html>
 <!-- PouchDB -->
@@ -80,11 +122,13 @@
 <script type="application/javascript" src="js/lib/editorjs/marker/bundle.js"></script>
 <script type="application/javascript" src="js/lib/editorjs/quote/bundle.js"></script>
 <!-- User -->
+<script type="module" src="js/modules/db/db.mjs"></script>
 <script type="module" src="js/modules/global.mjs"></script>
 <script type="module" src="js/modules/db/db-query.mjs"></script>
 <script type="module" src="js/modules/db/db-actions.mjs"></script>
 
 <script type="module" src="js/modules/search.mjs"></script>
+<script type="module" src="js/modules/context-controller.mjs"></script>
 <script type="module" src="js/modules/document-controller.mjs"></script>
 <script type="module" src="js/modules/view-controller.mjs"></script>
 <script type="module" src="js/modules/extensions.mjs"></script>

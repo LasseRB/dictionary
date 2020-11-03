@@ -1,3 +1,4 @@
+import * as db from "./db/db.mjs";
 import * as g from "./global.mjs";
 import * as dc from "./document-controller.mjs";
 import * as q from "./db/db-query.mjs";
@@ -11,19 +12,18 @@ let selected = [];
 let searchList = [];
 let searchMatches = [];
 let fuse = undefined;
-let dictionaries;
+
 
 /**
  * Initialize the database and search event listeners.
  */
-function init() {
+async function init() {
     // respond to database changes
-    g.db.changes({
+    db.db.changes({
         since: 'now',
         live: true,
         include_docs: true
     }).on('change', change => {
-       
         // one event per changed document
         databaseUpdated(change);
         
@@ -37,14 +37,16 @@ function init() {
     elem.contextList = document.getElementById('context-list-ul');
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
-   
-    
     // create visible list of titles, setup search array and initialize Fuse
    
-    createDictionaryList();
-    
-    createTermList();
+        
+     
+        // clearContextList();
+        // createContextList();
+        createTermList();
+      
   
+    
 }
 
 
@@ -56,12 +58,12 @@ export function updateFuse() {
     const options = {
         isCaseSensitive: false,
         // includeScore: false,
-        //shouldSort: true,
+        // shouldSort: true,
         // includeMatches: false,
         // findAllMatches: false,
         // minMatchCharLength: 1,
         // location: 0,
-        threshold: 0.4,
+        threshold: 0.1,
         // distance: 100,
         // useExtendedSearch: false,
         keys: [
@@ -89,28 +91,33 @@ function onSearchChange(event) {
 export function updateSearch(searchTerm){
     // clear array
     searchMatches.splice(0, searchMatches.length);
-    
-    let c_children = document.querySelectorAll("li_cntx");
-    let t_children = document.querySelectorAll("li_term_wrapper");
+    let c_children = document.getElementsByClassName("li_cntx");
+    let h1_children = document.getElementsByClassName("li_term_h1");
+    let t_children = document.getElementsByClassName("li_term_wrapper");
+
     if (searchTerm.value === "") {
-        for (let i = 0; i < t_children.length; i++) {
-            c_children[i].style.removeProperty('display');
-            t_children[i].style.removeProperty('display');
+        for (let i = 0; i < c_children.length; i++) {
+           c_children[i].style.removeProperty('display');
+           t_children[i].style.removeProperty('display');
+
+
         }
-        // todo: revert order back to default
     } else {
         
         searchMatches = getSearchResults(searchTerm.value);
 
-        for (let i = 0; i < t_children.length; i++) {
-            t_children[i].style.setProperty('display', 'none');
-            c_children[i].style.setProperty('display', 'none');   
+        for (let i = 0; i < c_children.length; i++) {
+           t_children[i].style.setProperty('display', 'none');
+           c_children[i].style.setProperty('display', 'none');   
+
         }
         searchMatches.forEach(match => {
-        console.debug("cntx term " + match.item.doc._id);
+     
            document.getElementById("cntx term " + match.item.doc._id).parentElement.style.removeProperty('display');
            document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
-           match.item.element.parentNode.appendChild(match.item.element);
+
+           // no reason to append the elements back
+          // match.item.element.parentNode.appendChild(match.item.element);
       
         });
     }
@@ -157,108 +164,116 @@ export function databaseUpdated(change) {
 }
 
 // create dictionary Map<String, Doc>
-export function createDictionaryList() {
-  dictionaries =  new Map();
-  // clear the list before
- 
-    q.getTermList().then(res => {
-        for (let i = 0; i < res.docs.length; i++) {
-            res.docs[i].tags.forEach(tag => {
-                if(tag.trim()!== ""){
-                    // console.debug("tag is");
-                    // console.debug(tag);
-                    if(dictionaries.has(tag)){
-                    let all_words;
-                        all_words = dictionaries.get(tag);
-                        all_words.push(res.docs[i]);
-                        dictionaries.set(tag, all_words);
-                    } else{
-                            dictionaries.set(tag, [res.docs[i]]);
-                    }
-                }
-                   // let array = dictionaries.get(res.docs[i].title);
-            });
-        }
-    
-    }).then(() => {
+export function updateContextList() {
         clearContextList();
-        // console.warn("Dictionary Map created:")
-        // console.debug([...dictionaries]);
-        //run here for 
         createContextList();
-    }).catch(err =>{
-        console.error(err);
-    });
+   
 }
 
 
 export function clearContextList() {
-    while (elem.contextList.firstChild != null) {
+    while (elem.contextList.firstChild != null || elem.contextList.firstChild != undefined) {
         elem.contextList.removeChild(elem.contextList.firstChild);
     }
 }
-
+// this to be moved into term-view-controller
 export function createTermList(){
-    q.getTermList().then(res => {
-        for (let i = 0; i < res.docs.length; i++) {
-            console.debug("term:" + res.docs[i].title);
-            let term = dc.createTermDom(res.docs[i]);
-            //console.log(term);
-                elem.termList.appendChild(term);
-                dc.setupEditor(res.docs[i]);    
-                addSearchItem(term, res.docs[i]);
-            }
+    g.createDictionaryList().then( () =>{
+        let res  = g.getDictionary();
+        res.forEach((value,key) =>{
+            let dict = document.createElement('h1');
+                    dict.innerText = key;
+                    dict.className = 'li_term_title';
+                elem.termList.appendChild(dict);
+            for (let i = 0; i < value.length; i++) {
+                
+               // console.debug("term:" + value[i].title);
+                let term = dc.createTermDom(value[i]);
+                //console.log(term);
+                    elem.termList.appendChild(term);
+                    dc.setupEditor(value[i]);    
+                    addSearchItem(term, value[i]);
+                }
+            });
         }).then(() => {
             updateFuse(); // always re-initialize Fuse after changing content
         }).catch((err) => {
             console.log(err);
         });
-       
+
 }
 
+// export function createTermList(){
+//     q.getTermList().then(res => {
+//         for (let i = 0; i < res.docs.length; i++) {
+//             console.debug("term:" + res.docs[i].title);
+//             let term = dc.createTermDom(res.docs[i]);
+//             //console.log(term);
+//                 elem.termList.appendChild(term);
+//                 dc.setupEditor(res.docs[i]);    
+//                 addSearchItem(term, res.docs[i]);
+//             }
+//         }).then(() => {
+//             updateFuse(); // always re-initialize Fuse after changing content
+//         }).catch((err) => {
+//             console.log(err);
+//         });
+// }
 
 /**
  * Creates the list of documents that are displayed and can be searched.
  */
+
+
 export function createContextList() {
+   g.createDictionaryList().then( () =>{
+    clearContextList();
+     let res  = g.getDictionary();
+      res.forEach((value,key) =>{
+         // console.debug(key + " "+ value.length +" \n");
+         // console.debug(value.forEach(val => console.debug(val.title)));
+         let li = document.createElement('li');
+             li.id = "cntx dictionary li " + key;
+             
+         let dictionary = document.createElement('input');
+             dictionary.className= "cntx dictionary";
+             dictionary.id = "cntx dictionary " + key;
+ 
+             dictionary.setAttribute("type", "button");
+             dictionary.value = key.trim();
+             dictionary.addEventListener('dblclick', ()=>{
+                 
+                    dictionary.setAttribute("type", "input");
+                    dictionary.focus();
+                 
+             });
+             dictionary.addEventListener('blur', ()=>{
+                dictionary.className= "cntx dictionary";
+                dictionary.setAttribute("type", "button");
 
-    dictionaries.forEach((value,key) =>{
-        // console.debug(key + " "+ value.length +" \n");
-        // console.debug(value.forEach(val => console.debug(val.title)));
-        let li = document.createElement('li');
-            li.id = "cntx dictionary li " + key;
-            
-        let dictionary = document.createElement('input');
-            dictionary.className= "cntx dictionary";
-            dictionary.id = "cntx dictionary " + key;
-
-            dictionary.setAttribute("type", "button");
-            dictionary.value = key.trim();
-    
-        let ol = document.createElement('ol');
-       
+             });
+     
+         let ol = document.createElement('ol');
+         
+         
+         value.forEach(val => {
+             // console.debug("context "+val.title)
+             ol.appendChild(contextDOM(val));
+             //elem.contextList.appendChild(contextDOM(val));
+         });
+             li.appendChild(dictionary)
+             li.appendChild(ol);
         
-           
-        value.forEach(val => {
-            // console.debug("context "+val.title)
-            ol.appendChild(contextDOM(val));
-            //elem.contextList.appendChild(contextDOM(val));
+        
+        
+         elem.contextList.appendChild(li);  
+         
+         });
         });
-        
-        
-            li.appendChild(dictionary)
-            li.appendChild(ol);
-       
-
-        elem.contextList.appendChild(li);  
-   
-});
+     
 
 updateFuse(); // always re-initialize Fuse after changing content
-
-
 }
-
 
 function contextDOM(doc){
 //  create actual term text //
@@ -293,6 +308,7 @@ function contextDOM(doc){
         addSearchItem(item, doc);
         li.appendChild(item);
         li.appendChild(deleteBtn);
+       
         return li;
 
 }
@@ -327,18 +343,8 @@ export function getTopElement() {
 function onTermClicked(event) {
     let btn = event.target;
     let id = btn.getAttribute('data-id');
-       // selected.push(btn);
         dc.displayDocument(id);
-    // de-select previous
-    // for (let i = 0; i < selected.length; i++)
-    // {
-    //     selected[i].checked = false;
-    // }
-    // selected.splice(0, selected.length);
 
-    // select new
-   
-    // }
 }
 function onDeleteBtn(event){
     let confirmed = false;
@@ -355,8 +361,6 @@ function onDeleteBtn(event){
         } catch (error) {
             console.error(error);
         }
-       
-       
     });
 
     setTimeout(()=>{

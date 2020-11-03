@@ -1,4 +1,4 @@
-import {db} from '../global.mjs';
+import * as database from './db.mjs';
 // following code stolen from https://stackoverflow.com/questions/37229561/how-to-import-export-database-from-pouchdb
 // and https://stackoverflow.com/questions/13405129/javascript-create-and-save-file/30832210#30832210
 
@@ -21,7 +21,7 @@ export function download(data, filename, type) {
   }
 }
 export function handleExport() {
-    db.allDocs({include_docs: true}, (error, doc) => {
+    database.db.allDocs({include_docs: true}, (error, doc) => {
       if (error) console.error(error);
       else download(
         JSON.stringify(doc.rows.map(({doc}) => doc)),
@@ -35,7 +35,7 @@ export function handleImport ({target: {files: [file]}}) {
     if (file) {
       const reader = new FileReader();
       reader.onload = ({target: {result}}) => {
-        db.bulkDocs(
+        database.db.bulkDocs(
           JSON.parse(result),
           {new_edits: false}, // not change revision
           (...args) => console.log('DONE', args)

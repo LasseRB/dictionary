@@ -1,9 +1,7 @@
-import * as q from "./db/db-query.mjs";
-import * as a from "./db/db-actions.mjs";
-import * as s from "./search.mjs";
-import * as g from "./global.mjs";
-import { getDocFromId } from "./db/db-query.mjs";
 
+import * as a from "./db/db-actions.mjs";
+import * as g from "./global.mjs";
+import * as s from "./search.mjs";
 // // todo: ability to delete documents
 // // todo: empty page instead of editor on open?
 // // todo: create new document when clicking plus
@@ -26,26 +24,25 @@ function init() {
     elem.currentDict = undefined;
     elem.currentAbbriv =undefined;
     elem.currentEditor =undefined;
+    elem.editorWrapper = undefined;
     elem.currentCrossRef =undefined;
+
 
 
     //
     elem.termList = document.getElementById('term-list');
     elem.contextList = document.getElementById('context-list');
 
-
     // add and search functionality
     elem.newTermButton = document.getElementById('new-term');
     elem.newTerm = document.getElementById('search-term');
     elem.allApp = document.getElementById('app');
 
-
     // setup event listeners
     addEventListeners();
     elem.newTerm.focus();
-    addBorder();
-    // s.clearContextList();
-    // s.createDictionaryList();
+
+
     
 }
 
@@ -53,8 +50,6 @@ function addEventListeners(element) {
    // let t_children = document.getElementsByClassName('li_term_wrapper');
     elem.newTermButton.addEventListener('click', onNewTermButton);
     elem.newTerm.addEventListener('input', clearFocusOnElement);
-    elem.allApp.addEventListener('click', addBorder);
-   
 }
 
 function getOldVersions(){
@@ -138,47 +133,41 @@ export function addDataFromDatabase(doc, editor){
         console.error(err);
     })
 }
-function addBorder(event){
 
-    if(document.getElementById('search-term') === document.activeElement){
-        document.getElementById('search-create-box').setAttribute("style", "border:solid 1px #00A3FF");
-    }
-    else{
-        document.getElementById('search-create-box').setAttribute("style", "border:solid 0px #FFFFFF");
-    }
-
-}
 function updateHistory(event){
     dictionaryHistory.push(event.target.value);
     console.debug("dictionary History:")
     console.debug(...dictionaryHistory);
 }
 export function assignFocusOnElement(event){
-
+    console.debug('editorjs ' + elem.currentID);
     elem.currentID = event.currentTarget.id.substring(4).trim();
     elem.currentTitle = event.currentTarget.childNodes[0][0];
     elem.currentDict = document.getElementById('doc-dictionaries-'+elem.currentID);
     elem.currentEditor = editors.get(elem.currentID);
+    elem.editorWrapper = document.getElementById('editorjs ' + elem.currentID);
    // elem.currentAbbriv = event.currentTarget.childNodes[0][2];
     elem.currentAbbriv = document.getElementById('doc-abbreviation-'+elem.currentID);
     elem.currentCrossRef = document.getElementById('doc-crossref-'+elem.currentID);
     console.debug("event.currentTarget.id: " + event.currentTarget.id);
-    
-}   
+}
 export function clearFocusOnElement(event){
     elem.currentID = undefined; 
     elem.currentTitle = undefined;
     elem.currentDict = undefined;
     elem.currentEditor =undefined;
+    elem.editorWrapper = undefined;
     elem.currentAbbriv =undefined;
     elem.currentCrossRef=undefined;
 }
 
-export function onDocumentChanged(event) {
+
+export async function onDocumentChanged(event) {
+    console.debug('has changed!');
     hasChanged = true;
 
     assignFocusOnElement(event);
-    getOldVersions();
+   // getOldVersions();
    
     console.debug("id "+ elem.currentID + "\n"
                  + "title "+ elem.currentTitle.value + "\n"
@@ -189,8 +178,9 @@ export function onDocumentChanged(event) {
 
     
     //s.updateTermTitle("cntx term " + elem.currentID, elem.currentTitle.value);
+   // await g.createDictionaryList();
    
-    s.createDictionaryList();
+    s.createContextList();
     // document.getElementById(("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1]).id = "cntx dictionary " +elem.currentDict.value)
     //s.updateTermTitle("cntx dictionary " + dictionaryHistory[dictionaryHistory.length-1], elem.currentDict.value);
    
@@ -207,6 +197,7 @@ function onNewTermButton(){
     saveDocument();
     location.reload();
 }
+
 
 /**
  * Saves the current document to the database.
@@ -286,7 +277,11 @@ export function displayDocument(id) {
     }
     
     if(document.getElementById("term " + id) != null){
-        document.getElementById("term " + id).scrollIntoView({behavior: "smooth", block: "end", inline: "start"});
+        let target = document.getElementById("term " + id);
+            // target.parentNode.scrollTop = target.offsetTop;
+        // animation is nice, but it moves page to the left in 
+        // an incorrect way
+        target.scrollIntoView({behavior: "smooth", block: "end", inline: "center"});
     } 
     hasChanged = false;
 
@@ -328,13 +323,13 @@ export function createTermDom(doc){
             title_val = "Untitled";
         }
         title.value = title_val;
-    let dictionariesTitle = document.createElement('h4');
+    let dictionariesTitle = document.createElement('h3');
         dictionariesTitle.innerHTML = 'Dictionaries';
         dictionariesTitle.className = 'term-headers';
     let dictionaries = document.createElement('input');
         dictionaries.id="doc-dictionaries-"+doc._id;
         dictionaries.setAttribute("aria-label","dictionaries");
-        dictionaries.setAttribute("placeholder","");
+        dictionaries.setAttribute("placeholder","Unsorted terms");
         dictionaries.addEventListener('beforeinput', updateHistory);
         //dictionaries.value = doc.tags;
         doc.tags.forEach(element => {
@@ -348,7 +343,7 @@ export function createTermDom(doc){
         // remove the last comma
         dictionaries.value = dictionaries.value.substring(0,(dictionaries.value.length - 2))
 
-    let editorJSTitle = document.createElement('h4');
+    let editorJSTitle = document.createElement('h3');
         editorJSTitle.innerHTML = 'Definition';
         editorJSTitle.className = 'term-headers';
     
@@ -356,8 +351,9 @@ export function createTermDom(doc){
         editorjs.id="editorjs "+ doc._id;
         editorjs.className = "editorjs-wrapper";
         editorjs.setAttribute("aria-label","content");
+  
         //add content from database
-    let abbreviationTitle = document.createElement('h4');
+    let abbreviationTitle = document.createElement('h3');
         abbreviationTitle.innerHTML = 'Abbreviation';
         abbreviationTitle.className = 'term-headers';
     let abbreviation = document.createElement('input');
@@ -366,7 +362,7 @@ export function createTermDom(doc){
         abbreviation.setAttribute("aria-label","abbreviation");
         abbreviation.setAttribute("placeholder","");
         abbreviation.value = doc.abbreviation;
-    let crossrefTitle = document.createElement('h4');
+    let crossrefTitle = document.createElement('h3');
     crossrefTitle.innerHTML = 'Cross reference';
     crossrefTitle.className = 'term-headers';
     let crossref = document.createElement('input');
@@ -387,8 +383,7 @@ export function createTermDom(doc){
     form.appendChild(abbreviation);
     form.appendChild(crossrefTitle);
     form.appendChild(crossref);
-
-    
+    li.addEventListener('click', assignFocusOnElement)
     li.addEventListener('input', onDocumentChanged);
     return li;
 }
