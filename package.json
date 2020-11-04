@@ -1,6 +1,6 @@
 {
   "name": "Define",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Your personal dictionary",
   "main": "electron.js",
   "scripts": {
