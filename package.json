@@ -1,6 +1,6 @@
 {
   "name": "Define",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Your personal dictionary",
   "main": "electron.js",
   "scripts": {
@@ -8,7 +8,6 @@
     "elec": "electron .",
     "build": "electron-builder build --mac --win --publish never",
     "deploy": "electron-builder build --mac --win --publish always"
-    
   },
   "keywords": [],
   "author": "Lasse Rützou Bruntse, Morten Dalgaard Andersen",

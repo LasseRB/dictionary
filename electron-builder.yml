@@ -1,0 +1,4 @@
+appId: app.define.DefineApp
+publish:
+  provider: github
+  token: 49534e236fd4dc8ffd43aaae95bc84e543fb8cb2
