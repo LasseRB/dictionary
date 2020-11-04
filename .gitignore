@@ -136,4 +136,5 @@ dist
 .pnp.*
 
 # YAML
-./electron-builder.yml
+
+electron-builder.yml
