@@ -36,7 +36,10 @@ export var Document = function(title, abbreviation, tags, content, crossref, _id
         this.tags = ["Unsorted terms"];
         console.debug("Unsorted is " + this.tags);
         // dictionary.push("Unsorted terms"); 
-    }else{
+    }else if(Array.isArray(tags)){
+        this.tags=tags;
+    }
+    else{
         const dictionary=(seperateTags(tags.value));
         this.tags=dictionary;
         console.debug("Sorted is "+ this.tags);

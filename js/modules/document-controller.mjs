@@ -222,7 +222,7 @@ export function saveDocument() {
     // }
    
 }
-function setNewDoc(data) {
+function setNewDoc(data){
     console.debug(elem.newTerm.value);
     let newTitle = "";
 
@@ -232,13 +232,27 @@ function setNewDoc(data) {
     else if (elem.currentTitle.value != undefined) {
         newTitle = elem.currentTitle.value;
     }
-s
+
     let doc = new a.Document(
         newTitle,
         elem.currentAbbriv,
         elem.currentDict,
         JSON.stringify(data),
         elem.currentCrossRef,
+    );
+        // console.debug(elem.currentDict.value);
+        //console.debug(doc);
+    updateDoc(doc);
+    
+}
+export function setNewDocFromImport(data, abbriv, title, crossref, dictionary) {
+   
+    let doc = new a.Document(
+        title,
+        abbriv,
+        dictionary,
+        JSON.stringify(data),
+        crossref,
     );
         // console.debug(elem.currentDict.value);
         //console.debug(doc);

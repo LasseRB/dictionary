@@ -1,4 +1,7 @@
 import * as database from './db.mjs';
+import * as g from '../global.mjs';
+import * as dc from '../document-controller.mjs';
+
 // following code stolen from https://stackoverflow.com/questions/37229561/how-to-import-export-database-from-pouchdb
 // and https://stackoverflow.com/questions/13405129/javascript-create-and-save-file/30832210#30832210
 
@@ -25,22 +28,29 @@ export function handleExport() {
       if (error) console.error(error);
       else download(
         JSON.stringify(doc.rows.map(({doc}) => doc)),
-        'tracker.db',
+        Date.now()+'_defineApp.json',
         'text/plain'
       );
     });
   }
 
-export function handleImport ({target: {files: [file]}}) {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ({target: {result}}) => {
-        database.db.bulkDocs(
-          JSON.parse(result),
-          {new_edits: false}, // not change revision
-          (...args) => console.log('DONE', args)
-        );
-      };
-      reader.readAsText(file);
+export function handleImport () {
+  fetch("../../1604771233147_defineApp.json")
+  .then(response => response.json())
+  .then(data => {
+    for(var i = 0; i < data.length; i++){
+      console.log(data[i].title); 
+      dc.setNewDocFromImport(data[i].definition, data[i].abbreviation, data[i].title, data[i].crossref, data[i].tags)
     }
+    // database.db.bulkDocs(data);
+    // data.forEach(doc => {
+    //   database.      
+    // });
+      
+    }).then(function () {
+      return database.db.allDocs({include_docs: true});
+    }).catch(error =>{
+      console.error(error);
+    });
+  
   }

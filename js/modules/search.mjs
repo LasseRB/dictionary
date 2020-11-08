@@ -38,17 +38,10 @@ async function init() {
     // fire the search button click event, when enter key is pressed in search field
     elem.searchTerm.addEventListener('keyup', onSearchChange);
     // create visible list of titles, setup search array and initialize Fuse
-   
-        
-     
         // clearContextList();
         // createContextList();
         createTermList();
-      
-  
-    
 }
-
 
 /**
  * Update Fuse. Should be done whenever a document has been changed or added.
@@ -99,26 +92,18 @@ export function updateSearch(searchTerm){
         for (let i = 0; i < c_children.length; i++) {
            c_children[i].style.removeProperty('display');
            t_children[i].style.removeProperty('display');
-
-
         }
     } else {
-        
         searchMatches = getSearchResults(searchTerm.value);
-
         for (let i = 0; i < c_children.length; i++) {
            t_children[i].style.setProperty('display', 'none');
            c_children[i].style.setProperty('display', 'none');   
-
         }
         searchMatches.forEach(match => {
-     
            document.getElementById("cntx term " + match.item.doc._id).parentElement.style.removeProperty('display');
            document.getElementById("term " + match.item.doc._id).style.removeProperty('display');
-
            // no reason to append the elements back
           // match.item.element.parentNode.appendChild(match.item.element);
-      
         });
     }
 }
@@ -150,8 +135,6 @@ export function addSearchItem(elem, doc) {
  * @param {Object} change: The document object that has changed
  */
 export function databaseUpdated(change) {
-   // 
-
     // todo: respond to database changes?
     if (change.deleted) {
         location.reload(); 
@@ -242,20 +225,15 @@ export function createContextList() {
              dictionary.setAttribute("type", "button");
              dictionary.value = key.trim();
              dictionary.addEventListener('dblclick', ()=>{
-                 
                     dictionary.setAttribute("type", "input");
                     dictionary.focus();
-                 
              });
              dictionary.addEventListener('blur', ()=>{
                 dictionary.className= "cntx dictionary";
                 dictionary.setAttribute("type", "button");
-
              });
      
          let ol = document.createElement('ol');
-         
-         
          value.forEach(val => {
              // console.debug("context "+val.title)
              ol.appendChild(contextDOM(val));
@@ -263,14 +241,9 @@ export function createContextList() {
          });
              li.appendChild(dictionary)
              li.appendChild(ol);
-        
-        
-        
-         elem.contextList.appendChild(li);  
-         
+         elem.contextList.appendChild(li);     
          });
         });
-     
 
 updateFuse(); // always re-initialize Fuse after changing content
 }

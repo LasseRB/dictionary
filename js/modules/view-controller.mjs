@@ -1,13 +1,17 @@
 
 import * as s from "./search.mjs";
 import * as q from "./db/db-query.mjs";
+import * as db from "./db/db-save.mjs";
 
 let elem = {};
 
 function init() {
     elem.termButton = document.getElementById('button-contextToggle');
     // elem.styleButton = document.getElementById('button-style');
-    // elem.exportButton = document.getElementById('button-export');
+    elem.exportButton = document.getElementById('button-export');
+    elem.exportButton.addEventListener('click', db.handleExport);
+    elem.importButton = document.getElementById('importBtn');
+    elem.importButton.addEventListener('click', db.handleImport);
     // elem.dictionaryView = document.getElementById('view-dictionary');
     elem.contextView = document.getElementById('view-context');
     elem.contextList = document.getElementById('context-list');
