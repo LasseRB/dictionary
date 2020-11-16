@@ -1,20 +1,22 @@
 {
-  "name": "Define",
+  "name": "Dictionary",
   "version": "1.0.5",
   "description": "Your personal dictionary",
   "main": "electron.js",
   "scripts": {
     "dev": "nodemon ./index.js",
     "elec": "electron .",
-    "build": "electron-builder build --mac --win --publish never",
+    "build-all": "electron-builder build --mac --win --publish never",
+    "build-mac": "electron-builder build --mac --publish never",
+    "build-win": "electron-builder build --win --publish never",
     "deploy": "electron-builder build --mac --win --publish always"
   },
   "keywords": [],
   "author": "Lasse Rützou Bruntse, Morten Dalgaard Andersen",
   "license": "ISC",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/LasseRB/dictionary.git"
+    "type": "git",
+    "url": "https://github.com/LasseRB/dictionary.git"
   },
   "devDependencies": {
     "electron": "^10.1.2",
@@ -22,6 +24,7 @@
     "nodemon": "^2.0.4"
   },
   "dependencies": {
+    "config": "^3.3.2",
     "electron-updater": "^4.3.5"
   }
 }

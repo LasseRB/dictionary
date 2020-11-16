@@ -244,7 +244,8 @@ button {
     position: relative;
     max-width: 500px;
     padding: 20px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    /* justify-content: left; */
 }
 .document-editor {
     transition: all .2s ease-in-out;
@@ -419,24 +420,32 @@ button {
     vertical-align: middle;
 }
 ul#term-list{
+    display: flex;
     position: relative;
     list-style: none;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     padding: 0;
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    flex-wrap:wrap;
     
 }
+
 h1.li_term_title{
- 
-    width: 480px;
+    position: relative;
+    /* flex: content; */
+    display: block;
+    width: 100vw;
+    height: min-content;
     padding: 20px 0 5px 20px;
     margin: 0 auto;
+    justify-content: flex-start;
 }
 ul{
     margin: 0;
     padding: 0;
+
 }
 
 #context-list input {
@@ -572,6 +581,9 @@ h3.ce-header {
 
 .ce-toolbar, .ce-inline-toolbar{
     z-index: 3;
+}
+#file-import, #importBtn, #button-export{
+    display: none;
 }
 
 @media (prefers-color-scheme: dark) {

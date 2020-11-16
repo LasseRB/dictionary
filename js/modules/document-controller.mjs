@@ -109,7 +109,7 @@ export function setupEditor(doc) {
 
 
 export function addDataFromDatabase(doc, editor){
-    let newdef = doc.definition;
+    let newdef = doc.content;
     
     if(newdef === undefined || newdef === null ||newdef === "" ) newdef = `{"blocks":[
                                                                                 {"type":"paragraph",

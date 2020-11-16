@@ -34,7 +34,7 @@ export function createDictionaryList() {
                 });
               }
         }).then(done =>{
-            console.debug('resolved dictioanry map');
+            console.debug('resolved dictionary map');
             resolve(done)})
         .catch(error =>{
             console.error(error);

@@ -40,7 +40,10 @@ export function handleImport () {
   .then(data => {
     for(var i = 0; i < data.length; i++){
       console.log(data[i].title); 
-      dc.setNewDocFromImport(data[i].definition, data[i].abbreviation, data[i].title, data[i].crossref, data[i].tags)
+      var editorcontent = data[i].content;
+      if(data[i].definition != undefined)
+        editorcontent = data[i].definition
+      dc.setNewDocFromImport(editorcontent, data[i].abbreviation, data[i].title, data[i].crossref, data[i].tags)
     }
     // database.db.bulkDocs(data);
     // data.forEach(doc => {
@@ -48,7 +51,8 @@ export function handleImport () {
     // });
       
     }).then(function () {
-      return database.db.allDocs({include_docs: true});
+      
+      // return database.db.allDocs({include_docs: true});
     }).catch(error =>{
       console.error(error);
     });
