@@ -2,8 +2,9 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+// const hostname = '127.0.0.1';
+const hostname = 'spirou';
+const port = 3100;
 
 const server = http.createServer((req, res) => {
     const docRoot = './';

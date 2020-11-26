@@ -10,10 +10,12 @@
 <body>
 <div id="app">
     <div id="toolbar">
+        
        <!-- <h1 id="app-title">Dictionary</h1> -->
         <button id="button-contextToggle" class="button-toolbar">
             <img src="genericons/genericons-neue/category.svg" alt="toggle terms">
         </button>
+       
         <p id="version"></p>
         <!-- <button id="button-style" class="button-toolbar">
             <img src="genericons/genericons-neue/paintbrush.svg" alt="toggle style">
@@ -26,6 +28,16 @@
         <div id = 'search-create-box' class="search-create">
             <input id="search-term"  class="search-field" aria-label="Search for term" placeholder="Define term" autofocus="true"></input>
             <button id="new-term"></button>
+        </div>
+
+        <button id="button-view-list" class="button-toolbar">
+            <img src="genericons/genericons-neue/hierarchy.svg" alt="toggle view">
+        </button>
+        <div class="view-dropdown">
+            <ul>
+                <li><input id="aslist" type="button" value="as list"></li>
+                <li><input id="asgrid" type="button" value="as grid"></li>
+            </ul>
         </div>
     </div>
     <div id="views">

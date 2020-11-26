@@ -223,6 +223,26 @@ button {
     margin: 0;
     padding: 0;
 }
+#button-view-list{
+    position: relative;
+    margin: 0px 40px 0px auto;
+    padding-right: 10px;
+}
+.view-dropdown ul {
+    display: none;
+    position: absolute;
+    background-color: white;
+    list-style: none;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    right: 20px;
+    top: 70px;
+    z-index: 3;
+    border-left: 1px solid rgba(80, 80, 80,0.5);
+    border-right: 1px solid rgba(80, 80, 80,0.5);
+    border-bottom: 1px solid rgba(80, 80, 80,0.5);
+    
+}
 
 
 #app-title {
@@ -244,7 +264,7 @@ button {
     position: relative;
     max-width: 500px;
     padding: 20px;
-    /* margin: 0 auto; */
+    margin: 0 auto;
     /* justify-content: left; */
 }
 .document-editor {
@@ -423,7 +443,7 @@ ul#term-list{
     display: flex;
     position: relative;
     list-style: none;
-    /* margin: 0 auto; */
+  
     padding: 0;
     width: 100%;
     overflow-x: hidden;
@@ -434,7 +454,7 @@ ul#term-list{
 
 h1.li_term_title{
     position: relative;
-    /* flex: content; */
+    flex: content;
     display: block;
     width: 100vw;
     height: min-content;
@@ -448,7 +468,7 @@ ul{
 
 }
 
-#context-list input {
+#context-list input, .view-dropdown input{
     display: inline-block;
     position: relative;
     text-align: start;
@@ -460,13 +480,13 @@ ul{
     cursor: pointer;  
 }
 
-#context-list input:hover {
+#context-list input:hover, .view-dropdown input:hover {
     color: #fff;
     background-color: #00A3FF;
     border-radius: 3px;
 }
 
-#context-list input:focus{
+#context-list input:focus, .view-dropdown input:focus{
     color: #fff;
     background-color: #404040;
     outline: none;
@@ -590,10 +610,11 @@ h3.ce-header {
 body{
     color: #F0F0F0;
 }
-#view-dictionary, #view-context,#view-document, #toolbar, #statusbar  {
+#view-dictionary, #view-context,#view-document, #toolbar, #statusbar, .view-dropdown ul  {
     background-color: #212121;
     
 }
+
 .search-create #new-term {
     background-color: #ff5100;
 }
@@ -619,7 +640,7 @@ body{
 a,p, input, .editorjs-wrapper, .document-title, #toolbar{
     color: #F0F0F0;
 }
-#context-list input:hover {
+#context-list input:hover, .view-dropdown input:hover {
     background-color: #ff5100;
 }
 

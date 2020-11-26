@@ -1,5 +1,6 @@
-
+const config = require('config');
 import * as a from "./db/db-actions.mjs";
+import * as db from "./db/db.mjs";
 import * as g from "./global.mjs";
 import * as s from "./search.mjs";
 // // todo: ability to delete documents
@@ -36,22 +37,60 @@ function init() {
     // add and search functionality
     elem.newTermButton = document.getElementById('new-term');
     elem.newTerm = document.getElementById('search-term');
+    elem.viewSettings = document.getElementById('button-view-list');
     elem.allApp = document.getElementById('app');
 
     // setup event listeners
     addEventListeners();
     elem.newTerm.focus();
-
-
-    
+    toggleViews();
 }
 
-function addEventListeners(element) {
+function addEventListeners() {
    // let t_children = document.getElementsByClassName('li_term_wrapper');
     elem.newTermButton.addEventListener('click', onNewTermButton);
     elem.newTerm.addEventListener('input', clearFocusOnElement);
+    elem.viewSettings.addEventListener('click', onViewSettings)
 }
+function onViewSettings(event){
+    let dropdown = document.querySelector('.view-dropdown ul');
+    if(window.getComputedStyle(dropdown).getPropertyValue('display') == 'none'){
+        dropdown.style.display = "block";
+        let list = document.getElementById('aslist');
+        let grid = document.getElementById('asgrid');
+        list.addEventListener('click', ()=>{
+            db.settings.setItem('settings', JSON.stringify({'view': 'list'}));
+            toggleViews();
+        });
+        grid.addEventListener('click', ()=>{
+            db.settings.setItem('settings', JSON.stringify({'view': 'grid'}));
+            toggleViews();
+        });
+        // make buttons clickable
+       
+    } else{
+        dropdown.style.display = "none";
+    }
+    
+}
+function toggleViews(){
+    let termlist = document.querySelector('ul#term-list');
+    let termlist_elem =document.getElementsByClassName('li_term_wrapper');
+    let view = JSON.parse(db.settings.getItem("settings")).view;
+    if(view == 'list'){
+        termlist.style.display = "inline-block";
+        for(let i = 0; i < termlist_elem.length; i++){
+            termlist_elem[i].style.margin= "0px auto";
+        }
+    }
+    if(view == 'grid'){
+        termlist.style.display = "flex";
+        for(let i = 0; i < termlist_elem.length; i++){
+            termlist_elem[i].style.margin= "1px";
+        }
 
+    }
+}
 function getOldVersions(){
  
         console.debug("old version:");
@@ -99,8 +138,6 @@ export function setupEditor(doc) {
             
             }
         });
-       // console.debug(doc._id + ": " + editor);
-        
         addDataFromDatabase(doc, editor);
         editors.set(doc._id, editor);
         return editor;
@@ -399,9 +436,11 @@ export function createTermDom(doc){
     form.appendChild(crossref);
     li.addEventListener('click', assignFocusOnElement)
     li.addEventListener('input', onDocumentChanged);
+
     return li;
 }
 
 
 window.addEventListener('load', init);
+
 // window.addEventListener('beforeunload', saveDocument);
