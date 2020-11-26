@@ -1,4 +1,4 @@
-const config = require('config');
+// const config = require('config');
 import * as a from "./db/db-actions.mjs";
 import * as db from "./db/db.mjs";
 import * as g from "./global.mjs";
@@ -43,7 +43,9 @@ function init() {
     // setup event listeners
     addEventListeners();
     elem.newTerm.focus();
-    toggleViews();
+    setTimeout(function (){
+        toggleViews();
+    },200);
 }
 
 function addEventListeners() {
@@ -61,10 +63,12 @@ function onViewSettings(event){
         list.addEventListener('click', ()=>{
             db.settings.setItem('settings', JSON.stringify({'view': 'list'}));
             toggleViews();
+            dropdown.style.display = "none";
         });
         grid.addEventListener('click', ()=>{
             db.settings.setItem('settings', JSON.stringify({'view': 'grid'}));
             toggleViews();
+            dropdown.style.display = "none";
         });
         // make buttons clickable
        
@@ -76,17 +80,22 @@ function onViewSettings(event){
 function toggleViews(){
     let termlist = document.querySelector('ul#term-list');
     let termlist_elem =document.getElementsByClassName('li_term_wrapper');
+    
     let view = JSON.parse(db.settings.getItem("settings")).view;
     if(view == 'list'){
         termlist.style.display = "inline-block";
         for(let i = 0; i < termlist_elem.length; i++){
             termlist_elem[i].style.margin= "0px auto";
+            termlist_elem[i].style.width = "500px";
+            termlist_elem[i].firstChild.children[1].style.fontSize= "35px";
         }
     }
     if(view == 'grid'){
         termlist.style.display = "flex";
         for(let i = 0; i < termlist_elem.length; i++){
-            termlist_elem[i].style.margin= "1px";
+            termlist_elem[i].style.margin= "20px auto";
+            termlist_elem[i].style.width = "30%";
+            termlist_elem[i].firstChild.children[1].style.fontSize= "30px";
         }
 
     }
