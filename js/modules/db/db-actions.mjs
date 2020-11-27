@@ -144,4 +144,9 @@ export function getPrevVersion(id){
       });
 }
 
+export function updateSettings(setting){
+ // save settings as a global object and update from here. 
+}
+
+
 window.onload = init;

@@ -61,12 +61,12 @@ function onViewSettings(event){
         let list = document.getElementById('aslist');
         let grid = document.getElementById('asgrid');
         list.addEventListener('click', ()=>{
-            db.settings.setItem('settings', JSON.stringify({'view': 'list'}));
+            db.settings.setItem('settings', JSON.stringify({'docview': 'list'}));
             toggleViews();
             dropdown.style.display = "none";
         });
         grid.addEventListener('click', ()=>{
-            db.settings.setItem('settings', JSON.stringify({'view': 'grid'}));
+            db.settings.setItem('settings', JSON.stringify({'docview': 'grid'}));
             toggleViews();
             dropdown.style.display = "none";
         });
@@ -81,9 +81,10 @@ function toggleViews(){
     let termlist = document.querySelector('ul#term-list');
     let termlist_elem =document.getElementsByClassName('li_term_wrapper');
     
-    let view = JSON.parse(db.settings.getItem("settings")).view;
+    let view = JSON.parse(db.settings.getItem("settings")).docview;
     if(view == 'list'){
         termlist.style.display = "inline-block";
+        elem.viewSettings.children[0].src ="genericons/genericons-neue/hierarchy.svg";
         for(let i = 0; i < termlist_elem.length; i++){
             termlist_elem[i].style.margin= "0px auto";
             termlist_elem[i].style.width = "500px";
@@ -92,6 +93,8 @@ function toggleViews(){
     }
     if(view == 'grid'){
         termlist.style.display = "flex";
+        elem.viewSettings.children[0].src ="genericons/hierarchy_grid.svg";
+
         for(let i = 0; i < termlist_elem.length; i++){
             termlist_elem[i].style.margin= "20px auto";
             termlist_elem[i].style.width = "30%";
@@ -387,7 +390,8 @@ export function createTermDom(doc){
         dictionariesTitle.innerHTML = 'Dictionaries';
         dictionariesTitle.className = 'term-headers';
     let dictionaries = document.createElement('input');
-        dictionaries.id="doc-dictionaries-"+doc._id;
+        dictionaries.id="doc-dictionaries-"+doc._id;;
+        dictionaries.className ="doc-dictionary"
         dictionaries.setAttribute("aria-label","dictionaries");
         dictionaries.setAttribute("placeholder","Unsorted terms");
         dictionaries.addEventListener('beforeinput', updateHistory);

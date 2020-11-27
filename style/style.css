@@ -269,6 +269,13 @@ button {
     align-items: stretch;
     /* justify-content: left; */
 }
+
+.doc-dictionary {
+    /* background-color: #00A3FF; */
+    /* border-radius: 30px; */
+    /* font-style: italic; */
+    /* color: whitesmoke; */
+}
 .document-editor {
     transition: all .2s ease-in-out;
     border: solid 1px transparent;
@@ -470,7 +477,14 @@ ul{
     padding: 0;
 
 }
-
+.dictionary{
+    font-style:italic;
+    color: #757473;
+    /* font-weight: bolder; */
+}
+.cntx.term{
+    color: #000000;
+}
 #context-list input, .view-dropdown input{
     display: inline-block;
     position: relative;
@@ -563,7 +577,7 @@ ul{
     text-align: justify;
     line-height: 2;
     background-color: transparent;
-    padding: 15px 0 0 0;
+    padding: 0 0 0 0;
 }
 .cdx-block {
     padding: 10px 0 !important;
