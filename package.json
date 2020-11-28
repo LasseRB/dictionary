@@ -1,5 +1,5 @@
 {
-  "name": "Define",
+  "name": "Dictionary",
   "version": "1.0.5",
   "description": "Your personal dictionary",
   "main": "electron.js",
@@ -21,8 +21,7 @@
   "devDependencies": {
     "electron": "^10.1.2",
     "electron-builder": "^22.8.1",
-    "nodemon": "^2.0.4",
-    "parcel-bundler": "^1.12.4"
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "config": "^3.3.2",

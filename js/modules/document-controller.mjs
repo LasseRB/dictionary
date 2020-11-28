@@ -110,9 +110,16 @@ function getOldVersions(){
 }
 
 export function setupEditor(doc) {
+    console.log(doc.definition);
        const editor = new EditorJS({
             holder: 'editorjs '+ doc._id,
-            tools: {
+
+            tools: { 
+                paragraph: {
+                config: {
+                  placeholder: 'Define ' + doc.title
+                }
+            },
                 code: {
                     class: CodeTool     
                 },
@@ -125,6 +132,7 @@ export function setupEditor(doc) {
                         defaultLevel: 1
                     }
                 },
+               
                 inlineCode: {
                
                     class: InlineCode,
@@ -148,25 +156,32 @@ export function setupEditor(doc) {
                     }
                 }
             
-            }
+            },
+            data:((doc.definition === undefined) ? JSON.parse(doc.content) : JSON.parse(doc.definition))
+            // autofocus: true
         });
-        addDataFromDatabase(doc, editor);
+        // addDataFromDatabase(doc, editor);
         editors.set(doc._id, editor);
+    
         return editor;
 }
 
 
 
-export function addDataFromDatabase(doc, editor){
+export function addDataFromDatabase(doc){
     let newdef = doc.content;
     
-    if(newdef === undefined || newdef === null ||newdef === "" ) newdef = `{"blocks":[
-                                                                                {"type":"paragraph",
-                                                                                "data":{
-                                                                                    "text":""}
-                                                                                }],
-                                                                            "version":"2.18.0"}`;
-   // console.debug("JSON: " + newdef);
+    // if(newdef === undefined || newdef === null ||newdef === "" ){
+    //     newdef = doc.definition;
+    // }
+    if(newdef === undefined || newdef === null ||newdef === "" )
+    { newdef = `{"blocks":[
+                        {"type":"paragraph",
+                        "data":{
+                            "text":""}
+                        }],
+                    "version":"2.18.0"}`;}
+   console.debug("JSON: " + newdef);
     editor.isReady.then(() => {
         editor.clear();
         try {
@@ -181,6 +196,7 @@ export function addDataFromDatabase(doc, editor){
     }).catch(err =>{
         console.error(err);
     })
+    // return newdef;
 }
 
 function updateHistory(event){
@@ -408,7 +424,7 @@ export function createTermDom(doc){
         dictionaries.value = dictionaries.value.substring(0,(dictionaries.value.length - 2))
 
     let editorJSTitle = document.createElement('h3');
-        editorJSTitle.innerHTML = 'Definition';
+        // editorJSTitle.innerHTML = 'Definition';
         editorJSTitle.className = 'term-headers';
     
     let editorjs = document.createElement('div');
