@@ -157,10 +157,11 @@ export function setupEditor(doc) {
                 }
             
             },
-            data:((doc.definition === undefined) ? JSON.parse(doc.content) : JSON.parse(doc.definition))
+            // preferred method for getting data.. but trouble with early data
+            //  data:JSON.parse(doc.content)
             // autofocus: true
         });
-        // addDataFromDatabase(doc, editor);
+         addDataFromDatabase(doc, editor);
         editors.set(doc._id, editor);
     
         return editor;
@@ -168,20 +169,16 @@ export function setupEditor(doc) {
 
 
 
-export function addDataFromDatabase(doc){
-    let newdef = doc.content;
+export function addDataFromDatabase(doc, editor){
+    let newdef = doc.definition;
     
-    // if(newdef === undefined || newdef === null ||newdef === "" ){
-    //     newdef = doc.definition;
-    // }
-    if(newdef === undefined || newdef === null ||newdef === "" )
-    { newdef = `{"blocks":[
-                        {"type":"paragraph",
-                        "data":{
-                            "text":""}
-                        }],
-                    "version":"2.18.0"}`;}
-   console.debug("JSON: " + newdef);
+    if(newdef === undefined || newdef === null ||newdef === "" ) newdef = `{"blocks":[
+                                                                                {"type":"paragraph",
+                                                                                "data":{
+                                                                                    "text":""}
+                                                                                }],
+                                                                            "version":"2.18.0"}`;
+   // console.debug("JSON: " + newdef);
     editor.isReady.then(() => {
         editor.clear();
         try {
@@ -196,7 +193,6 @@ export function addDataFromDatabase(doc){
     }).catch(err =>{
         console.error(err);
     })
-    // return newdef;
 }
 
 function updateHistory(event){
