@@ -54,8 +54,9 @@ function updateCount(){
         q.getTermList().then(res => {
             elem.dbCount = document.getElementById('dbsize');
             elem.dbCount.innerHTML = res.docs.length + " terms";
-            s.updateSearch(elem.searchTerm);
-            elem.searchTerm.value = "";
+           
+            // s.updateSearch(elem.searchTerm);
+            // elem.searchTerm.value = "";
            // for (let i = 0; i < res.docs.length; i++) {}
         }).catch(err=>{
             console.error(err);

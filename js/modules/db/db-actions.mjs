@@ -123,7 +123,7 @@ export function updateDocument(doc) {
         res.content= doc.content;
         // check while 'definition' bug exists in database
         if(res.definition != undefined)
-            res.definition += doc.content;
+            res.definition = doc.content;
         res.tags = doc.tags;
 
         return database.db.put(res);

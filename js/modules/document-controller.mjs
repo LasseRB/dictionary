@@ -110,7 +110,6 @@ function getOldVersions(){
 }
 
 export function setupEditor(doc) {
-    console.log(doc.definition);
        const editor = new EditorJS({
             holder: 'editorjs '+ doc._id,
 
@@ -158,16 +157,16 @@ export function setupEditor(doc) {
             
             },
             // preferred method for getting data.. but trouble with early data
-            //  data:JSON.parse(doc.content)
+            data:JSON.parse(doc.content)
             // autofocus: true
         });
-         addDataFromDatabase(doc, editor);
+        //  addDataFromDatabase(doc, editor);
         editors.set(doc._id, editor);
     
         return editor;
 }
 
-
+//! want to replace this with the editor.data field
 
 export function addDataFromDatabase(doc, editor){
     let newdef = doc.definition;
@@ -183,7 +182,7 @@ export function addDataFromDatabase(doc, editor){
         editor.clear();
         try {
             let data = JSON.parse(newdef);
-            
+           
             editor.render(data);
         } catch (err) {
             // could not parse JSON
