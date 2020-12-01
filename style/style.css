@@ -139,7 +139,7 @@ button {
     z-index: 0;
 }
 
-#statusbar {
+#footer {
     position: relative;
     color: #757473;
     background-color: #fefefe;
@@ -151,7 +151,7 @@ button {
    
 }
 
-#statusbar:before {
+#footer:before {
     content: "";
     position: absolute;
     left: 0;
@@ -225,8 +225,8 @@ button {
 }
 #button-view-list{
     position: relative;
-    margin: 0px 40px 0px auto;
-    padding-right: 10px;
+    left: 0px;
+    margin-left: 5px;
 }
 .view-dropdown ul {
     display: none;
@@ -235,7 +235,7 @@ button {
     list-style: none;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    right: 20px;
+    left: 30px;
     top: 70px;
     z-index: 3;
     border-left: 1px solid rgba(80, 80, 80,0.5);
@@ -351,11 +351,15 @@ button {
     opacity: 0.3;
 }
 
-/* Statusbar items */
-#statusbar p {
+/* Footer items */
+#footer p {
     display: inline-block;
     margin-left: 10px;
     font-size: 12px;
+}
+#version{
+    position: absolute;
+    right: 10px;
 }
 
 /* Search */
@@ -620,21 +624,24 @@ h3.ce-header {
 .ce-toolbar, .ce-inline-toolbar{
     z-index: 3;
 }
-/* #file-import, #importBtn, #button-export{
+#file-import, #importBtn, #button-export{
     display: none;
-} */
+}
 .ce-toolbar__plus{
     transform: translate3d(-50px, calc(21px - 50%), 0px);
 }
+
 
 @media (prefers-color-scheme: dark) {
 body{
     color: #F0F0F0;
 }
-#view-dictionary, #view-context,#view-document, #toolbar, #statusbar, .view-dropdown ul  {
+#view-dictionary, #view-context,#view-document, #toolbar, #footer, .view-dropdown ul  {
     background-color: #212121;
     
 }
+
+
 
 .search-create #new-term {
     background-color: #ff5100;

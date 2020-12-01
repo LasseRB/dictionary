@@ -1,6 +1,8 @@
+const { ipcRenderer } = window.require('electron');
 import * as database from './db.mjs';
 import * as g from '../global.mjs';
 import * as dc from '../document-controller.mjs';
+
 // const database = require('./db.mjs');
 // const g = require('../global.mjs');
 // const dc = require( '../document-controller.mjs');
@@ -8,6 +10,9 @@ import * as dc from '../document-controller.mjs';
 // following code stolen from https://stackoverflow.com/questions/37229561/how-to-import-export-database-from-pouchdb
 // and https://stackoverflow.com/questions/13405129/javascript-create-and-save-file/30832210#30832210
 
+ipcRenderer.on('EXPORTDB', (event, data) => handleExport());
+
+ipcRenderer.on('IMPORTDB', (event, data) => handleImport(data));
 
 export function download(data, filename, type) {
   var file = new Blob([data], {type: type});
@@ -37,10 +42,13 @@ export function handleExport() {
     });
   }
 
-export function handleImport () {
- const input = document.getElementById("file-import");
-  
-  fetch(input.files[0].path)
+export function handleImport (files) {
+  console.debug(files);
+//  const input = document.getElementById("file-import");
+  // const input = new Blob([data], {type: type});
+  // if (window.navigator.msSaveOrOpenBlob) // IE10+
+  // window.navigator.msSaveOrOpenBlob(file, filename);
+  fetch(files.filePaths[0])
   .then(response => response.json())
   .then(data => {
     for(var i = 0; i < data.length; i++){
@@ -65,4 +73,6 @@ export function handleImport () {
 
     });
   
+
+
   }

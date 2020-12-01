@@ -1,12 +1,19 @@
 
 // const ejse = require('ejs-electron');
 // const dbsave = require('./js/modules/db/db-save.mjs');
-const { app, BrowserWindow, ipcMain, Menu} = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, dialog} = require('electron');
 const { autoUpdater } = require('electron-updater');
+const fs = require('fs');
+var events = require('events');
+
+// const { handleExport } = require('./js/modules/db/db-save.mjs');
 // import * as dbsave from './js/modules/db/db-save.mjs';
 // import {app, BrowserWindow, ipcMain, Menu} from 'node_modules/electron';
 // import * as autoUpdater from 'node_modules/electron-updater';
 let win;
+
+
+// const importDB = new Event('importFB');
 function createWindow () {
   // Create the browser window.
     win = new BrowserWindow({
@@ -50,8 +57,18 @@ function createWindow () {
   {
     label: 'File',
     submenu: [
-      {label: 'Export all terms',click() {consol}},
-      {label: 'Import terms'},
+      {label: 'Export all terms',click() {win.webContents.send('EXPORTDB');}},
+      {label: 'Import terms', click() { 
+              dialog.showOpenDialog({properties: ['openFile']}).then(file =>{
+                win.webContents.send('IMPORTDB', file)
+              }).catch(error =>{
+                console.error(error);
+              })
+              
+            
+          }
+        },
+      
       {type: 'separator'},
      isMac ? { role: 'close' } : { role: 'quit' }
     ]

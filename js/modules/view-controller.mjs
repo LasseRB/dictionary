@@ -1,8 +1,10 @@
 
+var e = require('events');
 import * as s from "./search.mjs";
 import * as q from "./db/db-query.mjs";
-// import * as dbs from "./db/db-save.js";
+import * as dbs from "./db/db-save.mjs";
 import * as db from "./db/db.mjs";
+// import * as e from 'events';
 
 let elem = {};
 
@@ -10,6 +12,7 @@ function init() {
     elem.termButton = document.getElementById('button-contextToggle');
     // elem.styleButton = document.getElementById('button-style');
     elem.exportButton = document.getElementById('button-export');
+   
     // elem.exportButton.addEventListener('click', dbs.handleExport);
     elem.importButton = document.getElementById('importBtn');
     // elem.importButton.addEventListener('click', dbs.handleImport);
@@ -21,7 +24,11 @@ function init() {
     elem.termButton.addEventListener('click', onTermButtonClicked);
     // elem.styleButton.addEventListener('click', onStyleButtonClicked);
     elem.viewBtn = document.getElementById('button-view-list');
-    
+   
+    const em = new e.EventEmitter();
+    em.on('exportDB', ()=>{
+        console.log('Export event observed!')
+    })
     setTimeout(function (){
     updateCount();
     checkSettings();
