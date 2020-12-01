@@ -1,5 +1,11 @@
-const { app, BrowserWindow, ipcMain} = require('electron');
+
+// const ejse = require('ejs-electron');
+// const dbsave = require('./js/modules/db/db-save.mjs');
+const { app, BrowserWindow, ipcMain, Menu} = require('electron');
 const { autoUpdater } = require('electron-updater');
+// import * as dbsave from './js/modules/db/db-save.mjs';
+// import {app, BrowserWindow, ipcMain, Menu} from 'node_modules/electron';
+// import * as autoUpdater from 'node_modules/electron-updater';
 let win;
 function createWindow () {
   // Create the browser window.
@@ -13,7 +19,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
     }
-  })
+  });
 
   // and load the index.html of the app.
   win.loadFile('index.html')
@@ -23,6 +29,108 @@ function createWindow () {
   win.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify();
   });
+
+  const isMac = process.platform === 'darwin';
+  const menuTemp = 
+   [{
+      label: app.name,
+      submenu: [
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideothers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    },
+  // { role: 'fileMenu' }
+  {
+    label: 'File',
+    submenu: [
+      {label: 'Export all terms',click() {consol}},
+      {label: 'Import terms'},
+      {type: 'separator'},
+     isMac ? { role: 'close' } : { role: 'quit' }
+    ]
+  },
+  // { role: 'editMenu' }
+  {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      ...(isMac ? [
+        { role: 'pasteAndMatchStyle' },
+        { role: 'delete' },
+        { role: 'selectAll' },
+        { type: 'separator' },
+        {
+          label: 'Speech',
+          submenu: [
+            { role: 'startSpeaking' },
+            { role: 'stopSpeaking' }
+          ]
+        }
+      ] : [
+        { role: 'delete' },
+        { type: 'separator' },
+        { role: 'selectAll' }
+      ])
+    ]
+  },
+  // { role: 'viewMenu' }
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
+  // { role: 'windowMenu' }
+  {
+    label: 'Window',
+    submenu: [
+      { role: 'minimize' },
+      { role: 'zoom' },
+      ...(isMac ? [
+        { type: 'separator' },
+        { role: 'front' },
+        { type: 'separator' },
+        { role: 'window' }
+      ] : [
+        { role: 'close' }
+      ])
+    ]
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://electronjs.org')
+        }
+      }
+    ]
+  }];
+
+  const menu = Menu.buildFromTemplate(menuTemp);
+  Menu.setApplicationMenu(menu);
 
  
 }

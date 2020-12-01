@@ -482,9 +482,9 @@ ul{
     color: #757473;
     /* font-weight: bolder; */
 }
-.cntx.term{
+/* .cntx.term{
     color: #000000;
-}
+} */
 #context-list input, .view-dropdown input{
     display: inline-block;
     position: relative;
@@ -620,9 +620,9 @@ h3.ce-header {
 .ce-toolbar, .ce-inline-toolbar{
     z-index: 3;
 }
-#file-import, #importBtn, #button-export{
+/* #file-import, #importBtn, #button-export{
     display: none;
-}
+} */
 .ce-toolbar__plus{
     transform: translate3d(-50px, calc(21px - 50%), 0px);
 }

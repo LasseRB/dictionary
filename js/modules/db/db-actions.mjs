@@ -121,9 +121,6 @@ export function updateDocument(doc) {
         res.abbreviation = doc.abbreviation;
         res.crossref = doc.crossref;
         res.content= doc.content;
-        // check while 'definition' bug exists in database
-        if(res.definition != undefined)
-            res.definition = doc.content;
         res.tags = doc.tags;
 
         return database.db.put(res);

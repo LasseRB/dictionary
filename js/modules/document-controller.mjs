@@ -28,8 +28,6 @@ function init() {
     elem.editorWrapper = undefined;
     elem.currentCrossRef =undefined;
 
-
-
     //
     elem.termList = document.getElementById('term-list');
     elem.contextList = document.getElementById('context-list');
@@ -110,6 +108,7 @@ function getOldVersions(){
 }
 
 export function setupEditor(doc) {
+    console.debug(doc.content);
        const editor = new EditorJS({
             holder: 'editorjs '+ doc._id,
 
@@ -166,8 +165,7 @@ export function setupEditor(doc) {
         return editor;
 }
 
-//! want to replace this with the editor.data field
-
+//! deprecated: replaced with the editor.data field above
 export function addDataFromDatabase(doc, editor){
     let newdef = doc.definition;
     
@@ -271,7 +269,9 @@ export function saveDocument() {
     }else{
         elem.currentEditor.isReady.then(
             elem.currentEditor.save().then(data => {
-            setNewDoc(data);
+                console.log("data is:");
+                console.log(data);
+                setNewDoc(data);
 
             }).catch((err) => {
                 console.error(err);
@@ -284,7 +284,7 @@ export function saveDocument() {
 }
 function setNewDoc(data){
     console.debug(elem.newTerm.value);
-    let newTitle = "";
+    let newTitle = "mistake";
 
     if (elem.currentTitle === undefined && elem.newTerm.value != "") {
         newTitle = elem.newTerm.value;
@@ -302,16 +302,17 @@ function setNewDoc(data){
     );
         // console.debug(elem.currentDict.value);
         //console.debug(doc);
+    
     updateDoc(doc);
     
 }
 export function setNewDocFromImport(data, abbriv, title, crossref, dictionary) {
-   
+   console.log(data);
     let doc = new a.Document(
         title,
         abbriv,
         dictionary,
-        JSON.stringify(data),
+        data,
         crossref,
     );
         // console.debug(elem.currentDict.value);

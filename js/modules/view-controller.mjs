@@ -1,7 +1,7 @@
 
 import * as s from "./search.mjs";
 import * as q from "./db/db-query.mjs";
-import * as dbs from "./db/db-save.mjs";
+// import * as dbs from "./db/db-save.js";
 import * as db from "./db/db.mjs";
 
 let elem = {};
@@ -10,9 +10,9 @@ function init() {
     elem.termButton = document.getElementById('button-contextToggle');
     // elem.styleButton = document.getElementById('button-style');
     elem.exportButton = document.getElementById('button-export');
-    elem.exportButton.addEventListener('click', dbs.handleExport);
+    // elem.exportButton.addEventListener('click', dbs.handleExport);
     elem.importButton = document.getElementById('importBtn');
-    elem.importButton.addEventListener('click', dbs.handleImport);
+    // elem.importButton.addEventListener('click', dbs.handleImport);
     // elem.dictionaryView = document.getElementById('view-dictionary');
     elem.contextView = document.getElementById('view-context');
     elem.contextList = document.getElementById('context-list');

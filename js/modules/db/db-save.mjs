@@ -1,6 +1,9 @@
 import * as database from './db.mjs';
 import * as g from '../global.mjs';
 import * as dc from '../document-controller.mjs';
+// const database = require('./db.mjs');
+// const g = require('../global.mjs');
+// const dc = require( '../document-controller.mjs');
 
 // following code stolen from https://stackoverflow.com/questions/37229561/how-to-import-export-database-from-pouchdb
 // and https://stackoverflow.com/questions/13405129/javascript-create-and-save-file/30832210#30832210
@@ -35,14 +38,18 @@ export function handleExport() {
   }
 
 export function handleImport () {
-  fetch("../../1604771233147_defineApp.json")
+ const input = document.getElementById("file-import");
+  
+  fetch(input.files[0].path)
   .then(response => response.json())
   .then(data => {
     for(var i = 0; i < data.length; i++){
-      console.log(data[i].title); 
-      var editorcontent = data[i].content;
-      if(data[i].definition != undefined)
-        editorcontent = data[i].definition
+      console.log(data[i].title);
+      let editorcontent = data[i].content;
+      console.debug(editorcontent);
+        
+        // editorcontent = editorcontent.substring(1, editorcontent -1);
+        
       dc.setNewDocFromImport(editorcontent, data[i].abbreviation, data[i].title, data[i].crossref, data[i].tags)
     }
     // database.db.bulkDocs(data);
@@ -55,6 +62,7 @@ export function handleImport () {
       // return database.db.allDocs({include_docs: true});
     }).catch(error =>{
       console.error(error);
+
     });
   
   }
