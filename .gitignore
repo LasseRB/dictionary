@@ -137,3 +137,5 @@ dist
 
 # YAML
 electron-builder.yml
+
+dist/
